@@ -3,13 +3,13 @@ import { updateItem as updateItemInStore } from '../../logic';
 import { View } from 'react-native';
 import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { addTerm, updateTerm } from '../../redux/voc/actions';
-import { selectCategories } from '../../redux/voc/selectors';
+import { addSelector, addTerm, removeSelector, updateTerm } from '../../redux/voc/actions';
+import { selectCategories, selectSelectors } from '../../redux/voc/selectors';
 import { createTerm as createTermInStorage } from '../../logic';
 import { VocItem } from '../../types';
 import Button from '../button';
 import Input from '../input';
-import Select from '../select';
+import Select, { SelectItem } from '../select';
 import { PreviewInput } from './PreviewInput';
 
 export const EditTerm: React.FC<{
@@ -20,6 +20,8 @@ export const EditTerm: React.FC<{
     const [term, setTerm] = useState(defaultItem?.term || '');
     const [definition, setDefinition] = useState(defaultItem?.definition || '');
     const [parentId, setParentId] = useState(defaultItem?.parentId || null);
+    const [selectors, setSelectors] = useState(defaultItem?.selectors || []);
+    const availableSelectors = useAppSelector(selectSelectors);
     const availableParents = useAppSelector(selectCategories);
     const disabled = !term && !definition;
 
@@ -29,8 +31,9 @@ export const EditTerm: React.FC<{
         const newItem: VocItem = {
             ...defaultItem,
             term: term,
-            definition: definition,
-            parentId: parentId
+            definition,
+            parentId,
+            selectors
         }
 
         // Updating item in redux
@@ -60,12 +63,28 @@ export const EditTerm: React.FC<{
         createTermInStorage(termItem);
     }
 
+    // Creating selector
+    const onSelectorAdd = (selector: SelectItem) => {
+        dispatch(addSelector(selector.text))
+    }
+
+    // Deleting selector
+    const onSelectorDelete = (selector: string) => {
+        dispatch(removeSelector(selector))
+    }
+
     // Fetching parents, current item parent
     const parentItems = availableParents.map(category => ({
         id: category.id,
         text: category.title as string
     }));
     const currentParent = availableParents.find(parent => parent.id === parentId);
+
+    // Fetching selectors
+    const selectorItems = availableSelectors.map(selector => ({
+        id: selector,
+        text: selector
+    }));
 
     // Checking if user can edit values
     const canEdit = isEditing || !defaultItem;
@@ -98,6 +117,24 @@ export const EditTerm: React.FC<{
                         defaultValue={definition}
                         onTextChange={setDefinition}
                         containerStyle={styles.inputContainer}
+                    />
+                )}
+                {!canEdit ? (
+                    <PreviewInput 
+                        text={selectors.join(', ')}
+                        label={'Selectors'}
+                    />
+                ) : (
+                    <Select 
+                        containerStyle={styles.inputContainer}
+                        selectableItems={selectorItems}
+                        header={'Choose selectors'}
+                        label={'Selectors'}
+                        onChange={setSelectors}
+                        onItemAdd={onSelectorAdd}
+                        onItemDelete={onSelectorDelete}
+                        defaultActive={selectors}
+                        allowEdit
                     />
                 )}
                 {!canEdit ? (

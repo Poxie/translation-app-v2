@@ -9,6 +9,7 @@ export type VocItem = {
     title?: string | null;
     term?: string | null;
     definition?: string | null;
+    selectors?: string[];
     parentId: string | null;
 }
 

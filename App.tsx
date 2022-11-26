@@ -6,7 +6,7 @@ import { store, useAppDispatch } from './redux/store';
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
 import { ReactElement, useEffect } from 'react';
-import { setCategories, setTerms } from './redux/voc/actions';
+import { setCategories, setSelectors, setTerms } from './redux/voc/actions';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -59,6 +59,21 @@ const StorageProvider: React.FC<{
         }
 
         dispatch(setCategories(JSON.parse(data)));
+      })
+    } catch(e) {
+      console.error(`Error getting/setting initial categories`, e);
+    }
+
+    // Setting initial selectors
+    try {
+      AsyncStorageLib.getItem('@selectors').then(data => {
+        if(!data) {
+          AsyncStorageLib.setItem('@selectors', '[]');
+          dispatch(setSelectors([]));
+          return;
+        }
+
+        dispatch(setSelectors(JSON.parse(data)));
       })
     } catch(e) {
       console.error(`Error getting/setting initial categories`, e);
