@@ -9,6 +9,7 @@ import Voc from "../components/voc";
 import Quiz from "../components/quiz";
 import Favorite from "../components/favorite";
 import ImportVoc from "../components/import-voc";
+import EditVocItem from "../components/edit-voc-item";
 
 // Root stack
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -62,6 +63,10 @@ const ModalStackProvider = () => {
                 name="Add Select Item" 
                 component={AddSelectItem}
                 options={({ route }) => ({ headerTitle: route.params.header || 'Add Item' })}
+            />
+            <ModalStack.Screen 
+                name="Edit Voc Item"
+                component={EditVocItem}
             />
         </ModalStack.Navigator>
     )

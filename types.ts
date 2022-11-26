@@ -2,6 +2,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import { SelectItem } from "./components/select";
 
+// Creating global types
+export type VocItem = {
+    id: string;
+    term: string | null;
+    definition: string | null;
+}
+
 // Overriding useNavigation autocorrection
 declare global {
     namespace ReactNavigation {
@@ -40,8 +47,13 @@ export type ModalStackParamList = {
         onSubmit: (text: string) => void;
         header?: string;
     }
+    'Edit Voc Item': {
+        defaultItem?: VocItem;
+        type: 'term' | 'category'
+    }
 }
 
 // Screen props
 export type SelectItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Select Items'>
 export type AddSelectItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Add Select Item'>
+export type EditVocItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Edit Voc Item'>
