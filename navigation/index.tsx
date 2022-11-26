@@ -33,7 +33,11 @@ const ModalStack = createNativeStackNavigator<ModalStackParamList>();
 const ModalStackProvider = () => {
     return(
         <ModalStack.Navigator>
-            <ModalStack.Screen name="Select Items" component={SelectItems} />
+            <ModalStack.Screen 
+                name="Select Items" 
+                component={SelectItems}
+                options={({ route }) => ({ headerTitle: route.params.header || 'Select Items' })}
+            />
         </ModalStack.Navigator>
     )
 }
