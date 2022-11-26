@@ -5,7 +5,7 @@ import { useColors } from '../../hooks/useColors';
 export default function Text({
     children, style, type='primary'
 }: {
-    children: string | string[];
+    children?: string | string[];
     style?: StyleProps;
     type?: 'primary' | 'secondary'
 }) {
