@@ -52,6 +52,7 @@ export default function EditVocItem({ route: { params: {
                 {type === 'category' && (
                     <EditCategory 
                         defaultItem={defaultItem}
+                        isEditing={isEditing}
                     />
                 )}
             </View>

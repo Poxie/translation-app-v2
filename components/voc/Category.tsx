@@ -1,6 +1,7 @@
+import { useNavigation } from '@react-navigation/native';
 import { useRef, useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
-import { View, TouchableOpacity, Pressable } from 'react-native';
+import { View, TouchableOpacity, Pressable, } from 'react-native';
 import Animated, { EasingNode } from 'react-native-reanimated';
 import { useColors } from '../../hooks/useColors';
 import { useAppSelector } from "../../redux/store"
@@ -13,6 +14,7 @@ export const Category: React.FC<{
     id: string;
     isChild?: boolean;
 }> = ({ id, isChild }) => {
+    const navigation = useNavigation();
     const category = useAppSelector(state => selectCategoryById(state, id));
     const children = useAppSelector(state => selectCategoryChildren(state, id))
     const { background: { tertiary }, text: { secondary } } = useColors();
@@ -20,6 +22,14 @@ export const Category: React.FC<{
     const [open, setOpen] = useState(false);
     const rotation = useRef(new Animated.Value(0)).current;
     const height = useRef(new Animated.Value(0)).current;
+
+    // Opening edit category modal
+    const editCategory = () => {
+        navigation.navigate('Modal', {
+            screen: 'Edit Voc Item',
+            params: { type: 'category', defaultItem: category, header: 'Edit category' }
+        })
+    }
 
     // Updating visible height
     const toggleChildren = (shouldUpdateActive=false) => {
@@ -50,6 +60,7 @@ export const Category: React.FC<{
     return(
         <>
             <TouchableOpacity 
+                onLongPress={editCategory}
                 onPress={hasItems ? () => toggleChildren(false) : () => toggleChildren(true)} 
                 style={[styles.header, isChild && styles.childHeader]}
             >

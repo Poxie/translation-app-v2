@@ -1,23 +1,42 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { addCategory } from '../../redux/voc/actions';
+import { addCategory, updateCategory } from '../../redux/voc/actions';
 import { selectCategories } from '../../redux/voc/selectors';
-import { createCategory as createCategoryInStorage } from '../../logic';
+import { createCategory as createCategoryInStorage, updateCategory as updateCategoryInStorage } from '../../logic';
 import { VocItem } from "../../types";
 import Button from '../button';
 import Input from '../input';
 import Select from '../select';
+import { PreviewInput } from './PreviewInput';
 
 export const EditCategory: React.FC<{
     defaultItem?: VocItem;
-}> = ({ defaultItem }) => {
+    isEditing: boolean;
+}> = ({ defaultItem, isEditing }) => {
     const dispatch = useAppDispatch();
     const [title, setTitle] = useState(defaultItem?.title || '');
     const [parentId, setParentId] = useState(defaultItem?.parentId || null);
     const availableParents = useAppSelector(selectCategories);
     const disabled = !title;
+
+    // Updating category on edit stop
+    useEffect(() => {
+        if(isEditing || !defaultItem) return;
+
+        const newItem = {
+            ...defaultItem,
+            title,
+            parentId
+        }
+
+        // Updating category in redux
+        dispatch(updateCategory(newItem));
+
+        // Updating category in local storage
+        updateCategoryInStorage(newItem);
+    }, [isEditing]);
 
     const createCategory = () => {
         // TODO: Make id entirely unique
@@ -38,32 +57,56 @@ export const EditCategory: React.FC<{
         createCategoryInStorage(category)
     }
 
+    // Determining parent items and active parent
     const parentItems = availableParents.map(category => ({
         id: category.id,
         text: category.title as string
-    }))
+    }));
+    const activeParent = parentItems.find(parent => parent.id === parentId);
+
+    // Determining if user can edit
+    const canEdit = isEditing || !defaultItem;
     return(
         <View style={styles.container}>
             <View>
-                <Input 
-                    placeholder={'Title'}
-                    label={'Title'}
-                    onTextChange={setTitle}
-                    containerStyle={styles.inputContainer}
-                />
-                <Select 
-                    label={'Category'}
-                    selectableItems={parentItems}
-                    onChange={ids => setParentId(ids[0])}
-                    containerStyle={styles.inputContainer}
-                />
+                {canEdit ? (
+                    <Input 
+                        placeholder={'Title'}
+                        label={'Title'}
+                        onTextChange={setTitle}
+                        containerStyle={styles.inputContainer}
+                        defaultValue={title}
+                    />
+                ) : (
+                    <PreviewInput 
+                        text={title}
+                        label={'Title'}
+                    />
+                )}
+                {canEdit ? (
+                    <Select 
+                        defaultActive={parentId ? [parentId] : undefined}
+                        label={'Category'}
+                        selectableItems={parentItems}
+                        onChange={ids => setParentId(ids[0])}
+                        containerStyle={styles.inputContainer}
+                        placeholder={'Select category...'}
+                    />
+                ) : (
+                    <PreviewInput 
+                        text={activeParent?.text || ''}
+                        label={'Category'}
+                    />
+                )}
             </View>
-            <Button 
-                onPress={createCategory}
-                disabled={disabled}
-            >
-                Create category
-            </Button>
+            {!defaultItem && (
+                <Button 
+                    onPress={createCategory}
+                    disabled={disabled}
+                >
+                    Create category
+                </Button>
+            )}
         </View>
     )
 }
@@ -73,6 +116,6 @@ const styles = {
         justifyContent: 'space-between' as 'space-between'
     },
     inputContainer: {
-        marginTop: layout.spacing.primary
+        marginBottom: layout.spacing.primary
     }
 }

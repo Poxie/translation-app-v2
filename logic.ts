@@ -50,3 +50,19 @@ export const updateItem = async (item: VocItem) => {
         console.error(`Error updating item`, e);
     }
 }
+export const updateCategory = async (category: VocItem) => {
+    try {
+        const data = await AsyncStorageLib.getItem('@categories')
+        if(!data) return;
+
+        let categories: VocItem[] = JSON.parse(data);
+        categories = categories.map(cat => {
+            if(cat.id === category.id) return category;
+            return cat;
+        })
+
+        AsyncStorageLib.setItem('@categories', JSON.stringify(categories));
+    } catch(e) {
+        console.error(`Error updating category`, e);
+    }
+}

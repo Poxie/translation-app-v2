@@ -1,6 +1,6 @@
 import { AnyAction, createReducer } from "@reduxjs/toolkit";
 import { updateItemInArray, updateObject } from "../utils";
-import { addTerm as addTermAction, addCategory as addCategoryAction, setCategories as setCategoriesAction, setTerms as setTermsAction, updateTerm as updateTermAction } from './actions';
+import { addTerm as addTermAction, addCategory as addCategoryAction, setCategories as setCategoriesAction, setTerms as setTermsAction, updateTerm as updateTermAction, updateCategory as updateCategoryAction } from './actions';
 import { VocState } from "./types";
 
 type ReducerAction = (state: VocState, action: AnyAction) => VocState;
@@ -27,6 +27,12 @@ const updateTerm: ReducerAction = (state, action) => {
     })
     return updateObject(state, { terms: newTerms });
 }
+const updateCategory: ReducerAction = (state, action) => {
+    const newCategories = updateItemInArray(state.categories, action.payload.id, item => {
+        return updateObject(item, action.payload);
+    })
+    return updateObject(state, { categories: newCategories });
+}
 
 export const vocReducer = createReducer<VocState>({
     terms: [],
@@ -38,4 +44,5 @@ export const vocReducer = createReducer<VocState>({
         .addCase(setCategoriesAction.type, setCategories)
         .addCase(setTermsAction.type, setTerms)
         .addCase(updateTermAction.type, updateTerm)
+        .addCase(updateCategoryAction.type, updateCategory)
 })
