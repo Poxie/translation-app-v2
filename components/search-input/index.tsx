@@ -8,10 +8,11 @@ import Input from '../input';
 import Select from '../select';
 
 export default function SearchInput({
-    onQueryChange, onQueryResults
+    onQueryChange, onQueryResults, hasFilters
 }: {
     onQueryChange: (query: string) => void;
     onQueryResults: (items: VocItem[]) => void;
+    hasFilters?: boolean;
 }) {
     const terms = useAppSelector(selectTerms);
     const [filter, setFilter] = useState<string[]>([]);
@@ -43,13 +44,15 @@ export default function SearchInput({
                 placeholder={'Search'}
                 onTextChange={setQuery}
             />
-            <Select 
-                containerStyle={styles.filters}
-                selectableItems={filters}
-                onChange={setFilter}
-                defaultActive={filter}
-                closeOnChange
-            />
+            {hasFilters && (
+                <Select 
+                    containerStyle={styles.filters}
+                    selectableItems={filters}
+                    onChange={setFilter}
+                    defaultActive={filter}
+                    closeOnChange
+                />
+            )}
         </View>
     )
 }
