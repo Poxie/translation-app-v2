@@ -3,7 +3,7 @@ import { addLanguage as addLanugageInStorage, removeLanguage as removeLanguageIn
 import { View } from 'react-native';
 import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { addLanguage, addSelector, addTerm, removeLanguage, removeSelector, updateTerm } from '../../redux/voc/actions';
+import { addLanguage, addSelector, addTerm, removeLanguage, removeSelector, setTerms, updateTerm } from '../../redux/voc/actions';
 import { addSelector as addSelectorInStorage, removeSelector as removeSelectorInStorage } from '../../logic';
 import { selectCategories, selectLanguages, selectSelectors, selectTranslations } from '../../redux/voc/selectors';
 import { createTerm as createTermInStorage } from '../../logic';
@@ -12,7 +12,6 @@ import Button from '../button';
 import Input from '../input';
 import Select, { SelectItem } from '../select';
 import { PreviewInput } from './PreviewInput';
-import { ItemTranslations } from './ItemTranslations';
 import { TranslationSelect } from './TranslationSelect';
 
 export const EditTerm: React.FC<{
@@ -20,34 +19,35 @@ export const EditTerm: React.FC<{
     isEditing: boolean;
 }> = ({ defaultItem, isEditing }) => {
     const dispatch = useAppDispatch();
-    const [term, setTerm] = useState(defaultItem?.term || '');
-    const [definition, setDefinition] = useState(defaultItem?.definition || '');
-    const [parentId, setParentId] = useState(defaultItem?.parentId || null);
-    const [selectors, setSelectors] = useState(defaultItem?.selectors || []);
-    const [language, setLanguage] = useState(defaultItem?.language || null);
-    const [translations, setTranslations] = useState(defaultItem?.translations || []);
+    const [item, setItem] = useState<Partial<VocItem>>(defaultItem || {
+        term: '',
+        definition: '',
+        language: null,
+        parentId: null,
+        selectors: []
+    })
+    const { id, term, definition, language, parentId, selectors } = item;
     const availableSelectors = useAppSelector(selectSelectors);
     const availableParents = useAppSelector(selectCategories);
     const availableLanguages = useAppSelector(selectLanguages);
-    const availableTranslations = useAppSelector(state => selectTranslations(state, defaultItem?.id || ''));
+    const availableTranslations = useAppSelector(state => selectTranslations(state, id || ''));
+    const translations = availableTranslations.map(translation => translation.id);
     const disabled = !term && !definition;
 
-    // Updating translations
+    // Updating properties on default item change
     useEffect(() => {
-        setTranslations(availableTranslations.map(translation => translation.id));
-    }, [availableTranslations]);
+        if(!defaultItem) return;
+        setItem(defaultItem);
+    }, [defaultItem]);
 
     useEffect(() => {
         if(isEditing || !defaultItem) return;
 
         const newItem: VocItem = {
             ...defaultItem,
-            term: term,
+            ...item,
             definition,
-            parentId,
-            language,
-            selectors,
-            translations
+            term
         }
 
         // Updating item in redux
@@ -63,11 +63,10 @@ export const EditTerm: React.FC<{
 
         // Creating term structure
         const termItem: VocItem = {
+            ...item,
             id,
             term,
             definition,
-            parentId,
-            language,
             translations,
             type: 'term'
         }
@@ -77,6 +76,15 @@ export const EditTerm: React.FC<{
         
         // Adding term to local storage
         createTermInStorage(termItem);
+    }
+
+    // Updating item property
+    const updateProperty = (property: keyof VocItem, value: any) => {
+        setItem(prev => {
+            const newItem = {...prev} as VocItem;
+            newItem[property] = value;
+            return newItem;
+        })
     }
 
     // Creating selector
@@ -111,7 +119,7 @@ export const EditTerm: React.FC<{
     const currentParent = availableParents.find(parent => parent.id === parentId);
 
     // Fetching selectors
-    const currentSelectors = availableSelectors.filter(selector => selectors.includes(selector.id)).map(s => s.text);
+    const currentSelectors = availableSelectors.filter(selector => selectors?.includes(selector.id)).map(s => s.text);
 
     // Fetching languages
     const currentLanguage = availableLanguages.find(lang => lang.id === language)
@@ -123,29 +131,29 @@ export const EditTerm: React.FC<{
             <View>
                 {!canEdit ? (
                     <PreviewInput 
-                        text={term}
+                        text={term || ''}
                         label={'Term'}
                     />
                 ) : (
                     <Input 
                         placeholder={'Term'}
                         label={'Term'}
-                        defaultValue={term}
-                        onTextChange={setTerm}
+                        defaultValue={term || ''}
+                        onTextChange={text => updateProperty('term', text)}
                         containerStyle={styles.inputContainer}
                     />
                 )}
                 {!canEdit ? (
                     <PreviewInput 
-                        text={definition}
+                        text={definition || ''}
                         label={'Definition'}
                     />  
                 ) : (
                     <Input 
                         placeholder={'Definition'}
                         label={'Definition'}
-                        defaultValue={definition}
-                        onTextChange={setDefinition}
+                        defaultValue={definition || ''}
+                        onTextChange={text => updateProperty('definition', text)}
                         containerStyle={styles.inputContainer}
                     />
                 )}
@@ -160,7 +168,7 @@ export const EditTerm: React.FC<{
                         selectableItems={availableSelectors}
                         header={'Choose selectors'}
                         label={'Selectors'}
-                        onChange={setSelectors}
+                        onChange={selectors => updateProperty('selectors', selectors)}
                         onItemAdd={onSelectorAdd}
                         onItemDelete={onSelectorDelete}
                         defaultActive={selectors}
@@ -178,7 +186,7 @@ export const EditTerm: React.FC<{
                         containerStyle={styles.inputContainer}
                         defaultActive={language ? [language] : undefined}
                         selectableItems={availableLanguages}
-                        onChange={ids => setLanguage(ids[0])}
+                        onChange={ids => updateProperty('language', ids[0])}
                         header={'Choose language'}
                         addHeader={'Add language'}
                         onItemAdd={onLanguageAdd}
@@ -199,7 +207,7 @@ export const EditTerm: React.FC<{
                 ) : (
                     <Select 
                         defaultActive={parentId ? [parentId] : undefined}
-                        onChange={ids => setParentId(ids[0])}
+                        onChange={ids => updateProperty('parentId', ids[0])}
                         containerStyle={styles.inputContainer}
                         selectableItems={parentItems}
                         header={'Choose category'}

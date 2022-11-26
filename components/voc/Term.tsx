@@ -20,7 +20,7 @@ export const Term: React.FC<{
     const editTerm = () => {
         navigation.navigate('Modal', {
             screen: 'Edit Voc Item',
-            params: { defaultItem: term, type: 'term', header: 'View term' }
+            params: { id, type: 'term', header: 'View term' }
         })
     }
 

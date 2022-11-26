@@ -24,6 +24,17 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
     }))
     if(!translations) return null;
 
+    const openTerm = (id: string) => {
+        navigation.navigate('Modal', {
+            screen: 'Edit Voc Item',
+            params: {
+                header: 'View term',
+                type: 'term',
+                id
+            }
+        })
+    }
+
     const onAddClick = () => {
         const onTermSelected = (termId: string) => {
             dispatch(addTranslation(id, termId));
@@ -41,6 +52,7 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
     }
 
     const onDeletePress = (termId: string) => {
+        console.log(termId)
         dispatch(removeTranslation(id, termId));
     }
 
@@ -65,11 +77,12 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
                 {items.map((item, key) => (
                     <SelectItem 
                         {...item}
-                        onPress={() => {}}
+                        onPress={openTerm}
                         isLast={key === translations.length - 1}
                         active={false}
                         onDeletePress={onDeletePress}
                         isEditing={true}
+                        allowPressWhileEdit={true}
                         key={item.id}
                     />
                 ))}

@@ -75,14 +75,14 @@ const removeLanguage: ReducerAction = (state, action) => {
 export const removeTranslation: ReducerAction = (state, action) => {
     const { termId, translationTermId } = action.payload;
     const updateItem = (terms: VocItem[], id: string) => {
-        return updateItemInArray(state.terms, termId, term => {
+        return updateItemInArray(terms, id, term => {
             return updateObject(term, {
-                translations: (term.translations || [])?.filter(t => t !== ( t === termId ? translationTermId : termId ))
+                translations: (term.translations || [])?.filter(t => t !== (id === translationTermId ? termId : translationTermId))
             })
         })
     }
     let newTerms = updateItem(state.terms, termId);
-    newTerms = updateItem(state.terms, translationTermId);
+    newTerms = updateItem(newTerms, translationTermId);
     return updateObject(state, { terms: newTerms });
 }
 

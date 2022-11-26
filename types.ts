@@ -12,7 +12,7 @@ export type VocItem = {
     selectors?: string[];
     language?: string | null;
     translations?: string[];
-    parentId: string | null;
+    parentId?: string | null;
 }
 export type SelectorItem = {
     text: string;
@@ -71,7 +71,7 @@ export type ModalStackParamList = {
     'Edit Voc Item': {
         header: string;
         type: 'term' | 'category';
-        defaultItem?: VocItem;
+        id?: string;
     }
     'Search Term': {
         header: string;

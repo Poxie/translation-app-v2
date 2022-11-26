@@ -30,7 +30,7 @@ export const Category: React.FC<{
     const editCategory = () => {
         navigation.navigate('Modal', {
             screen: 'Edit Voc Item',
-            params: { type: 'category', defaultItem: category, header: 'Edit category' }
+            params: { type: 'category', id, header: 'Edit category' }
         })
     }
 

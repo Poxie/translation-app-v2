@@ -24,7 +24,7 @@ export const SearchResult: React.FC<{
     const viewItem = () => {
         navigation.navigate('Modal', {
             screen: 'Edit Voc Item',
-            params: { defaultItem: item, header: `View term`, type: 'term' }
+            params: { id, header: `View term`, type: 'term' }
         })
     }
 

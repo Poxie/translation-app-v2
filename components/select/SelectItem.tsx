@@ -12,13 +12,14 @@ export const SelectItem: React.FC<SelectItemType & {
     isLast: boolean;
     active: boolean;
     isEditing: boolean;
-}> = ({ text, id, onPress, isLast, active, isEditing, onDeletePress }) => {
+    allowPressWhileEdit?: boolean;
+}> = ({ text, id, onPress, isLast, active, isEditing, onDeletePress, allowPressWhileEdit }) => {
     const { background: { secondary, tertiary }, text: { primary: textPrimary }, color: { red } } = useColors();
 
     return(
         <View style={styles.container}>
             <TouchableOpacity
-                disabled={isEditing}
+                disabled={isEditing && !allowPressWhileEdit}
                 onPress={() => onPress(id)}
                 style={{
                     backgroundColor: secondary,
