@@ -5,7 +5,7 @@ import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { addLanguage, addSelector, addTerm, removeLanguage, removeSelector, setTerms, updateTerm } from '../../redux/voc/actions';
 import { addSelector as addSelectorInStorage, removeSelector as removeSelectorInStorage } from '../../logic';
-import { selectCategories, selectLanguages, selectSelectors, selectTranslations } from '../../redux/voc/selectors';
+import { selectCategories, selectLanguages, selectSelectors } from '../../redux/voc/selectors';
 import { createTerm as createTermInStorage } from '../../logic';
 import { LanguageItem, VocItem } from '../../types';
 import Button from '../button';
@@ -30,8 +30,6 @@ export const EditTerm: React.FC<{
     const availableSelectors = useAppSelector(selectSelectors);
     const availableParents = useAppSelector(selectCategories);
     const availableLanguages = useAppSelector(selectLanguages);
-    const availableTranslations = useAppSelector(state => selectTranslations(state, id || ''));
-    const translations = availableTranslations.map(translation => translation.id);
     const disabled = !term && !definition;
 
     // Updating properties on default item change
@@ -67,7 +65,6 @@ export const EditTerm: React.FC<{
             id,
             term,
             definition,
-            translations,
             type: 'term'
         }
 

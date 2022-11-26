@@ -3,9 +3,9 @@ import { View as DefaultView, TouchableOpacity } from 'react-native';
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { addTranslation, removeTranslation } from '../../redux/voc/actions';
-import { selectLanguages, selectTranslations } from '../../redux/voc/selectors';
+import { selectLanguages } from '../../redux/voc/selectors';
 import { ItemTranslationsScreenProps } from '../../types';
+import { SelectItem as SelectItemType } from '../select';
 import { SelectItem } from '../select/SelectItem';
 import Text from '../text';
 import View from '../view';
@@ -14,15 +14,8 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
     const { background: { secondary, tertiary } } = useColors();
     const dispatch = useAppDispatch();
     const navigation = useNavigation();
-    const translations = useAppSelector(state => selectTranslations(state, id));
     const languages = useAppSelector(selectLanguages);
-    const items = translations.map(translation => ({
-        id: translation.id,
-        text: `${translation.term || translation.definition} ${translation.language ? '(' + (
-            languages.find(language => language.id === translation.language)?.text
-        ) + ')' : ''}`
-    }))
-    if(!translations) return null;
+    const items: SelectItemType[] = [];
 
     const openTerm = (id: string) => {
         navigation.navigate('Modal', {
@@ -37,7 +30,7 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
 
     const onAddClick = () => {
         const onTermSelected = (termId: string) => {
-            dispatch(addTranslation(id, termId));
+            console.log('translation add', termId);
             navigation.goBack();
         }
 
@@ -52,8 +45,7 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
     }
 
     const onDeletePress = (termId: string) => {
-        console.log(termId)
-        dispatch(removeTranslation(id, termId));
+        console.log('translation delete', termId);
     }
 
     return(
@@ -78,7 +70,7 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
                     <SelectItem 
                         {...item}
                         onPress={openTerm}
-                        isLast={key === translations.length - 1}
+                        isLast={key === items.length - 1}
                         active={false}
                         onDeletePress={onDeletePress}
                         isEditing={true}

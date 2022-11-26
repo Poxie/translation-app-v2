@@ -3,8 +3,6 @@ import { useNavigation } from '@react-navigation/native';
 import { View, TouchableOpacity } from 'react-native';
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
-import { useAppSelector } from "../../redux/store";
-import { selectTranslations } from "../../redux/voc/selectors";
 import Text from '../text';
 
 export const TranslationSelect: React.FC<{
@@ -13,8 +11,7 @@ export const TranslationSelect: React.FC<{
 }> = ({ id, isEditing }) => {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
     const navigation = useNavigation();
-    const translations = useAppSelector(state => selectTranslations(state, id));
-    const items = translations.map(translation => translation.term || translation.definition);
+    const items: string[] = [];
 
     const openModal = () => {
         navigation.navigate('Modal', {

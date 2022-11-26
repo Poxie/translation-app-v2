@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { ADD_CATEGORY, ADD_LANGUAGE, ADD_SELECTOR, ADD_TERM, ADD_TRANSLATION, REMOVE_LANGUAGE, REMOVE_SELECTOR, REMOVE_TRANSLATION, SET_CATEGORIES, SET_LANGUAGES, SET_SELECTORS, SET_TERMS, UPDATE_CATEGORY, UPDATE_TERM } from "./constants";
+import { ADD_CATEGORY, ADD_LANGUAGE, ADD_SELECTOR, ADD_TERM, ADD_TRANSLATION, REMOVE_LANGUAGE, REMOVE_SELECTOR, REMOVE_TRANSLATION, SET_CATEGORIES, SET_LANGUAGES, SET_SELECTORS, SET_TERMS, SET_TRANSLATIONS, UPDATE_CATEGORY, UPDATE_TERM } from "./constants";
 
 export const setTerms = createAction(SET_TERMS, terms => ({
     type: SET_TERMS,
@@ -16,6 +16,10 @@ export const setSelectors = createAction(SET_SELECTORS, selectors => ({
 export const setLanguages = createAction(SET_LANGUAGES, selectors => ({
     type: SET_LANGUAGES,
     payload: selectors
+}))
+export const setTranslations = createAction(SET_TRANSLATIONS, translations => ({
+    type: SET_TRANSLATIONS,
+    payload: translations
 }))
 
 export const addTerm = createAction(ADD_TERM, item => ({
@@ -34,10 +38,6 @@ export const addLanguage = createAction(ADD_LANGUAGE, selector => ({
     type: ADD_LANGUAGE,
     payload: selector
 }))
-export const addTranslation = createAction(ADD_TRANSLATION, (termId, translationTermId) => ({
-    type: ADD_TRANSLATION,
-    payload: { termId, translationTermId }
-}))
 
 export const removeSelector = createAction(REMOVE_SELECTOR, selector => ({
     type: REMOVE_SELECTOR,
@@ -46,10 +46,6 @@ export const removeSelector = createAction(REMOVE_SELECTOR, selector => ({
 export const removeLanguage = createAction(REMOVE_LANGUAGE, selectorId => ({
     type: REMOVE_LANGUAGE,
     payload: selectorId
-}))
-export const removeTranslation = createAction(REMOVE_TRANSLATION, (termId, translationTermId) => ({
-    type: REMOVE_TRANSLATION,
-    payload: { termId, translationTermId }
 }))
 
 export const updateTerm = createAction(UPDATE_TERM, item => ({

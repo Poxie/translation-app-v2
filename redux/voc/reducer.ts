@@ -14,8 +14,7 @@ import {
     setLanguages as setLanguagesAction,
     addLanguage as addLanguageAction,
     removeLanguage as removeLanguageAction,
-    addTranslation as addTranslationAction,
-    removeTranslation as removeTranslationAction
+    setTranslations as setTranslationsAction
 } from './actions';
 import { VocState } from "./types";
 
@@ -32,6 +31,9 @@ const setSelectors: ReducerAction = (state, action) => {
 }
 const setLanguages: ReducerAction = (state, action) => {
     return updateObject(state, { languages: action.payload });
+}
+const setTranslations: ReducerAction = (state, action) => {
+    return updateObject(state, { translations: action.payload });
 }
 
 const addTerm: ReducerAction = (state, action) => {
@@ -50,19 +52,6 @@ const addLanguage: ReducerAction = (state, action) => {
     const newLanguages = state.languages.concat(action.payload);
     return updateObject(state, { languages: newLanguages });
 }
-export const addTranslation: ReducerAction = (state, action) => {
-    const { termId, translationTermId } = action.payload;
-    const updateItem = (terms: VocItem[], id: string) => {
-        return updateItemInArray(terms, id, term => {
-            return updateObject(term, {
-                translations: (term.translations || [])?.concat(id === translationTermId ? termId : translationTermId)
-            })
-        })
-    }
-    let newTerms = updateItem(state.terms, termId);
-    newTerms = updateItem(newTerms, translationTermId);
-    return updateObject(state, { terms: newTerms });
-}
 
 const removeSelector: ReducerAction = (state, action) => {
     const newSelectors = state.selectors.filter(selector => selector.id !== action.payload);
@@ -71,19 +60,6 @@ const removeSelector: ReducerAction = (state, action) => {
 const removeLanguage: ReducerAction = (state, action) => {
     const newLanguages = state.languages.filter(language => language.id !== action.payload);
     return updateObject(state, { languages: newLanguages });
-}
-export const removeTranslation: ReducerAction = (state, action) => {
-    const { termId, translationTermId } = action.payload;
-    const updateItem = (terms: VocItem[], id: string) => {
-        return updateItemInArray(terms, id, term => {
-            return updateObject(term, {
-                translations: (term.translations || [])?.filter(t => t !== (id === translationTermId ? termId : translationTermId))
-            })
-        })
-    }
-    let newTerms = updateItem(state.terms, termId);
-    newTerms = updateItem(newTerms, translationTermId);
-    return updateObject(state, { terms: newTerms });
 }
 
 const updateTerm: ReducerAction = (state, action) => {
@@ -103,7 +79,8 @@ export const vocReducer = createReducer<VocState>({
     terms: [],
     categories: [],
     selectors: [],
-    languages: []
+    languages: [],
+    translations: {}
 }, builder => {
     builder
         .addCase(addTermAction.type, addTerm)
@@ -118,6 +95,5 @@ export const vocReducer = createReducer<VocState>({
         .addCase(setSelectorsAction.type, setSelectors)
         .addCase(addSelectorAction.type, addSelector)
         .addCase(removeSelectorAction.type, removeSelector)
-        .addCase(addTranslationAction.type, addTranslation)
-        .addCase(removeTranslationAction.type, removeTranslation)
+        .addCase(setTranslationsAction.type, setTranslations)
 })

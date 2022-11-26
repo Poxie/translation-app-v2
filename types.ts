@@ -11,7 +11,7 @@ export type VocItem = {
     definition?: string | null;
     selectors?: string[];
     language?: string | null;
-    translations?: string[];
+    translation?: string;
     parentId?: string | null;
 }
 export type SelectorItem = {

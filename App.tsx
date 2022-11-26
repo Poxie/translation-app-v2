@@ -6,7 +6,7 @@ import { store, useAppDispatch } from './redux/store';
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
 import { ReactElement, useEffect } from 'react';
-import { setCategories, setLanguages, setSelectors, setTerms } from './redux/voc/actions';
+import { setCategories, setLanguages, setSelectors, setTerms, setTranslations } from './redux/voc/actions';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -92,6 +92,21 @@ const StorageProvider: React.FC<{
       })
     } catch(e) {
       console.error(`Error getting/setting initial categories`, e);
+    }
+
+    // Setting initial languages
+    try {
+      AsyncStorageLib.getItem('@translations').then(data => {
+        if(!data) {
+          AsyncStorageLib.setItem('@translations', '{}');
+          dispatch(setTranslations({}));
+          return;
+        }
+
+        dispatch(setTranslations(JSON.parse(data)));
+      })
+    } catch(e) {
+      console.error(`Error getting/setting initial translations`, e);
     }
   }, []);
 
