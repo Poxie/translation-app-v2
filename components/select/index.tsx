@@ -16,7 +16,7 @@ export default function Select({
     selectableItems, defaultActive, header,
     onChange, closeOnChange, allowEdit, onItemAdd,
     multiSelect, addHeader, onItemDelete, label,
-    containerStyle
+    containerStyle, placeholder
 }: {
     selectableItems: SelectItem[];
     defaultActive?: string | string[];
@@ -30,6 +30,7 @@ export default function Select({
     multiSelect?: boolean;
     label?: string;
     containerStyle?: StyleProps;
+    placeholder?: string;
 }) {
     const navigation = useNavigation();
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
@@ -86,7 +87,7 @@ export default function Select({
                 }}
             >
                 <Text>
-                    {activeItemText.join(', ') || 'Select an item...'}
+                    {activeItemText.join(', ') || placeholder || 'Select an item...'}
                 </Text>
                 <MaterialIcons name="arrow-forward-ios" size={16} color="black" />
             </TouchableOpacity>
