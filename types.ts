@@ -12,6 +12,10 @@ export type VocItem = {
     selectors?: string[];
     parentId: string | null;
 }
+export type SelectorItem = {
+    text: string;
+    id: string;
+}
 
 // Overriding useNavigation autocorrection
 declare global {

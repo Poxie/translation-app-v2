@@ -29,7 +29,7 @@ const addSelector: ReducerAction = (state, action) => {
 }
 
 const removeSelector: ReducerAction = (state, action) => {
-    const newSelectors = state.selectors.filter(selector => selector !== action.payload);
+    const newSelectors = state.selectors.filter(selector => selector.id !== action.payload);
     return updateObject(state, { selectors: newSelectors });
 }
 

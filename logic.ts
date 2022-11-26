@@ -1,5 +1,5 @@
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
-import { VocItem } from "./types";
+import { SelectorItem, VocItem } from "./types";
 
 export const createTerm = async (item: VocItem) => {
     try {
@@ -64,5 +64,32 @@ export const updateCategory = async (category: VocItem) => {
         AsyncStorageLib.setItem('@categories', JSON.stringify(categories));
     } catch(e) {
         console.error(`Error updating category`, e);
+    }
+}
+
+export const addSelector = async (selector: SelectorItem) => {
+    try {
+        const data = await AsyncStorageLib.getItem('@selectors');
+        if(!data) return;
+
+        const selectors: SelectorItem[] = JSON.parse(data);
+        selectors.push(selector);
+
+        AsyncStorageLib.setItem('@selectors', JSON.stringify(selectors));
+    } catch(e) {
+        console.error(`Error adding selector`, e);
+    }
+}
+export const removeSelector = async (selectorId: string) => {
+    try {
+        const data = await AsyncStorageLib.getItem('@selectors');
+        if(!data) return;
+
+        let selectors: SelectorItem[] = JSON.parse(data);
+        selectors = selectors.filter(selector => selector.id !== selectorId);
+
+        AsyncStorageLib.setItem('@selectors', JSON.stringify(selectors));
+    } catch(e) {
+        console.error(`Error removing selector`, e);
     }
 }

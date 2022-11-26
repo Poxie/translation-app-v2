@@ -1,7 +1,7 @@
-import { VocItem } from "../../types"
+import { SelectorItem, VocItem } from "../../types"
 
 export type VocState = {
     terms: VocItem[];
     categories: VocItem[];
-    selectors: string[];
+    selectors: SelectorItem[];
 }

@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { addSelector, addTerm, removeSelector, updateTerm } from '../../redux/voc/actions';
+import { addSelector as addSelectorInStorage, removeSelector as removeSelectorInStorage } from '../../logic';
 import { selectCategories, selectSelectors } from '../../redux/voc/selectors';
 import { createTerm as createTermInStorage } from '../../logic';
 import { VocItem } from '../../types';
@@ -65,12 +66,14 @@ export const EditTerm: React.FC<{
 
     // Creating selector
     const onSelectorAdd = (selector: SelectItem) => {
-        dispatch(addSelector(selector.text))
+        dispatch(addSelector(selector))
+        addSelectorInStorage(selector);
     }
 
     // Deleting selector
-    const onSelectorDelete = (selector: string) => {
-        dispatch(removeSelector(selector))
+    const onSelectorDelete = (selectorId: string) => {
+        dispatch(removeSelector(selectorId));
+        removeSelectorInStorage(selectorId);
     }
 
     // Fetching parents, current item parent
@@ -82,8 +85,8 @@ export const EditTerm: React.FC<{
 
     // Fetching selectors
     const selectorItems = availableSelectors.map(selector => ({
-        id: selector,
-        text: selector
+        id: selector.id,
+        text: selector.text
     }));
 
     // Checking if user can edit values
