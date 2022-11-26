@@ -18,7 +18,7 @@ export const EditCategory: React.FC<{
     const dispatch = useAppDispatch();
     const [title, setTitle] = useState(defaultItem?.title || '');
     const [parentId, setParentId] = useState(defaultItem?.parentId || null);
-    const availableParents = useAppSelector(selectCategories);
+    const availableParents = useAppSelector(selectCategories).filter(category => category.id !== defaultItem?.id);
     const disabled = !title;
 
     // Updating category on edit stop
