@@ -25,8 +25,14 @@ export type ModalStackParamList = {
         onChange: (id: string) => void;
         header?: string;
         closeOnChange?: boolean;
+        allowAdd?: boolean;
+        onItemAdd?: (item: SelectItem) => void;
+    }
+    'Add Select Item': {
+        onSubmit: (text: string) => void;
     }
 }
 
 // Screen props
 export type SelectItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Select Items'>
+export type AddSelectItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Add Select Item'>

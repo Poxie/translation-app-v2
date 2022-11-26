@@ -11,7 +11,7 @@ import Select from '../select';
 import Text from '../text';
 import View from '../view';
 
-const selectableItems = [
+const SELECTABLE_ITEMS = [
     { text: 'Day', id: 'day' },
     { text: 'Night', id: 'night' },
     { text: 'Both', id: 'both' }
@@ -21,6 +21,8 @@ export default function Home() {
     const test = useAppSelector(selectVocTest);
     const dispatch = useAppDispatch();
     const [text, setText] = useState('typed text');
+    const [selectableItems, setSelectableItems] = useState(SELECTABLE_ITEMS);
+    console.log(selectableItems);
 
     return(
         <View style={styles.container}>
@@ -59,6 +61,8 @@ export default function Home() {
                 selectableItems={selectableItems}
                 defaultActive={'day'}
                 header={'Select Preferred Time'}
+                allowAdd
+                onItemAdd={item => setSelectableItems(prev => [...prev, ...[item]])}
             />
         </View>
     )

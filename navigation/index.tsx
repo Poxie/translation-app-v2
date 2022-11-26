@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Home from "../components/home/Home";
 import { SelectItems } from "../components/select/SelectItems";
 import { MainStackParamList, ModalStackParamList, RootStackParamList } from "../types";
+import { AddSelectItem } from "../components/select/AddSelectItem";
 
 // Root stack
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -37,6 +38,11 @@ const ModalStackProvider = () => {
                 name="Select Items" 
                 component={SelectItems}
                 options={({ route }) => ({ headerTitle: route.params.header || 'Select Items' })}
+            />
+            <ModalStack.Screen 
+                name="Add Select Item" 
+                component={AddSelectItem}
+                options={({ headerTitle: 'Add Item' })}
             />
         </ModalStack.Navigator>
     )

@@ -13,7 +13,7 @@ export type SelectItem = {
 
 export default function Select({
     selectableItems, defaultActive, header,
-    onChange, closeOnChange, allowAdd
+    onChange, closeOnChange, allowAdd, onItemAdd
 }: {
     selectableItems: SelectItem[];
     defaultActive?: string;
@@ -21,6 +21,7 @@ export default function Select({
     onChange?: (id: string) => void;
     closeOnChange?: boolean;
     allowAdd?: boolean;
+    onItemAdd?: (item: SelectItem) => void;
 }) {
     const navigation = useNavigation();
     const { background: { secondary, tertiary } } = useColors();
@@ -43,7 +44,9 @@ export default function Select({
                 active: activeItem,
                 items: selectableItems,
                 onChange: onItemChange,
-                closeOnChange
+                closeOnChange,
+                allowAdd,
+                onItemAdd
             }
         });
     }
