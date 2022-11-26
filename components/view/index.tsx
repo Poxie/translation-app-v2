@@ -7,7 +7,7 @@ export default function View({
     children, style, scrollView=false, contentContainerStyle,
     safeAreaView=false
 }: {
-    children: ReactElement[];
+    children: ReactElement | ReactElement[];
     scrollView?: boolean;
     contentContainerStyle?: StyleProps;
     safeAreaView?: boolean;
