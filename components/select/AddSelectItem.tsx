@@ -10,7 +10,7 @@ export const AddSelectItem: React.FC<AddSelectItemScreenProps> = ({ route: { par
 
     const onPress = () => {
         if(!text) return;
-        onSubmit(text);
+        onSubmit(text.trim());
     }
 
     return(
