@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import { TouchableOpacity, Text, View } from 'react-native';
 import { useColors } from '../../hooks/useColors';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { toggleTest } from '../../redux/voc/actions';
 import { selectVocTest } from '../../redux/voc/selectors';
+import Input from '../input';
 
 export default function Home() {
     const { text: { secondary }, background: { primary } } = useColors();
     const test = useAppSelector(selectVocTest);
     const dispatch = useAppDispatch();
+    const [text, setText] = useState('typed text');
 
     return(
         <View style={{backgroundColor: primary, ...styles.container}}>
@@ -21,6 +24,14 @@ export default function Home() {
                     Click to toggle test
                 </Text>
             </TouchableOpacity>
+            <Input 
+                placeholder={'My nice input'}
+                onTextChange={setText}
+                defaultValue={text}
+            />
+            <Text>
+                This is typed text: {text}
+            </Text>
         </View>
     )
 }
