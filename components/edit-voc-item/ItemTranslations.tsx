@@ -5,7 +5,7 @@ import Toast, { useToast } from 'react-native-toast-notifications';
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { addTranslation, createTranslation } from '../../redux/voc/actions';
+import { addTranslation, createTranslation, removeTranslation } from '../../redux/voc/actions';
 import { selectTermById, selectTerms, selectTermTranslations } from '../../redux/voc/selectors';
 import { ItemTranslationsScreenProps } from '../../types';
 import { SelectItem } from '../select/SelectItem';
@@ -81,7 +81,7 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
     }
 
     const onDeletePress = (termId: string) => {
-        console.log('translation delete', termId);
+        dispatch(removeTranslation(termId));
     }
 
     return(

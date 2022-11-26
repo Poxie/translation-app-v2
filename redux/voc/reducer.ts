@@ -90,16 +90,30 @@ const addTranslation: ReducerAction = (state, action) => {
     return updateObject(state, { terms: newTerms, translations: newTranslations });
 }
 const removeTranslation: ReducerAction = (state, action) => {
-    const { termId, translationId } = action.payload;
+    const termId = action.payload;
     
-    const newTranslations = updateObject(state.translations, {
-        [translationId]: (state.translations[translationId] || []).filter(id => id !== termId)
-    })
-    const newTerms = updateItemInArray(state.terms, termId, term => {
+    let translationId = '';
+    let newTerms = updateItemInArray(state.terms, termId, term => {
+        translationId = term.translation as string;
         return updateObject(term, {
             translation: null
         })
     })
+
+    let newTranslations = updateObject(state.translations, {
+        [translationId]: (state.translations[translationId] || []).filter(id => id !== termId)
+    })
+    if((newTranslations[translationId]?.length || Infinity) <= 1) {
+        const remainingId = newTranslations[translationId];
+        newTranslations = updateObject(state.translations, {});
+        delete newTranslations[translationId];
+
+        if(remainingId?.length) {
+            newTerms = updateItemInArray(newTerms, remainingId[0], term => {
+                return updateObject(term, { translation: null });
+            })
+        }
+    }
 
     return updateObject(state, { terms: newTerms, translations: newTranslations });
 }

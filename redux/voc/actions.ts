@@ -47,9 +47,9 @@ export const createTranslation = createAction(CREATE_TRANSLATION, (termIds, tran
     payload: { termIds, translationId }
 }))
 
-export const removeTranslation= createAction(REMOVE_TRANSLATION, (termId, translationId) => ({
+export const removeTranslation= createAction(REMOVE_TRANSLATION, (termId) => ({
     type: REMOVE_TRANSLATION,
-    payload: { termId, translationId }
+    payload: termId
 }))
 
 export const removeSelector = createAction(REMOVE_SELECTOR, selector => ({
