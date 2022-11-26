@@ -55,7 +55,11 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
     const onPress = (id: string) => {
         setActive(prev => {
             // If not multi select, set item id as active
-            if(!multiSelect) return [id];
+            if(!multiSelect) {
+                // If same id is pressed twice
+                if(prev.includes(id)) return [];
+                return [id];
+            }
 
             let newItems = [...prev];
 
