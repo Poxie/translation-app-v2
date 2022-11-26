@@ -34,7 +34,7 @@ export const Term: React.FC<{
 }
 const styles = {
     container: {
-        paddingVertical: 8,
+        paddingVertical: layout.spacing.secondary,
         flexDirection: 'row' as 'row',
         alignItems: 'center' as 'center'
     },

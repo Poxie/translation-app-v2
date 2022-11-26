@@ -123,7 +123,7 @@ const styles = {
         borderRadius: 4
     },
     header: {
-        padding: layout.spacing.primary,
+        padding: layout.spacing.secondary,
         flexDirection: 'row' as 'row',
         justifyContent: 'space-between' as 'space-between',
         alignItems: 'center' as 'center'

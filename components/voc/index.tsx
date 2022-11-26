@@ -52,7 +52,8 @@ const styles = {
     },
     categories: {
         borderWidth: layout.borderWidth.primary,
-        borderRadius: layout.borderRadius.primary
+        borderRadius: layout.borderRadius.primary,
+        padding: layout.spacing.secondary / 2
     },
     label: {
         marginTop: layout.spacing.primary * 2,
