@@ -25,7 +25,7 @@ export default function Button({
     const element = typeof children === 'string' ? (
         <Text style={{ 
             color: type === 'primary' ? light : secondaryText, 
-            fontWeight: '600',
+            fontWeight: '700',
             ...textStyle
         }}>
             {children}
@@ -49,7 +49,8 @@ export default function Button({
 const styles = {
     container: {
         paddingHorizontal: layout.spacing.primary,
-        paddingVertical: layout.spacing.secondary,
-        borderRadius: layout.borderRadius.secondary
+        paddingVertical: layout.spacing.primary,
+        borderRadius: layout.borderRadius.secondary,
+        alignItems: 'center' as 'center'
     }
 }
