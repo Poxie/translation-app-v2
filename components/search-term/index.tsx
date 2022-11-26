@@ -4,6 +4,7 @@ import layout from "../../constants/layout";
 import { useColors } from "../../hooks/useColors";
 import { SearchTermScreenProps } from "../../types";
 import SearchInput from "../search-input";
+import { SearchLabel } from "../search/SearchLabel";
 import Text from "../text"
 import View from "../view"
 import { SearchTermResult } from "./SearchTermResult";
@@ -32,6 +33,11 @@ export default function SearchTerm({ route: { params: {
             />
 
             <ScrollView contentContainerStyle={styles.container}>
+                <SearchLabel 
+                    resultCount={results.length}
+                    query={query}
+                />
+
                 {results.map(result => (
                     <SearchTermResult 
                         id={result}

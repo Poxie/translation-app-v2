@@ -98,7 +98,7 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
                             ...styles.empty
                         }}
                     >
-                        There are no items here yet.
+                        There are no translations for this term.
                     </Text>
                 )}
 
