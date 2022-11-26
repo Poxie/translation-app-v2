@@ -7,7 +7,7 @@ import Text from '../text';
 
 export default function Button({
     children, onPress, onLongPress, style, textStyle,
-    type='primary'
+    type='primary', disabled=false
 }: {
     children: ReactElement | string;
     onPress?: () => void;
@@ -15,6 +15,7 @@ export default function Button({
     style?: StyleProps;
     textStyle?: StyleProps;
     type?: 'primary' | 'secondary' | 'transparent';
+    disabled?: boolean;
 }) {
     const { 
         background: { tertiary },
@@ -43,10 +44,12 @@ export default function Button({
 
     return(
         <TouchableOpacity
+            disabled={disabled}
             onPress={onPress}
             onLongPress={onLongPress}
             style={{ 
                 backgroundColor: backgroundColor,
+                opacity: disabled ? .5 : 1,
                 ...styles.container,
                 ...style
             }}
