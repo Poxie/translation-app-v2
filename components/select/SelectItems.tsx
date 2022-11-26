@@ -4,7 +4,7 @@ import { View as DefaultView, TouchableOpacity } from 'react-native';
 import { SelectItemScreenProps } from "../../types"
 import View from "../view"
 import { SelectItem } from "./SelectItem"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Text from '../text';
 import { useColors } from '../../hooks/useColors';
 
@@ -18,6 +18,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
     const [active, setActive] = useState(_active);
     const [items, setItems] = useState(_items);
     const [isEditing, setIsEditing] = useState(false);
+    const initial = useRef(true);
 
     // Updating header if items are editable
     useEffect(() => {
@@ -45,6 +46,12 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
     // Updating parent on active items change
     useEffect(() => {
         onChange(active);
+
+        if(closeOnChange && !initial.current) {
+            navigation.goBack();
+            return;
+        }
+        initial.current = false;
     }, [active]);
 
     const onDeletePress = (id: string) => {
@@ -74,11 +81,6 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
 
             return newItems;
         });
-
-        if(closeOnChange) {
-            navigation.goBack();
-            return;
-        }
     }
     const openAddModal = () => {
         if(!onItemAdd) return;
