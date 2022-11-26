@@ -138,6 +138,7 @@ export const EditTerm: React.FC<{
                         onItemAdd={onSelectorAdd}
                         onItemDelete={onSelectorDelete}
                         defaultActive={selectors}
+                        multiSelect
                         allowEdit
                     />
                 )}
