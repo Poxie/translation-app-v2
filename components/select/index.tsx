@@ -13,40 +13,40 @@ export type SelectItem = {
 
 export default function Select({
     selectableItems, defaultActive, header,
-    onChange, closeOnChange, allowAdd, onItemAdd
+    onChange, closeOnChange, allowAdd, onItemAdd,
+    multiSelect
 }: {
     selectableItems: SelectItem[];
-    defaultActive?: string;
+    defaultActive?: string | string[];
     header?: string;
-    onChange?: (id: string) => void;
+    onChange?: (items: string[]) => void;
     closeOnChange?: boolean;
     allowAdd?: boolean;
     onItemAdd?: (item: SelectItem) => void;
+    multiSelect?: boolean;
 }) {
     const navigation = useNavigation();
     const { background: { secondary, tertiary } } = useColors();
-    const [active, setActive] = useState(defaultActive || selectableItems[0].id);
-    const activeItem = selectableItems.find(item => item.id === active);
+    const [active, setActive] = useState(
+        defaultActive ? (
+            Array.isArray(defaultActive) ? defaultActive : [defaultActive]
+        ) : [selectableItems[0].id]
+    );
+    const activeItems = selectableItems.filter(item => active.includes(item.id));
+    const activeItemText = activeItems.map(item => item.text);
 
-    const onItemChange = (id: string) => {
-        setActive(id);
-        if(onChange) {
-            onChange(id);
-        }
-    }
     const openModal = () => {
-        if(!activeItem) return;
-
         navigation.navigate('Modal', {
             screen: 'Select Items',
             params: { 
                 header: header,
-                active: activeItem,
+                active: active,
                 items: selectableItems,
-                onChange: onItemChange,
+                onChange: setActive,
                 closeOnChange,
                 allowAdd,
-                onItemAdd
+                onItemAdd,
+                multiSelect
             }
         });
     }
@@ -61,7 +61,7 @@ export default function Select({
             }}
         >
             <Text>
-                {activeItem?.text}
+                {activeItemText.join(', ') || 'Select an item...'}
             </Text>
             <MaterialIcons name="arrow-forward-ios" size={16} color="black" />
         </TouchableOpacity>

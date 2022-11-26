@@ -4,25 +4,45 @@ import { View as DefaultView, TouchableOpacity } from 'react-native';
 import { SelectItemScreenProps } from "../../types"
 import View from "../view"
 import { SelectItem } from "./SelectItem"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Text from '../text';
 
 export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: { 
     items: _items, active: _active, onChange, 
-    closeOnChange, allowAdd, onItemAdd
+    closeOnChange, allowAdd, onItemAdd, multiSelect
 } } }) => {
     const navigation = useNavigation();
-    const [active, setActive] = useState(_active.id);
+    const [active, setActive] = useState(_active);
     const [items, setItems] = useState(_items);
 
+    // Updating parent on active items change
+    useEffect(() => {
+        onChange(active);
+    }, [active]);
+
     const onPress = (id: string) => {
-        onChange(id);
+        setActive(prev => {
+            // If not multi select, set item id as active
+            if(!multiSelect) return [id];
+
+            let newItems = [...prev];
+
+            // If item already exists
+            if(prev.includes(id)) {
+                newItems = newItems.filter(item => item !== id);
+            } 
+            // Else add id to active array
+            else {
+                newItems = [...newItems, ...[id]]
+            }
+
+            return newItems;
+        });
+
         if(closeOnChange) {
             navigation.goBack();
             return;
         }
-
-        setActive(id);
     }
     const openAddModal = () => {
         if(!onItemAdd) return;
@@ -33,6 +53,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                 text
             }
             setItems(prev => [...prev, ...[newItem]]);
+
             onItemAdd(newItem);
             navigation.goBack();
         }
@@ -53,7 +74,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                         {...item}
                         onPress={onPress}
                         isLast={key === items.length - 1}
-                        active={item.id === active}
+                        active={active.includes(item.id)}
                         key={item.id}
                     />
                 ))}

@@ -21,12 +21,13 @@ export type MainStackParamList = {
 export type ModalStackParamList = {
     'Select Items': {
         items: SelectItem[];
-        active: SelectItem;
-        onChange: (id: string) => void;
+        active: string[];
+        onChange: (activeIds: string[]) => void;
         header?: string;
         closeOnChange?: boolean;
         allowAdd?: boolean;
         onItemAdd?: (item: SelectItem) => void;
+        multiSelect?: boolean;
     }
     'Add Select Item': {
         onSubmit: (text: string) => void;

@@ -63,6 +63,7 @@ export default function Home() {
                 header={'Select Preferred Time'}
                 allowAdd
                 onItemAdd={item => setSelectableItems(prev => [...prev, ...[item]])}
+                multiSelect
             />
         </View>
     )
