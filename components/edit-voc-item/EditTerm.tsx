@@ -28,9 +28,9 @@ export const EditTerm: React.FC<{
 
         const newItem: VocItem = {
             ...defaultItem,
-            term: term || defaultItem.term,
-            definition: definition || defaultItem.definition,
-            parentId: parentId || defaultItem.parentId,
+            term: term,
+            definition: definition,
+            parentId: parentId
         }
 
         // Updating item in redux
