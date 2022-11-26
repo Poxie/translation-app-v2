@@ -20,6 +20,12 @@ export default function SearchInput({
     
     // Updating results
     useEffect(() => {
+        if(!query) {
+            onQueryResults([]);
+            onQueryChange('');
+            return;
+        }
+
         // Filtering terms based on filters and query
         const processedQuery = query.toLowerCase();
         let filteredTerms = terms.filter(term => (
