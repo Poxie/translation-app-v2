@@ -1,4 +1,5 @@
 import { AnyAction, createReducer } from "@reduxjs/toolkit";
+import { VocItem } from "../../types";
 import { updateItemInArray, updateObject } from "../utils";
 import { 
     addTerm as addTermAction, 
@@ -51,11 +52,15 @@ const addLanguage: ReducerAction = (state, action) => {
 }
 export const addTranslation: ReducerAction = (state, action) => {
     const { termId, translationTermId } = action.payload;
-    const newTerms = updateItemInArray(state.terms, termId, term => {
-        return updateObject(term, {
-            translations: (term.translations || [])?.concat(translationTermId)
+    const updateItem = (terms: VocItem[], id: string) => {
+        return updateItemInArray(terms, id, term => {
+            return updateObject(term, {
+                translations: (term.translations || [])?.concat(id === translationTermId ? termId : translationTermId)
+            })
         })
-    })
+    }
+    let newTerms = updateItem(state.terms, termId);
+    newTerms = updateItem(newTerms, translationTermId);
     return updateObject(state, { terms: newTerms });
 }
 
@@ -69,11 +74,15 @@ const removeLanguage: ReducerAction = (state, action) => {
 }
 export const removeTranslation: ReducerAction = (state, action) => {
     const { termId, translationTermId } = action.payload;
-    const newTerms = updateItemInArray(state.terms, termId, term => {
-        return updateObject(term, {
-            translations: (term.translations || [])?.filter(t => t !== translationTermId)
+    const updateItem = (terms: VocItem[], id: string) => {
+        return updateItemInArray(state.terms, termId, term => {
+            return updateObject(term, {
+                translations: (term.translations || [])?.filter(t => t !== ( t === termId ? translationTermId : termId ))
+            })
         })
-    })
+    }
+    let newTerms = updateItem(state.terms, termId);
+    newTerms = updateItem(state.terms, translationTermId);
     return updateObject(state, { terms: newTerms });
 }
 
