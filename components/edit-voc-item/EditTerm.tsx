@@ -25,7 +25,8 @@ export const EditTerm: React.FC<{
             id,
             term,
             definition,
-            parentId
+            parentId,
+            type: 'term'
         }
 
         // Adding term to redux store
