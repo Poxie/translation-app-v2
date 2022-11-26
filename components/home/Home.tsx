@@ -62,6 +62,7 @@ export default function Home() {
                 defaultActive={'day'}
                 header={'Select Preferred Time'}
                 allowAdd
+                addHeader={'Add Preferred Time'}
                 onItemAdd={item => setSelectableItems(prev => [...prev, ...[item]])}
                 multiSelect
             />

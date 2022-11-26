@@ -26,11 +26,13 @@ export type ModalStackParamList = {
         header?: string;
         closeOnChange?: boolean;
         allowAdd?: boolean;
+        addHeader?: string;
         onItemAdd?: (item: SelectItem) => void;
         multiSelect?: boolean;
     }
     'Add Select Item': {
         onSubmit: (text: string) => void;
+        header?: string;
     }
 }
 

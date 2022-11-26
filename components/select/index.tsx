@@ -14,7 +14,7 @@ export type SelectItem = {
 export default function Select({
     selectableItems, defaultActive, header,
     onChange, closeOnChange, allowAdd, onItemAdd,
-    multiSelect
+    multiSelect, addHeader
 }: {
     selectableItems: SelectItem[];
     defaultActive?: string | string[];
@@ -23,6 +23,7 @@ export default function Select({
     closeOnChange?: boolean;
     allowAdd?: boolean;
     onItemAdd?: (item: SelectItem) => void;
+    addHeader?: string;
     multiSelect?: boolean;
 }) {
     const navigation = useNavigation();
@@ -46,6 +47,7 @@ export default function Select({
                 closeOnChange,
                 allowAdd,
                 onItemAdd,
+                addHeader,
                 multiSelect
             }
         });

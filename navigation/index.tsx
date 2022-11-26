@@ -42,7 +42,7 @@ const ModalStackProvider = () => {
             <ModalStack.Screen 
                 name="Add Select Item" 
                 component={AddSelectItem}
-                options={({ headerTitle: 'Add Item' })}
+                options={({ route }) => ({ headerTitle: route.params.header || 'Add Item' })}
             />
         </ModalStack.Navigator>
     )

@@ -9,7 +9,8 @@ import Text from '../text';
 
 export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: { 
     items: _items, active: _active, onChange, 
-    closeOnChange, allowAdd, onItemAdd, multiSelect
+    closeOnChange, allowAdd, onItemAdd, multiSelect,
+    addHeader
 } } }) => {
     const navigation = useNavigation();
     const [active, setActive] = useState(_active);
@@ -61,7 +62,8 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
         navigation.navigate('Modal', {
             screen: 'Add Select Item',
             params: {
-                onSubmit
+                onSubmit,
+                header: addHeader
             }
         })
     }
