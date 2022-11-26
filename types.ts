@@ -5,8 +5,10 @@ import { SelectItem } from "./components/select";
 // Creating global types
 export type VocItem = {
     id: string;
-    term: string | null;
-    definition: string | null;
+    type: 'term' | 'category';
+    title?: string | null;
+    term?: string | null;
+    definition?: string | null;
     parentId: string | null;
 }
 
