@@ -1,5 +1,8 @@
 export default {
     light: {
+        color: {
+            primary: '#0a95ff'
+        },
         background: {
             primary: '#fff',
             secondary: '#f9f9f9',
@@ -7,10 +10,14 @@ export default {
         },
         text: {
             primary: '#1a1a1a',
-            secondary: '#767676'
+            secondary: '#767676',
+            light: '#fff'
         }
     },
     dark: {
+        color: {
+            primary: '#0a95ff'
+        },
         background: {
             primary: 'red',
             secondary: 'yellow',
@@ -18,7 +25,8 @@ export default {
         },
         text: {
             primary: 'green',
-            secondary: 'purple'
+            secondary: 'purple',
+            light: '#fff'
         }
     }
 }

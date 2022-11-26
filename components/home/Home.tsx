@@ -4,6 +4,7 @@ import { useColors } from '../../hooks/useColors';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { toggleTest } from '../../redux/voc/actions';
 import { selectVocTest } from '../../redux/voc/selectors';
+import Button from '../button';
 import Input from '../input';
 
 export default function Home() {
@@ -32,6 +33,19 @@ export default function Home() {
             <Text>
                 This is typed text: {text}
             </Text>
+            <Button
+                onPress={() => console.log('simple press')}
+                onLongPress={() => console.log('loooong press')}
+            >
+                My primary button
+            </Button>
+            <Button
+                onPress={() => console.log('simple press')}
+                onLongPress={() => console.log('loooong press')}
+                type={'secondary'}
+            >
+                My secondary button
+            </Button>
         </View>
     )
 }
