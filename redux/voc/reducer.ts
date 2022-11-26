@@ -12,7 +12,9 @@ import {
     removeSelector as removeSelectorAction,
     setLanguages as setLanguagesAction,
     addLanguage as addLanguageAction,
-    removeLanguage as removeLanguageAction
+    removeLanguage as removeLanguageAction,
+    addTranslation as addTranslationAction,
+    removeTranslation as removeTranslationAction
 } from './actions';
 import { VocState } from "./types";
 
@@ -47,6 +49,15 @@ const addLanguage: ReducerAction = (state, action) => {
     const newLanguages = state.languages.concat(action.payload);
     return updateObject(state, { languages: newLanguages });
 }
+export const addTranslation: ReducerAction = (state, action) => {
+    const { termId, translationTermId } = action.payload;
+    const newTerms = updateItemInArray(state.terms, termId, term => {
+        return updateObject(term, {
+            translations: (term.translations || [])?.concat(translationTermId)
+        })
+    })
+    return updateObject(state, { terms: newTerms });
+}
 
 const removeSelector: ReducerAction = (state, action) => {
     const newSelectors = state.selectors.filter(selector => selector.id !== action.payload);
@@ -55,6 +66,15 @@ const removeSelector: ReducerAction = (state, action) => {
 const removeLanguage: ReducerAction = (state, action) => {
     const newLanguages = state.languages.filter(language => language.id !== action.payload);
     return updateObject(state, { languages: newLanguages });
+}
+export const removeTranslation: ReducerAction = (state, action) => {
+    const { termId, translationTermId } = action.payload;
+    const newTerms = updateItemInArray(state.terms, termId, term => {
+        return updateObject(term, {
+            translations: (term.translations || [])?.filter(t => t !== translationTermId)
+        })
+    })
+    return updateObject(state, { terms: newTerms });
 }
 
 const updateTerm: ReducerAction = (state, action) => {
@@ -89,4 +109,6 @@ export const vocReducer = createReducer<VocState>({
         .addCase(setSelectorsAction.type, setSelectors)
         .addCase(addSelectorAction.type, addSelector)
         .addCase(removeSelectorAction.type, removeSelector)
+        .addCase(addTranslationAction.type, addTranslation)
+        .addCase(removeTranslationAction.type, removeTranslation)
 })

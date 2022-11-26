@@ -11,6 +11,7 @@ export type VocItem = {
     definition?: string | null;
     selectors?: string[];
     language?: string | null;
+    translations?: string[];
     parentId: string | null;
 }
 export type SelectorItem = {
@@ -61,6 +62,7 @@ export type ModalStackParamList = {
         onItemAdd?: (item: SelectItem) => void;
         onItemDelete?: (id: string) => void;
         multiSelect?: boolean;
+        onAddClick?: () => void;
     }
     'Add Select Item': {
         onSubmit: (text: string) => void;
@@ -70,6 +72,14 @@ export type ModalStackParamList = {
         header: string;
         type: 'term' | 'category';
         defaultItem?: VocItem;
+    }
+    'Search Term': {
+        header: string;
+        description?: string;
+        onTermSelected: (id: string) => void;
+    }
+    'Item Translations': {
+        id: string;
     }
 }
 
@@ -81,3 +91,5 @@ export type QuizScreenProps = NativeStackScreenProps<MainStackParamList, 'Choose
 export type SelectItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Select Items'>
 export type AddSelectItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Add Select Item'>
 export type EditVocItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Edit Voc Item'>
+export type SearchTermScreenProps = NativeStackScreenProps<ModalStackParamList, 'Search Term'>
+export type ItemTranslationsScreenProps = NativeStackScreenProps<ModalStackParamList, 'Item Translations'>

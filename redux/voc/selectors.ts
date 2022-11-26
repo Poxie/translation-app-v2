@@ -30,4 +30,9 @@ export const selectCategoryChildren = createSelector(
     (categories, terms, categoryId) => [...categories, ...terms].filter(item => item.parentId === categoryId)
 )
 
+export const selectTranslations = createSelector(
+    [selectTerms, selectTermById],
+    (terms, term) => terms.filter(t => term?.translations?.includes(t.id))
+)
+
 export const selectSelectors = (state: RootState) => state.voc.selectors;

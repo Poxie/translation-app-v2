@@ -5,13 +5,15 @@ import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { addLanguage, addSelector, addTerm, removeLanguage, removeSelector, updateTerm } from '../../redux/voc/actions';
 import { addSelector as addSelectorInStorage, removeSelector as removeSelectorInStorage } from '../../logic';
-import { selectCategories, selectLanguages, selectSelectors } from '../../redux/voc/selectors';
+import { selectCategories, selectLanguages, selectSelectors, selectTranslations } from '../../redux/voc/selectors';
 import { createTerm as createTermInStorage } from '../../logic';
 import { LanguageItem, VocItem } from '../../types';
 import Button from '../button';
 import Input from '../input';
 import Select, { SelectItem } from '../select';
 import { PreviewInput } from './PreviewInput';
+import { ItemTranslations } from './ItemTranslations';
+import { TranslationSelect } from './TranslationSelect';
 
 export const EditTerm: React.FC<{
     defaultItem?: VocItem;
@@ -23,10 +25,17 @@ export const EditTerm: React.FC<{
     const [parentId, setParentId] = useState(defaultItem?.parentId || null);
     const [selectors, setSelectors] = useState(defaultItem?.selectors || []);
     const [language, setLanguage] = useState(defaultItem?.language || null);
+    const [translations, setTranslations] = useState(defaultItem?.translations || []);
     const availableSelectors = useAppSelector(selectSelectors);
     const availableParents = useAppSelector(selectCategories);
     const availableLanguages = useAppSelector(selectLanguages);
+    const availableTranslations = useAppSelector(state => selectTranslations(state, defaultItem?.id || ''));
     const disabled = !term && !definition;
+
+    // Updating translations
+    useEffect(() => {
+        setTranslations(availableTranslations.map(translation => translation.id));
+    }, [availableTranslations]);
 
     useEffect(() => {
         if(isEditing || !defaultItem) return;
@@ -37,7 +46,8 @@ export const EditTerm: React.FC<{
             definition,
             parentId,
             language,
-            selectors
+            selectors,
+            translations
         }
 
         // Updating item in redux
@@ -58,6 +68,7 @@ export const EditTerm: React.FC<{
             definition,
             parentId,
             language,
+            translations,
             type: 'term'
         }
 
@@ -176,6 +187,10 @@ export const EditTerm: React.FC<{
                         allowEdit
                     />
                 )}
+                <TranslationSelect 
+                    id={defaultItem?.id || ''}
+                    isEditing={isEditing || !defaultItem}
+                />
                 {!canEdit ? (
                     <PreviewInput 
                         text={currentParent?.title || ''}

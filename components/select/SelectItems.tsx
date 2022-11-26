@@ -11,7 +11,7 @@ import { useColors } from '../../hooks/useColors';
 export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: { 
     items: _items, active: _active, onChange, 
     closeOnChange, allowEdit, onItemAdd, multiSelect,
-    addHeader, onItemDelete
+    addHeader, onItemDelete, onAddClick
 } } }) => {
     const navigation = useNavigation();
     const { background: { secondary, tertiary } } = useColors();
@@ -138,7 +138,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
 
             {(isEditing || items.length === 0) && allowEdit && (
                 <TouchableOpacity 
-                    onPress={openAddModal}
+                    onPress={onAddClick || openAddModal}
                     style={styles.addButton}
                 >
                     <Text>
