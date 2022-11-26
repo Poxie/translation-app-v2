@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { updateItem as updateItemInStore } from '../../logic';
+import { addLanguage as addLanugageInStorage, removeLanguage as removeLanguageInStorage, updateItem as updateItemInStore } from '../../logic';
 import { View } from 'react-native';
 import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { addSelector, addTerm, removeSelector, updateTerm } from '../../redux/voc/actions';
+import { addLanguage, addSelector, addTerm, removeLanguage, removeSelector, updateTerm } from '../../redux/voc/actions';
 import { addSelector as addSelectorInStorage, removeSelector as removeSelectorInStorage } from '../../logic';
-import { selectCategories, selectSelectors } from '../../redux/voc/selectors';
+import { selectCategories, selectLanguages, selectSelectors } from '../../redux/voc/selectors';
 import { createTerm as createTermInStorage } from '../../logic';
-import { VocItem } from '../../types';
+import { LanguageItem, VocItem } from '../../types';
 import Button from '../button';
 import Input from '../input';
 import Select, { SelectItem } from '../select';
@@ -22,8 +22,10 @@ export const EditTerm: React.FC<{
     const [definition, setDefinition] = useState(defaultItem?.definition || '');
     const [parentId, setParentId] = useState(defaultItem?.parentId || null);
     const [selectors, setSelectors] = useState(defaultItem?.selectors || []);
+    const [language, setLanguage] = useState(defaultItem?.language || null);
     const availableSelectors = useAppSelector(selectSelectors);
     const availableParents = useAppSelector(selectCategories);
+    const availableLanguages = useAppSelector(selectLanguages);
     const disabled = !term && !definition;
 
     useEffect(() => {
@@ -34,6 +36,7 @@ export const EditTerm: React.FC<{
             term: term,
             definition,
             parentId,
+            language,
             selectors
         }
 
@@ -54,6 +57,7 @@ export const EditTerm: React.FC<{
             term,
             definition,
             parentId,
+            language,
             type: 'term'
         }
 
@@ -76,6 +80,18 @@ export const EditTerm: React.FC<{
         removeSelectorInStorage(selectorId);
     }
 
+    // Creating language
+    const onLanguageAdd = (language: LanguageItem) => {
+        dispatch(addLanguage(language));
+        addLanugageInStorage(language);
+    }
+
+    // Removing language
+    const onLanguageDelete = (languageId: string) => {
+        dispatch(removeLanguage(languageId));
+        removeLanguageInStorage(languageId);
+    }
+
     // Fetching parents, current item parent
     const parentItems = availableParents.map(category => ({
         id: category.id,
@@ -84,11 +100,10 @@ export const EditTerm: React.FC<{
     const currentParent = availableParents.find(parent => parent.id === parentId);
 
     // Fetching selectors
-    const selectorItems = availableSelectors.map(selector => ({
-        id: selector.id,
-        text: selector.text
-    }));
     const currentSelectors = availableSelectors.filter(selector => selectors.includes(selector.id)).map(s => s.text);
+
+    // Fetching languages
+    const currentLanguage = availableLanguages.find(lang => lang.id === language)
 
     // Checking if user can edit values
     const canEdit = isEditing || !defaultItem;
@@ -131,7 +146,7 @@ export const EditTerm: React.FC<{
                 ) : (
                     <Select 
                         containerStyle={styles.inputContainer}
-                        selectableItems={selectorItems}
+                        selectableItems={availableSelectors}
                         header={'Choose selectors'}
                         label={'Selectors'}
                         onChange={setSelectors}
@@ -139,6 +154,25 @@ export const EditTerm: React.FC<{
                         onItemDelete={onSelectorDelete}
                         defaultActive={selectors}
                         multiSelect
+                        allowEdit
+                    />
+                )}
+                {!canEdit ? (
+                    <PreviewInput 
+                        text={currentLanguage?.text || ''}
+                        label={'Language'}
+                    />
+                ) : (
+                    <Select 
+                        containerStyle={styles.inputContainer}
+                        defaultActive={language ? [language] : undefined}
+                        selectableItems={availableLanguages}
+                        onChange={ids => setLanguage(ids[0])}
+                        header={'Choose language'}
+                        addHeader={'Add language'}
+                        onItemAdd={onLanguageAdd}
+                        onItemDelete={onLanguageDelete}
+                        label={'Language'}
                         allowEdit
                     />
                 )}
