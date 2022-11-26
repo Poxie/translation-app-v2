@@ -1,8 +1,9 @@
 import { ReactElement } from 'react';
-import { TouchableOpacity, Text } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { StyleProps } from 'react-native-reanimated';
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
+import Text from '../text';
 
 export default function Button({
     children, onPress, onLongPress, style, textStyle,

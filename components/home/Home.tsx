@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { useColors } from '../../hooks/useColors';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { toggleTest } from '../../redux/voc/actions';
 import { selectVocTest } from '../../redux/voc/selectors';
 import Button from '../button';
 import Input from '../input';
+import Text from '../text';
 
 export default function Home() {
     const { text: { secondary }, background: { primary } } = useColors();
