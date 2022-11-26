@@ -1,18 +1,21 @@
 import { useState } from 'react';
 import { View } from 'react-native';
 import layout from '../../constants/layout';
-import { useAppDispatch } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { addCategory } from '../../redux/voc/actions';
+import { selectCategories } from '../../redux/voc/selectors';
 import { VocItem } from "../../types";
 import Button from '../button';
 import Input from '../input';
+import Select from '../select';
 
 export const EditCategory: React.FC<{
     defaultItem?: VocItem;
 }> = ({ defaultItem }) => {
     const dispatch = useAppDispatch();
     const [title, setTitle] = useState(defaultItem?.title || '');
-    const [parentId, setParentId] = useState(null);
+    const [parentId, setParentId] = useState(defaultItem?.parentId || null);
+    const availableParents = useAppSelector(selectCategories);
     const disabled = !title;
 
     const createCategory = () => {
@@ -31,6 +34,10 @@ export const EditCategory: React.FC<{
         dispatch(addCategory(category));
     }
 
+    const parentItems = availableParents.map(category => ({
+        id: category.id,
+        text: category.title as string
+    }))
     return(
         <View style={styles.container}>
             <View>
@@ -38,6 +45,12 @@ export const EditCategory: React.FC<{
                     placeholder={'Title'}
                     label={'Title'}
                     onTextChange={setTitle}
+                    containerStyle={styles.inputContainer}
+                />
+                <Select 
+                    label={'Category'}
+                    selectableItems={parentItems}
+                    onChange={ids => setParentId(ids[0])}
                     containerStyle={styles.inputContainer}
                 />
             </View>
