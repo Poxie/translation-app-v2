@@ -38,8 +38,10 @@ export const Term: React.FC<{
                     }} 
                 />
             )}
-            <Text>
-                {term.term}
+            <Text
+                style={{ fontStyle: !term.term ? 'italic' : 'normal' }}
+            >
+                {term.term || `Term name is missing. (Definition: ${term.definition})`}
             </Text>
         </TouchableOpacity>
     )
