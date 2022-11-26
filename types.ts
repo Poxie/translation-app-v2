@@ -24,6 +24,7 @@ export type ModalStackParamList = {
         active: SelectItem;
         onChange: (id: string) => void;
         header?: string;
+        closeOnChange?: boolean;
     }
 }
 

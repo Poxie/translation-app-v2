@@ -12,19 +12,26 @@ export type SelectItem = {
 }
 
 export default function Select({
-    selectableItems, defaultActive, header
+    selectableItems, defaultActive, header,
+    onChange, closeOnChange, allowAdd
 }: {
     selectableItems: SelectItem[];
     defaultActive?: string;
     header?: string;
+    onChange?: (id: string) => void;
+    closeOnChange?: boolean;
+    allowAdd?: boolean;
 }) {
     const navigation = useNavigation();
     const { background: { secondary, tertiary } } = useColors();
     const [active, setActive] = useState(defaultActive || selectableItems[0].id);
     const activeItem = selectableItems.find(item => item.id === active);
 
-    const onChange = (id: string) => {
-        console.log('selected', id);
+    const onItemChange = (id: string) => {
+        setActive(id);
+        if(onChange) {
+            onChange(id);
+        }
     }
     const openModal = () => {
         if(!activeItem) return;
@@ -35,7 +42,8 @@ export default function Select({
                 header: header,
                 active: activeItem,
                 items: selectableItems,
-                onChange
+                onChange: onItemChange,
+                closeOnChange
             }
         });
     }
