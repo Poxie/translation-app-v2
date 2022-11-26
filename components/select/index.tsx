@@ -41,6 +41,13 @@ export default function Select({
     const activeItems = selectableItems.filter(item => active.includes(item.id));
     const activeItemText = activeItems.map(item => item.text);
 
+    const handleChange = (ids: string[]) => {
+        setActive(ids);
+        if(onChange) {
+            onChange(ids);
+        }
+    }
+
     const openModal = () => {
         navigation.navigate('Modal', {
             screen: 'Select Items',
@@ -48,7 +55,7 @@ export default function Select({
                 header: header,
                 active: active,
                 items: selectableItems,
-                onChange: setActive,
+                onChange: handleChange,
                 closeOnChange,
                 allowEdit,
                 onItemAdd,
