@@ -13,7 +13,9 @@ import layout from '../../constants/layout';
 export const Category: React.FC<{
     id: string;
     isChild?: boolean;
-}> = ({ id, isChild }) => {
+    selectable?: boolean;
+    active?: boolean;
+}> = ({ id, isChild, selectable, active }) => {
     const navigation = useNavigation();
     const category = useAppSelector(state => selectCategoryById(state, id));
     const children = useAppSelector(state => selectCategoryChildren(state, id))
@@ -65,17 +67,20 @@ export const Category: React.FC<{
                 style={[styles.header, isChild && styles.childHeader]}
             >
                 <View style={styles.headerLeft}>
-                    <Pressable 
-                        style={[
-                            styles.checkbox,
-                            // { 
-                            //     borderColor: !active ? textSecondary : 'transparent', 
-                            //     backgroundColor: active ? textSecondary : 'transparent' 
-                            // },
-                            isChild && styles.childCheckbox
-                        ]} 
-                        // onPress={() => toggleActive([...[id], ...childIds])}
-                    />
+                    {selectable && (
+                        <Pressable 
+                            style={[{
+                                    borderColor: !active ? secondary : 'transparent', 
+                                    backgroundColor: active ? secondary : 'transparent',
+                                    ...styles.checkbox,
+                                },
+                                isChild && {
+                                    ...styles.childContainer
+                                }
+                            ]
+                        } 
+                        />
+                    )}
                     <Text style={[styles.headerText, isChild && styles.childText]}>
                         {category?.title}
                     </Text>

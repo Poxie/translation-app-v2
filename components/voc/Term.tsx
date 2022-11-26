@@ -8,8 +8,10 @@ import Text from '../text';
 
 export const Term: React.FC<{
     id: string;
-}> = ({ id }) => {
-    const colors = useColors();
+    selectable?: boolean;
+    active?: boolean;
+}> = ({ id, selectable, active }) => {
+    const { text: { secondary } } = useColors();
     const navigation = useNavigation();
     const term = useAppSelector(state => selectTermById(state, id));
     if(!term) return null;
@@ -27,15 +29,15 @@ export const Term: React.FC<{
             style={styles.container}
             onPress={editTerm}
         >
-            <View 
-                style={[
-                    styles.checkbox,
-                    // { 
-                    //     borderColor: !active ? colors.textSecondary : 'transparent', 
-                    //     backgroundColor: active ? colors.textSecondary : 'transparent' 
-                    // }
-                ]} 
-            />
+            {selectable && (
+                <View 
+                    style={{
+                        borderColor: !active ? secondary : 'transparent', 
+                        backgroundColor: active ? secondary : 'transparent',
+                        ...styles.checkbox
+                    }} 
+                />
+            )}
             <Text>
                 {term.term}
             </Text>
