@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { View, TouchableOpacity } from 'react-native';
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
@@ -9,13 +10,22 @@ export const Term: React.FC<{
     id: string;
 }> = ({ id }) => {
     const colors = useColors();
+    const navigation = useNavigation();
     const term = useAppSelector(state => selectTermById(state, id));
     if(!term) return null;
     // const { selectable, activeItems, toggleActive } = useVocabulary();
 
+    const editTerm = () => {
+        navigation.navigate('Modal', {
+            screen: 'Edit Voc Item',
+            params: { defaultItem: term, type: 'term', header: 'View term' }
+        })
+    }
+
     return(
         <TouchableOpacity 
             style={styles.container}
+            onPress={editTerm}
         >
             <View 
                 style={[

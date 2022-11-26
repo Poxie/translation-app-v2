@@ -50,13 +50,14 @@ const styles = {
     header: {
         marginBottom: layout.spacing.primary,
         fontSize: 17,
-        fontWeight: '600' as '600'
+        fontWeight: '600' as '600',
     },
     tabs: {
         flexDirection: 'row' as 'row',
         borderRadius: layout.borderRadius.primary,
         borderWidth: layout.borderWidth.secondary,
-        overflow: 'hidden' as 'hidden'
+        overflow: 'hidden' as 'hidden',
+        marginBottom: layout.spacing.primary
     },
     tab: {
         padding: 30,
