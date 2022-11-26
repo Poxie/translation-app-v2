@@ -56,6 +56,7 @@ export default function SearchInput({
                     selectableItems={filters}
                     onChange={setFilter}
                     defaultActive={filter}
+                    placeholder={'Select a filter...'}
                     closeOnChange
                 />
             )}
