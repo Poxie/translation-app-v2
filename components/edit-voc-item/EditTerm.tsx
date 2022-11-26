@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import layout from '../../constants/layout';
+import { useAppDispatch } from '../../redux/store';
+import { addTerm } from '../../redux/voc/actions';
 import { VocItem } from '../../types';
 import Button from '../button';
 import Input from '../input';
@@ -11,10 +13,27 @@ const isDisabled = (item: Partial<VocItem>) => {
 export const EditTerm: React.FC<{
     defaultItem?: VocItem;
 }> = ({ defaultItem }) => {
-    const item = useRef<Partial<VocItem>>(defaultItem || {});
+    const dispatch = useAppDispatch();
     const [term, setTerm] = useState(defaultItem?.term || '');
     const [definition, setDefinition] = useState(defaultItem?.definition || '');
+    const [parentId, setParentId] = useState(defaultItem?.parentId || null);
     const disabled = !term && !definition;
+
+    const createTerm = () => {
+        // TODO: Make id entirely unique
+        const id = Math.random().toString();
+
+        // Creating term structure
+        const termItem: VocItem = {
+            id,
+            term,
+            definition,
+            parentId
+        }
+
+        // Adding term to redux store
+        dispatch(addTerm(termItem));
+    }
 
     return(
         <View style={styles.container}>
@@ -32,7 +51,10 @@ export const EditTerm: React.FC<{
                     containerStyle={styles.inputContainer}
                 />
             </View>
-            <Button disabled={disabled}>
+            <Button 
+                onPress={createTerm}
+                disabled={disabled}
+            >
                 Create term
             </Button>
         </View>

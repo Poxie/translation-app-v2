@@ -7,6 +7,7 @@ export type VocItem = {
     id: string;
     term: string | null;
     definition: string | null;
+    parentId: string | null;
 }
 
 // Overriding useNavigation autocorrection
