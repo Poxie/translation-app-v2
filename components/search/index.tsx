@@ -6,6 +6,7 @@ import { VocItem } from "../../types";
 import SearchInput from "../search-input";
 import Text from "../text";
 import View from "../view";
+import { SearchLabel } from "./SearchLabel";
 import { SearchResult } from "./SearchResult";
 
 export default function Search() {
@@ -22,25 +23,11 @@ export default function Search() {
             />
 
             <ScrollView style={styles.content}>
-                <DefaultView style={{
-                    borderColor: tertiary,
-                    ...styles.labelContainer
-                }}>
-                    <Text style={{
-                        color: secondary,
-                        ...styles.label
-                    }}>
-                        {!query ? (
-                            'Enter something above to search.'
-                        ) : (
-                            results.length ? (
-                                `Displaying ${results.length} results.`
-                            ) : (
-                                `No results were found matching "${query}"`
-                            )
-                        )}
-                    </Text>
-                </DefaultView>
+                <SearchLabel 
+                    query={query}
+                    resultCount={results.length}
+                />
+
                 {results.map(result => (
                     <SearchResult 
                         id={result}
@@ -54,13 +41,5 @@ export default function Search() {
 const styles = {
     content: {
         padding: layout.spacing.primary
-    },
-    labelContainer: {
-        borderBottomWidth: layout.borderWidth.secondary,
-        marginBottom: layout.spacing.primary,
-        paddingBottom: layout.spacing.primary
-    },
-    label: {
-        fontWeight: '600' as '600'
     }
 }
