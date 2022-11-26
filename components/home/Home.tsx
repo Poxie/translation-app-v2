@@ -64,6 +64,7 @@ export default function Home() {
                 allowAdd
                 addHeader={'Add Preferred Time'}
                 onItemAdd={item => setSelectableItems(prev => [...prev, ...[item]])}
+                onItemDelete={id => setSelectableItems(prev => prev.filter(item => item.id !== id))}
                 multiSelect
             />
         </View>

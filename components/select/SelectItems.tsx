@@ -10,17 +10,40 @@ import Text from '../text';
 export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: { 
     items: _items, active: _active, onChange, 
     closeOnChange, allowAdd, onItemAdd, multiSelect,
-    addHeader
+    addHeader, onItemDelete
 } } }) => {
     const navigation = useNavigation();
     const [active, setActive] = useState(_active);
     const [items, setItems] = useState(_items);
+    const [isEditing, setIsEditing] = useState(false);
+
+    // Updating header if items are editable
+    useEffect(() => {
+        if(!allowAdd) return;
+
+        const toggleEdit = () => setIsEditing(!isEditing);
+
+        navigation.setOptions({ 
+            headerRight: () => (
+                <TouchableOpacity onPress={toggleEdit}>
+                    <Text>
+                        {isEditing ? 'Done' : 'Edit'}
+                    </Text>
+                </TouchableOpacity>
+            )
+        })
+    }, [allowAdd, isEditing]);
 
     // Updating parent on active items change
     useEffect(() => {
         onChange(active);
     }, [active]);
 
+    const onDeletePress = (id: string) => {
+        if(!onItemDelete) return;
+        setItems(prev => prev.filter(item => item.id !== id));
+        onItemDelete(id);
+    }
     const onPress = (id: string) => {
         setActive(prev => {
             // If not multi select, set item id as active
@@ -77,12 +100,14 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                         onPress={onPress}
                         isLast={key === items.length - 1}
                         active={active.includes(item.id)}
+                        onDeletePress={onDeletePress}
+                        isEditing={isEditing}
                         key={item.id}
                     />
                 ))}
             </DefaultView>
 
-            {allowAdd && (
+            {isEditing && (
                 <TouchableOpacity 
                     onPress={openAddModal}
                     style={styles.addButton}

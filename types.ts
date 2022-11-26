@@ -28,6 +28,7 @@ export type ModalStackParamList = {
         allowAdd?: boolean;
         addHeader?: string;
         onItemAdd?: (item: SelectItem) => void;
+        onItemDelete?: (id: string) => void;
         multiSelect?: boolean;
     }
     'Add Select Item': {

@@ -1,5 +1,6 @@
 import { TouchableOpacity, View, Dimensions } from 'react-native';
 import { AntDesign } from '@expo/vector-icons'; 
+import { Feather } from '@expo/vector-icons'; 
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
 import Text from '../text';
@@ -7,26 +8,45 @@ import { SelectItem as SelectItemType } from './index';
 
 export const SelectItem: React.FC<SelectItemType & {
     onPress: (id: string) => void;
+    onDeletePress: (id: string) => void;
     isLast: boolean;
     active: boolean;
-}> = ({ text, id, onPress, isLast, active }) => {
-    const { background: { secondary, tertiary }, text: { primary: textPrimary } } = useColors();
+    isEditing: boolean;
+}> = ({ text, id, onPress, isLast, active, isEditing, onDeletePress }) => {
+    const { background: { secondary, tertiary }, text: { primary: textPrimary }, color: { red } } = useColors();
 
     return(
         <View style={styles.container}>
             <TouchableOpacity
+                disabled={isEditing}
                 onPress={() => onPress(id)}
                 style={{
                     backgroundColor: secondary,
                     ...styles.button
                 }}
             >
-                <Text>
+                <Text style={styles.text}>
                     {text}
                 </Text>
 
-                {active && (
-                    <AntDesign name="check" size={18} color={textPrimary} />
+                {active && !isEditing && (
+                    <AntDesign 
+                        style={styles.itemButton}
+                        name="check" 
+                        size={18} 
+                        color={textPrimary} 
+                    />
+                )}
+
+                {isEditing && (
+                    <TouchableOpacity onPress={() => onDeletePress(id)}>
+                        <Feather 
+                            style={styles.itemButton} 
+                            name="trash-2" 
+                            size={18} 
+                            color={red} 
+                        />
+                    </TouchableOpacity>
                 )}
             </TouchableOpacity>
             {!isLast && (
@@ -46,11 +66,16 @@ const styles = {
         position: 'relative' as 'relative'
     },
     button: {
-        padding: layout.spacing.primary,
         flexDirection: 'row' as 'row',
         alignItems: 'center' as 'center',
         justifyContent: 'space-between' as 'space-between',
         width: '100%'
+    },
+    text: {
+        padding: layout.spacing.primary
+    },
+    itemButton: {
+        padding: layout.spacing.primary
     },
     divider: {
         width: Dimensions.get('screen').width - layout.spacing.primary * 4,
