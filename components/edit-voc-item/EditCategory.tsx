@@ -45,7 +45,7 @@ export const EditCategory: React.FC<{
                 onPress={createCategory}
                 disabled={disabled}
             >
-                Create term
+                Create category
             </Button>
         </View>
     )
