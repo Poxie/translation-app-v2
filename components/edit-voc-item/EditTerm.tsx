@@ -7,9 +7,6 @@ import { VocItem } from '../../types';
 import Button from '../button';
 import Input from '../input';
 
-const isDisabled = (item: Partial<VocItem>) => {
-    return Object.values(item).find(v => console.log(v)) || !Object.keys(item).length;
-}
 export const EditTerm: React.FC<{
     defaultItem?: VocItem;
 }> = ({ defaultItem }) => {
