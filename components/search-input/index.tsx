@@ -27,7 +27,7 @@ export default function SearchInput({
             (term.definition && term.definition.toLowerCase().includes(processedQuery))
         ))
         if(filter.length) {
-            filteredTerms = filteredTerms.filter(term => term[filter[0] as keyof VocItem]?.toLowerCase()?.includes(processedQuery));
+            filteredTerms = filteredTerms.filter(term => term[filter[0] as 'term' | 'definition']?.toLowerCase()?.includes(processedQuery));
         }
 
         onQueryResults(filteredTerms);
