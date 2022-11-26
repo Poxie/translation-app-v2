@@ -48,8 +48,9 @@ export type ModalStackParamList = {
         header?: string;
     }
     'Edit Voc Item': {
+        header: string;
+        type: 'term' | 'category';
         defaultItem?: VocItem;
-        type: 'term' | 'category'
     }
 }
 

@@ -67,6 +67,7 @@ const ModalStackProvider = () => {
             <ModalStack.Screen 
                 name="Edit Voc Item"
                 component={EditVocItem}
+                options={({ route }) => ({ headerTitle: route.params.header })}
             />
         </ModalStack.Navigator>
     )
