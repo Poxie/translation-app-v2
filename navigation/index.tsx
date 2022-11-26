@@ -1,9 +1,14 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from '@react-navigation/native';
-import Home from "../components/home/Home";
 import { SelectItems } from "../components/select/SelectItems";
 import { MainStackParamList, ModalStackParamList, RootStackParamList } from "../types";
 import { AddSelectItem } from "../components/select/AddSelectItem";
+import Home from "../components/home";
+import Search from "../components/search";
+import Voc from "../components/voc";
+import Quiz from "../components/quiz";
+import Favorite from "../components/favorite";
+import ImportVoc from "../components/import-voc";
 
 // Root stack
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -24,7 +29,21 @@ const MainStack = createNativeStackNavigator<MainStackParamList>();
 const MainStackProvider = () => {
     return(
         <MainStack.Navigator initialRouteName={'Home'}>
-            <MainStack.Screen options={{ headerTitle: 'heylow' }} name="Home" component={Home} />
+            <MainStack.Screen 
+                options={{ 
+                    headerTitle: 'Dashboard',
+                    headerLargeTitle: true,
+                    headerShadowVisible: false,
+                    headerLargeTitleStyle: { fontSize: 32 }
+                }} 
+                name="Home" 
+                component={Home} 
+            />
+            <MainStack.Screen name="Search" component={Search} />
+            <MainStack.Screen name="Voc" component={Voc} />
+            <MainStack.Screen name="Import Voc" component={ImportVoc} />
+            <MainStack.Screen name="Choose Quiz" component={Quiz} />
+            <MainStack.Screen name="Favorites" component={Favorite} />
         </MainStack.Navigator>
     )
 }

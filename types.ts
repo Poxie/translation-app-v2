@@ -16,6 +16,11 @@ export type RootStackParamList = {
 }
 export type MainStackParamList = {
     'Home': undefined;
+    'Search': undefined;
+    'Voc': undefined;
+    'Import Voc': undefined;
+    'Choose Quiz': undefined;
+    'Favorites': undefined;
 }
 
 export type ModalStackParamList = {
