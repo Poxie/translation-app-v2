@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { useState } from "react";
 import Text from '../text';
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
+import { StyleProps } from 'react-native-reanimated';
 
 export type SelectItem = {
     text: string;
@@ -14,7 +15,8 @@ export type SelectItem = {
 export default function Select({
     selectableItems, defaultActive, header,
     onChange, closeOnChange, allowEdit, onItemAdd,
-    multiSelect, addHeader, onItemDelete
+    multiSelect, addHeader, onItemDelete, label,
+    containerStyle
 }: {
     selectableItems: SelectItem[];
     defaultActive?: string | string[];
@@ -26,9 +28,11 @@ export default function Select({
     onItemDelete: (id: string) => void;
     addHeader?: string;
     multiSelect?: boolean;
+    label?: string;
+    containerStyle?: StyleProps;
 }) {
     const navigation = useNavigation();
-    const { background: { secondary, tertiary } } = useColors();
+    const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
     const [active, setActive] = useState(
         defaultActive ? (
             Array.isArray(defaultActive) ? defaultActive : [defaultActive]
@@ -56,23 +60,34 @@ export default function Select({
     }
 
     return(
-        <TouchableOpacity
-            onPress={openModal}
-            style={{
-                backgroundColor: secondary,
-                borderColor: tertiary,
-                ...styles.container
-            }}
-        >
-            <Text>
-                {activeItemText.join(', ') || 'Select an item...'}
-            </Text>
-            <MaterialIcons name="arrow-forward-ios" size={16} color="black" />
-        </TouchableOpacity>
+        <View style={containerStyle}>
+            {label && (
+                <Text style={{
+                    color: textSecondary,
+                    ...styles.label
+                }}>
+                    {label}
+                </Text>
+            )}
+            
+            <TouchableOpacity
+                onPress={openModal}
+                style={{
+                    backgroundColor: secondary,
+                    borderColor: tertiary,
+                    ...styles.button
+                }}
+            >
+                <Text>
+                    {activeItemText.join(', ') || 'Select an item...'}
+                </Text>
+                <MaterialIcons name="arrow-forward-ios" size={16} color="black" />
+            </TouchableOpacity>
+        </View>
     )
 }
 const styles = {
-    container: {
+    button: {
         padding: layout.spacing.primary,
         borderWidth: layout.borderWidth.primary,
         borderRadius: layout.borderRadius.secondary,
@@ -80,5 +95,9 @@ const styles = {
         justifyContent: 'space-between' as 'space-between',
         alignItems: 'center' as 'center',
         width: '100%'
+    },
+    label: {
+        marginBottom: layout.spacing.secondary,
+        fontWeight: '600' as '600'
     }
 }

@@ -64,6 +64,7 @@ export default function Home() {
                 addHeader={'Add Preferred Time'}
                 onItemAdd={item => setSelectableItems(prev => [...prev, ...[item]])}
                 onItemDelete={id => setSelectableItems(prev => prev.filter(item => item.id !== id))}
+                label={'Preferred time'}
                 multiSelect
                 allowEdit
             />
@@ -73,7 +74,6 @@ export default function Home() {
 
 const styles = {
     container: {
-        alignItems: 'center' as 'center',
         justifyContent: 'center' as 'center',
         padding: layout.spacing.primary
     }
