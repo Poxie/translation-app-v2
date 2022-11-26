@@ -13,7 +13,7 @@ export type SelectItem = {
 
 export default function Select({
     selectableItems, defaultActive, header,
-    onChange, closeOnChange, allowAdd, onItemAdd,
+    onChange, closeOnChange, allowEdit, onItemAdd,
     multiSelect, addHeader, onItemDelete
 }: {
     selectableItems: SelectItem[];
@@ -21,7 +21,7 @@ export default function Select({
     header?: string;
     onChange?: (items: string[]) => void;
     closeOnChange?: boolean;
-    allowAdd?: boolean;
+    allowEdit?: boolean;
     onItemAdd?: (item: SelectItem) => void;
     onItemDelete: (id: string) => void;
     addHeader?: string;
@@ -46,7 +46,7 @@ export default function Select({
                 items: selectableItems,
                 onChange: setActive,
                 closeOnChange,
-                allowAdd,
+                allowEdit,
                 onItemAdd,
                 onItemDelete,
                 addHeader,

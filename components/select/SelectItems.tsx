@@ -10,7 +10,7 @@ import { useColors } from '../../hooks/useColors';
 
 export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: { 
     items: _items, active: _active, onChange, 
-    closeOnChange, allowAdd, onItemAdd, multiSelect,
+    closeOnChange, allowEdit, onItemAdd, multiSelect,
     addHeader, onItemDelete
 } } }) => {
     const navigation = useNavigation();
@@ -21,7 +21,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
 
     // Updating header if items are editable
     useEffect(() => {
-        if(!allowAdd || !items.length) {
+        if(!allowEdit || !items.length) {
             navigation.setOptions({
                 headerRight: null
             })
@@ -40,7 +40,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                 </TouchableOpacity>
             )
         })
-    }, [allowAdd, isEditing, items.length]);
+    }, [allowEdit, isEditing, items.length]);
 
     // Updating parent on active items change
     useEffect(() => {

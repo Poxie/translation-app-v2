@@ -61,11 +61,11 @@ export default function Home() {
                 selectableItems={selectableItems}
                 defaultActive={'day'}
                 header={'Select Preferred Time'}
-                allowAdd
                 addHeader={'Add Preferred Time'}
                 onItemAdd={item => setSelectableItems(prev => [...prev, ...[item]])}
                 onItemDelete={id => setSelectableItems(prev => prev.filter(item => item.id !== id))}
                 multiSelect
+                allowEdit
             />
         </View>
     )

@@ -25,7 +25,7 @@ export type ModalStackParamList = {
         onChange: (activeIds: string[]) => void;
         header?: string;
         closeOnChange?: boolean;
-        allowAdd?: boolean;
+        allowEdit?: boolean;
         addHeader?: string;
         onItemAdd?: (item: SelectItem) => void;
         onItemDelete?: (id: string) => void;
