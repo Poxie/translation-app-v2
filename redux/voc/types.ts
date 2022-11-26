@@ -5,5 +5,5 @@ export type VocState = {
     categories: VocItem[];
     selectors: SelectorItem[];
     languages: LanguageItem[];
-    translations: {[key: string]: string[]};
+    translations: {[key: string]: string[] | undefined};
 }

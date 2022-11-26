@@ -1,21 +1,30 @@
 import { useNavigation } from '@react-navigation/native';
+import { useRef } from 'react';
 import { View as DefaultView, TouchableOpacity } from 'react-native';
+import Toast, { useToast } from 'react-native-toast-notifications';
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { selectLanguages } from '../../redux/voc/selectors';
+import { addTranslation, createTranslation } from '../../redux/voc/actions';
+import { selectTermById, selectTerms, selectTermTranslations } from '../../redux/voc/selectors';
 import { ItemTranslationsScreenProps } from '../../types';
-import { SelectItem as SelectItemType } from '../select';
 import { SelectItem } from '../select/SelectItem';
 import Text from '../text';
 import View from '../view';
 
 export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslationsScreenProps) => {
     const { background: { secondary, tertiary } } = useColors();
+    const toast = useToast();
     const dispatch = useAppDispatch();
     const navigation = useNavigation();
-    const languages = useAppSelector(selectLanguages);
-    const items: SelectItemType[] = [];
+    const terms = useAppSelector(selectTerms);
+    const term = useAppSelector(state => selectTermById(state, id));
+    const termTranslations = useAppSelector(state => selectTermTranslations(state, id));
+    const items = termTranslations.map(translation => ({
+        id: translation.id,
+        text: translation.term || translation.definition || ''
+    }))
+    const toastRef = useRef<any>();
 
     const openTerm = (id: string) => {
         navigation.navigate('Modal', {
@@ -30,8 +39,35 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
 
     const onAddClick = () => {
         const onTermSelected = (termId: string) => {
-            console.log('translation add', termId);
+            const selectedTerm = terms.find(term => term.id === termId);
+            if(!selectedTerm) return;
             navigation.goBack();
+
+            const selectedTermTranslation = selectedTerm?.translation;
+            const selfTermTranslation = term?.translation
+            const translation = selectedTermTranslation || selfTermTranslation;
+
+            // If both terms are same
+            if(termId === term?.id) {
+                toastRef.current.show('A term cannot be a translation of itself.', {
+                    type: 'danger'
+                });
+                return;
+            }
+
+            // If both terms are in translation
+            if(translation && selectedTermTranslation === selfTermTranslation) {
+                toastRef.current.show('This term is already a translation.');
+                return;
+            }
+            
+            // If selected term has translations, add to translation array
+            if(translation) {
+                dispatch(addTranslation(selectedTermTranslation ? id : termId, translation))
+            } else {
+                const translationId = Math.random().toString();
+                dispatch(createTranslation([id, termId], translationId));
+            }
         }
 
         navigation.navigate('Modal', {
@@ -88,6 +124,8 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
                     Add Item
                 </Text>
             </TouchableOpacity>
+
+            <Toast ref={toastRef} />
         </View>
     )
 }

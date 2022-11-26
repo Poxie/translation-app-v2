@@ -14,7 +14,10 @@ import {
     setLanguages as setLanguagesAction,
     addLanguage as addLanguageAction,
     removeLanguage as removeLanguageAction,
-    setTranslations as setTranslationsAction
+    setTranslations as setTranslationsAction,
+    addTranslation as addTranslationAction,
+    removeTranslation as removeTranslationAction,
+    createTranslation as createTranslationAction
 } from './actions';
 import { VocState } from "./types";
 
@@ -51,6 +54,54 @@ const addSelector: ReducerAction = (state, action) => {
 const addLanguage: ReducerAction = (state, action) => {
     const newLanguages = state.languages.concat(action.payload);
     return updateObject(state, { languages: newLanguages });
+}
+
+const createTranslation: ReducerAction = (state, action) => {
+    const { termIds, translationId } = action.payload;
+    
+    const newTranslations = updateObject(state.translations, {
+        [translationId]: termIds
+    });
+    
+    const addTranslationToTerm = (terms: VocItem[], id: string) => {
+        return updateItemInArray(terms, id, term => {
+            return updateObject(term, {
+                translation: translationId
+            })
+        })
+    }
+    let newTerms = addTranslationToTerm(state.terms, termIds[0]);
+    newTerms = addTranslationToTerm(newTerms, termIds[1]);
+
+    return updateObject(state, { translations: newTranslations, terms: newTerms });
+}
+const addTranslation: ReducerAction = (state, action) => {
+    const { termId, translationId } = action.payload;
+    
+    const newTranslations = updateObject(state.translations, {
+        [translationId]: (state.translations[translationId] || []).concat(termId)
+    })
+    const newTerms = updateItemInArray(state.terms, termId, term => {
+        return updateObject(term, {
+            translation: translationId
+        })
+    })
+
+    return updateObject(state, { terms: newTerms, translations: newTranslations });
+}
+const removeTranslation: ReducerAction = (state, action) => {
+    const { termId, translationId } = action.payload;
+    
+    const newTranslations = updateObject(state.translations, {
+        [translationId]: (state.translations[translationId] || []).filter(id => id !== termId)
+    })
+    const newTerms = updateItemInArray(state.terms, termId, term => {
+        return updateObject(term, {
+            translation: null
+        })
+    })
+
+    return updateObject(state, { terms: newTerms, translations: newTranslations });
 }
 
 const removeSelector: ReducerAction = (state, action) => {
@@ -96,4 +147,7 @@ export const vocReducer = createReducer<VocState>({
         .addCase(addSelectorAction.type, addSelector)
         .addCase(removeSelectorAction.type, removeSelector)
         .addCase(setTranslationsAction.type, setTranslations)
+        .addCase(addTranslationAction.type, addTranslation)
+        .addCase(removeTranslationAction.type, removeTranslation)
+        .addCase(createTranslationAction.type, createTranslation)
 })

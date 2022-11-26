@@ -1,3 +1,4 @@
+import { ToastProvider } from 'react-native-toast-notifications'
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
@@ -16,7 +17,9 @@ export default function App() {
   return(
     <Provider store={store}>
       <StorageProvider>
-        <Navigation />
+        <ToastProvider>
+          <Navigation />
+        </ToastProvider>
       </StorageProvider>
     </Provider>
   )
@@ -35,6 +38,8 @@ const StorageProvider: React.FC<{
   // Hydrating redux with data from local storage
   useEffect(() => {
     // Setting inital terms
+    AsyncStorageLib.setItem('@terms', '[]');
+    AsyncStorageLib.setItem('@translations', '{}');
     try {
       AsyncStorageLib.getItem('@terms').then(data => {
         if(!data) {
