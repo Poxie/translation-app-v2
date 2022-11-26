@@ -1,4 +1,3 @@
-import { ReactElement } from 'react';
 import { View as DefaultView, ScrollView, SafeAreaView } from 'react-native';
 import { StyleProps } from "react-native-reanimated"
 import { useColors } from '../../hooks/useColors';
@@ -7,7 +6,7 @@ export default function View({
     children, style, scrollView=false, contentContainerStyle,
     safeAreaView=false
 }: {
-    children: ReactElement | ReactElement[];
+    children: any;
     scrollView?: boolean;
     contentContainerStyle?: StyleProps;
     safeAreaView?: boolean;
