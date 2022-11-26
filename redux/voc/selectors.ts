@@ -24,3 +24,7 @@ export const selectCategoryById = createSelector(
     [selectCategories, selectId],
     (categories, categoryId) => categories.find(category => category.id === categoryId)
 )
+export const selectCategoryChildren = createSelector(
+    [selectCategories, selectTerms, selectId],
+    (categories, terms, categoryId) => [...categories, ...terms].filter(item => item.parentId === categoryId)
+)
