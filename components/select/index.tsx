@@ -25,7 +25,7 @@ export default function Select({
     closeOnChange?: boolean;
     allowEdit?: boolean;
     onItemAdd?: (item: SelectItem) => void;
-    onItemDelete: (id: string) => void;
+    onItemDelete?: (id: string) => void;
     addHeader?: string;
     multiSelect?: boolean;
     label?: string;
