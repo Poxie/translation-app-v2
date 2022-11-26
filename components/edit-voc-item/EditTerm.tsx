@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { addLanguage as addLanugageInStorage, removeLanguage as removeLanguageInStorage, updateItem as updateItemInStore } from '../../logic';
-import { View } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { addLanguage, addSelector, addTerm, removeLanguage, removeSelector, setTerms, updateTerm } from '../../redux/voc/actions';
@@ -125,7 +125,7 @@ export const EditTerm: React.FC<{
     const canEdit = isEditing || !defaultItem;
     return(
         <View style={styles.container}>
-            <View>
+            <ScrollView>
                 {!canEdit ? (
                     <PreviewInput 
                         text={term || ''}
@@ -212,7 +212,7 @@ export const EditTerm: React.FC<{
                         label={'Category'}
                     />
                 )}
-            </View>
+            </ScrollView>
             {!defaultItem && (
                 <Button 
                     onPress={createTerm}
