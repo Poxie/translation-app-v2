@@ -4,6 +4,7 @@ import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { addTerm } from '../../redux/voc/actions';
 import { selectCategories } from '../../redux/voc/selectors';
+import { createTerm as createTermInStorage } from '../../logic';
 import { VocItem } from '../../types';
 import Button from '../button';
 import Input from '../input';
@@ -34,6 +35,9 @@ export const EditTerm: React.FC<{
 
         // Adding term to redux store
         dispatch(addTerm(termItem));
+        
+        // Adding term to local storage
+        createTermInStorage(termItem);
     }
 
     const parentItems = availableParents.map(category => ({

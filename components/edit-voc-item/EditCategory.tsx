@@ -4,6 +4,7 @@ import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { addCategory } from '../../redux/voc/actions';
 import { selectCategories } from '../../redux/voc/selectors';
+import { createCategory as createCategoryInStorage } from '../../logic';
 import { VocItem } from "../../types";
 import Button from '../button';
 import Input from '../input';
@@ -32,6 +33,9 @@ export const EditCategory: React.FC<{
 
         // Adding category to redux store
         dispatch(addCategory(category));
+
+        // Adding category to local storage
+        createCategoryInStorage(category)
     }
 
     const parentItems = availableParents.map(category => ({
