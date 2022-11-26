@@ -1,14 +1,21 @@
 import { useState } from 'react';
 import { TouchableOpacity } from 'react-native';
+import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { toggleTest } from '../../redux/voc/actions';
 import { selectVocTest } from '../../redux/voc/selectors';
 import Button from '../button';
 import Input from '../input';
+import Select from '../select';
 import Text from '../text';
 import View from '../view';
 
+const selectableItems = [
+    { text: 'Day', id: 'day' },
+    { text: 'Night', id: 'night' },
+    { text: 'Both', id: 'both' }
+]
 export default function Home() {
     const { text: { secondary }, background: { primary } } = useColors();
     const test = useAppSelector(selectVocTest);
@@ -16,7 +23,7 @@ export default function Home() {
     const [text, setText] = useState('typed text');
 
     return(
-        <View scrollView>
+        <View style={styles.container}>
             <Text>
                 Hello test is: {test ? 'true' : 'false'}
             </Text>
@@ -48,6 +55,11 @@ export default function Home() {
             >
                 My secondary button
             </Button>
+            <Select 
+                selectableItems={selectableItems}
+                defaultActive={'day'}
+                header={'Select Preferred Time'}
+            />
         </View>
     )
 }
@@ -55,6 +67,7 @@ export default function Home() {
 const styles = {
     container: {
         alignItems: 'center' as 'center',
-        justifyContent: 'center' as 'center'
+        justifyContent: 'center' as 'center',
+        padding: layout.spacing.primary
     }
 }

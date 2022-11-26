@@ -6,5 +6,8 @@ export default {
     borderRadius: {
         primary: 12,
         secondary: 8
+    },
+    borderWidth: {
+        primary: 2
     }
 }
