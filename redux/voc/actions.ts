@@ -1,4 +1,7 @@
 import { createAction } from "@reduxjs/toolkit";
-import { TOGGLE_TEST } from "./constants";
+import { ADD_TERM } from "./constants";
 
-export const toggleTest = createAction(TOGGLE_TEST);
+export const addTerm = createAction(ADD_TERM, item => ({
+    type: ADD_TERM,
+    payload: item
+}));

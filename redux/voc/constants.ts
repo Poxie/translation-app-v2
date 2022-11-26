@@ -1,1 +1,1 @@
-export const TOGGLE_TEST = 'TOGGLE_TEST';
+export const ADD_TERM = 'ADD_TERM';

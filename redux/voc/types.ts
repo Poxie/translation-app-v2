@@ -1,3 +1,5 @@
+import { VocItem } from "../../types"
+
 export type VocState = {
-    test: boolean;
+    terms: VocItem[];
 }

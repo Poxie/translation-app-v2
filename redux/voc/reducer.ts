@@ -1,16 +1,17 @@
 import { AnyAction, createReducer } from "@reduxjs/toolkit";
 import { updateObject } from "../utils";
-import { toggleTest as toggleTestAction } from './actions';
+import { addTerm as addTermAction } from './actions';
 import { VocState } from "./types";
 
 type ReducerAction = (state: VocState, action: AnyAction) => VocState;
 
-const toggleTest: ReducerAction = (state, action) => {
-    return updateObject(state, { test: !state.test });
+const addTerm: ReducerAction = (state, action) => {
+    const newTerms = state.terms.concat(action.payload);
+    return updateObject(state, { terms: newTerms });
 }
 
 export const vocReducer = createReducer<VocState>({
-    test: true
+    terms: []
 }, builder => {
-    builder.addCase(toggleTestAction, toggleTest)
+    builder.addCase(addTermAction, addTerm)
 })
