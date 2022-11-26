@@ -36,7 +36,7 @@ export default function Select({
     const [active, setActive] = useState(
         defaultActive ? (
             Array.isArray(defaultActive) ? defaultActive : [defaultActive]
-        ) : [selectableItems[0]?.id]
+        ) : []
     );
     const activeItems = selectableItems.filter(item => active.includes(item.id));
     const activeItemText = activeItems.map(item => item.text);
