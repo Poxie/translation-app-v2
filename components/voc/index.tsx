@@ -33,7 +33,7 @@ export default function Voc({ route: { params: { selectable, pathAfterSelection 
     const floatingCategoryIds = useAppSelector(selectFloatingCategoryIds);
     const floatingTermIds = useAppSelector(selectFloatingTermIds);
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState<VocItem[]>([]);
+    const [results, setResults] = useState<string[]>([]);
     const [active, setActive] = useState<string[]>([]);
 
     useEffect(() => {

@@ -6,7 +6,7 @@ import Text from '../text';
 import { Term } from './Term';
 
 export const SearchResults: React.FC<{
-    results: VocItem[];
+    results: string[];
     query: string;
 }> = ({ results, query }) => {
     const { background: { tertiary }, text: { secondary } } = useColors();
@@ -41,8 +41,8 @@ export const SearchResults: React.FC<{
 
             {results.map(result => (
                 <Term 
-                    {...result}
-                    key={result.id}
+                    id={result}
+                    key={result}
                 />
             ))}
         </ScrollView>

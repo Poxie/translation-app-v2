@@ -11,7 +11,7 @@ export default function SearchInput({
     onQueryChange, onQueryResults, hasFilters
 }: {
     onQueryChange: (query: string) => void;
-    onQueryResults: (items: VocItem[]) => void;
+    onQueryResults: (items: string[]) => void;
     hasFilters?: boolean;
 }) {
     const terms = useAppSelector(selectTerms);
@@ -36,7 +36,7 @@ export default function SearchInput({
             filteredTerms = filteredTerms.filter(term => term[filter[0] as 'term' | 'definition']?.toLowerCase()?.includes(processedQuery));
         }
 
-        onQueryResults(filteredTerms);
+        onQueryResults(filteredTerms.map(term => term.id));
         onQueryChange(query);
     }, [query, filter]);
     
