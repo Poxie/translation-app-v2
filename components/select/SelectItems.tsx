@@ -6,6 +6,7 @@ import View from "../view"
 import { SelectItem } from "./SelectItem"
 import { useEffect, useState } from "react";
 import Text from '../text';
+import { useColors } from '../../hooks/useColors';
 
 export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: { 
     items: _items, active: _active, onChange, 
@@ -13,13 +14,20 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
     addHeader, onItemDelete
 } } }) => {
     const navigation = useNavigation();
+    const { background: { secondary, tertiary } } = useColors();
     const [active, setActive] = useState(_active);
     const [items, setItems] = useState(_items);
     const [isEditing, setIsEditing] = useState(false);
 
     // Updating header if items are editable
     useEffect(() => {
-        if(!allowAdd) return;
+        if(!allowAdd || !items.length) {
+            navigation.setOptions({
+                headerRight: null
+            })
+            setIsEditing(false);
+            return;
+        }
 
         const toggleEdit = () => setIsEditing(!isEditing);
 
@@ -32,7 +40,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                 </TouchableOpacity>
             )
         })
-    }, [allowAdd, isEditing]);
+    }, [allowAdd, isEditing, items.length]);
 
     // Updating parent on active items change
     useEffect(() => {
@@ -94,6 +102,18 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
     return(
         <View style={styles.container}>
             <DefaultView style={styles.content}>
+                {items.length === 0 && (
+                    <Text 
+                        style={{
+                            backgroundColor: secondary,
+                            borderColor: tertiary,
+                            ...styles.empty
+                        }}
+                    >
+                        There are no items here yet.
+                    </Text>
+                )}
+
                 {items.map((item, key) => (
                     <SelectItem 
                         {...item}
@@ -107,7 +127,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                 ))}
             </DefaultView>
 
-            {isEditing && (
+            {(isEditing || items.length === 0) && (
                 <TouchableOpacity 
                     onPress={openAddModal}
                     style={styles.addButton}
@@ -132,5 +152,11 @@ const styles = {
         alignItems: 'center' as 'center',
         paddingVertical: layout.spacing.primary,
         marginTop: layout.spacing.primary
+    },
+    empty: {
+        borderRadius: layout.borderRadius.primary,
+        borderWidth: layout.borderWidth.primary,
+        padding: layout.spacing.primary,
+        textAlign: 'center' as 'center'
     }
 }
