@@ -1,5 +1,5 @@
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
-import { SelectorItem, VocItem } from "./types";
+import { LanguageItem, SelectorItem, VocItem } from "./types";
 
 export const createTerm = async (item: VocItem) => {
     try {
@@ -91,5 +91,32 @@ export const removeSelector = async (selectorId: string) => {
         AsyncStorageLib.setItem('@selectors', JSON.stringify(selectors));
     } catch(e) {
         console.error(`Error removing selector`, e);
+    }
+}
+
+export const addLanguage = async (language: LanguageItem) => {
+    try {
+        const data = await AsyncStorageLib.getItem('@languages');
+        if(!data) return;
+
+        const languages: LanguageItem[] = JSON.parse(data);
+        languages.push(language);
+
+        AsyncStorageLib.setItem('@languages', JSON.stringify(languages));
+    } catch(e) {
+        console.error(`Error adding language`, e);
+    }
+}
+export const removeLanguage = async (languageId: string) => {
+    try {
+        const data = await AsyncStorageLib.getItem('@languages');
+        if(!data) return;
+
+        let languages: SelectorItem[] = JSON.parse(data);
+        languages = languages.filter(selector => selector.id !== languageId);
+
+        AsyncStorageLib.setItem('@languages', JSON.stringify(languages));
+    } catch(e) {
+        console.error(`Error removing language`, e);
     }
 }

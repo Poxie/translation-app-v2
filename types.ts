@@ -10,9 +10,14 @@ export type VocItem = {
     term?: string | null;
     definition?: string | null;
     selectors?: string[];
+    language?: string | null;
     parentId: string | null;
 }
 export type SelectorItem = {
+    text: string;
+    id: string;
+}
+export type LanguageItem = {
     text: string;
     id: string;
 }

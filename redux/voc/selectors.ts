@@ -3,6 +3,7 @@ import { RootState } from "../store"
 
 export const selectTerms = (state: RootState) => state.voc.terms;
 export const selectCategories = (state: RootState) => state.voc.categories;
+export const selectLanguages = (state: RootState) => state.voc.languages;
 const selectFloatingTerms = (state: RootState) => state.voc.terms.filter(term => !term.parentId);
 const selectFloatingCategories = (state: RootState) => state.voc.categories.filter(category => !category.parentId);
 const selectId = (_:any, id: string) => id;
