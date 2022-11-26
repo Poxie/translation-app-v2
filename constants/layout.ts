@@ -8,6 +8,7 @@ export default {
         secondary: 8
     },
     borderWidth: {
-        primary: 2
+        primary: 2,
+        secondary: 1
     }
 }
