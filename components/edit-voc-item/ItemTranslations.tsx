@@ -121,7 +121,7 @@ export const ItemTranslations = ({ route: { params: { id } } }: ItemTranslations
                 style={styles.addButton}
             >
                 <Text>
-                    Add Item
+                    Add translation
                 </Text>
             </TouchableOpacity>
 
