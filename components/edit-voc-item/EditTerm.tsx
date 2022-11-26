@@ -88,6 +88,7 @@ export const EditTerm: React.FC<{
         id: selector.id,
         text: selector.text
     }));
+    const currentSelectors = availableSelectors.filter(selector => selectors.includes(selector.id)).map(s => s.text);
 
     // Checking if user can edit values
     const canEdit = isEditing || !defaultItem;
@@ -124,7 +125,7 @@ export const EditTerm: React.FC<{
                 )}
                 {!canEdit ? (
                     <PreviewInput 
-                        text={selectors.join(', ')}
+                        text={currentSelectors.join(', ')}
                         label={'Selectors'}
                     />
                 ) : (
