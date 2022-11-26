@@ -105,7 +105,10 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
 
     return(
         <View style={styles.container}>
-            <DefaultView style={styles.content}>
+            <DefaultView style={{
+                borderColor: tertiary,
+                ...styles.content
+            }}>
                 {items.length === 0 && (
                     <Text 
                         style={{
@@ -150,6 +153,7 @@ const styles = {
     },
     content: {
         borderRadius: layout.borderRadius.primary,
+        borderWidth: layout.borderWidth.secondary,
         overflow: 'hidden' as 'hidden'
     },
     addButton: {
