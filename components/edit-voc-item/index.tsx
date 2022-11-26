@@ -21,28 +21,31 @@ export default function EditVocItem({ route: { params: {
     }, [type]);
 
     return(
-        <View style={styles.container}>
-            <TypeSelection 
-                type={type}
-                setType={setType}
-            />
-
-            {type === 'term' && (
-                <EditTerm 
-                    defaultItem={defaultItem}
+        <View safeAreaView>
+            <View style={styles.container}>
+                <TypeSelection 
+                    type={type}
+                    setType={setType}
                 />
-            )}
 
-            {type === 'category' && (
-                <EditCategory 
-                    defaultItem={defaultItem}
-                />
-            )}
+                {type === 'term' && (
+                    <EditTerm 
+                        defaultItem={defaultItem}
+                    />
+                )}
+
+                {type === 'category' && (
+                    <EditCategory 
+                        defaultItem={defaultItem}
+                    />
+                )}
+            </View>
         </View>
     )
 }
 const styles = {
     container: {
-        padding: layout.spacing.primary
+        padding: layout.spacing.primary,
+        paddingBottom: 0
     }
 }
