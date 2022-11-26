@@ -127,7 +127,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                 ))}
             </DefaultView>
 
-            {(isEditing || items.length === 0) && (
+            {(isEditing || items.length === 0) && allowEdit && (
                 <TouchableOpacity 
                     onPress={openAddModal}
                     style={styles.addButton}
