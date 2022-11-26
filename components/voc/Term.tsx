@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { View, TouchableOpacity } from 'react-native';
+import { useVoc } from '.';
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
 import { useAppSelector } from '../../redux/store';
@@ -8,14 +9,13 @@ import Text from '../text';
 
 export const Term: React.FC<{
     id: string;
-    selectable?: boolean;
-    active?: boolean;
-}> = ({ id, selectable, active }) => {
+}> = ({ id }) => {
+    const { selectable, activeIds, setActive } = useVoc();
     const { text: { secondary } } = useColors();
     const navigation = useNavigation();
     const term = useAppSelector(state => selectTermById(state, id));
+    const active = activeIds.includes(id);
     if(!term) return null;
-    // const { selectable, activeItems, toggleActive } = useVocabulary();
 
     const editTerm = () => {
         navigation.navigate('Modal', {
@@ -27,7 +27,7 @@ export const Term: React.FC<{
     return(
         <TouchableOpacity 
             style={styles.container}
-            onPress={editTerm}
+            onPress={selectable ? () => setActive(id) : editTerm}
         >
             {selectable && (
                 <View 

@@ -9,18 +9,19 @@ import { selectCategoryById, selectCategoryChildren } from "../../redux/voc/sele
 import Text from "../text"
 import { Term } from './Term';
 import layout from '../../constants/layout';
+import { useVoc } from '.';
 
 export const Category: React.FC<{
     id: string;
     isChild?: boolean;
-    selectable?: boolean;
-    active?: boolean;
-}> = ({ id, isChild, selectable, active }) => {
+}> = ({ id, isChild }) => {
     const navigation = useNavigation();
-    const category = useAppSelector(state => selectCategoryById(state, id));
-    const children = useAppSelector(state => selectCategoryChildren(state, id))
+    const { setActive, activeIds, selectable } = useVoc();
     const { background: { tertiary }, text: { secondary } } = useColors();
+    const category = useAppSelector(state => selectCategoryById(state, id));
+    const children = useAppSelector(state => selectCategoryChildren(state, id));
     const hasItems = children.length > 0;
+    const active = activeIds.includes(id);
     const [open, setOpen] = useState(false);
     const rotation = useRef(new Animated.Value(0)).current;
     const height = useRef(new Animated.Value(0)).current;
@@ -68,14 +69,15 @@ export const Category: React.FC<{
             >
                 <View style={styles.headerLeft}>
                     {selectable && (
-                        <Pressable 
+                        <Pressable
+                            onPress={() => setActive(id)} 
                             style={[{
                                     borderColor: !active ? secondary : 'transparent', 
                                     backgroundColor: active ? secondary : 'transparent',
                                     ...styles.checkbox,
                                 },
                                 isChild && {
-                                    ...styles.childContainer
+                                    ...styles.childCheckbox
                                 }
                             ]
                         } 

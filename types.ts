@@ -32,7 +32,10 @@ export type RootStackParamList = {
 export type MainStackParamList = {
     'Home': undefined;
     'Search': undefined;
-    'Voc': undefined;
+    'Voc': {
+        header: string;
+        selectable?: boolean;
+    };
     'Import Voc': undefined;
     'Choose Quiz': undefined;
     'Favorites': undefined;
@@ -62,7 +65,10 @@ export type ModalStackParamList = {
     }
 }
 
-// Screen props
+// Main stack screen props
+export type VocScreenProps = NativeStackScreenProps<MainStackParamList, 'Voc'>;
+
+// Modal stack screen props
 export type SelectItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Select Items'>
 export type AddSelectItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Add Select Item'>
 export type EditVocItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Edit Voc Item'>

@@ -41,7 +41,11 @@ const MainStackProvider = () => {
                 component={Home} 
             />
             <MainStack.Screen name="Search" component={Search} />
-            <MainStack.Screen name="Voc" component={Voc} />
+            <MainStack.Screen 
+                name="Voc" 
+                component={Voc} 
+                options={({ route }) => ({ headerTitle: route.params.header })}
+            />
             <MainStack.Screen name="Import Voc" component={ImportVoc} />
             <MainStack.Screen name="Choose Quiz" component={Quiz} />
             <MainStack.Screen name="Favorites" component={Favorite} />
