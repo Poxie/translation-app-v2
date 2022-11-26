@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import layout from '../../constants/layout';
+import { useNavigation } from '@react-navigation/native';
 import { useColors } from '../../hooks/useColors';
 import { useAppSelector } from "../../redux/store";
 import { selectCategories, selectFloatingCategoryIds, selectFloatingTermIds, selectTerms } from "../../redux/voc/selectors";
 import View from '../view';
-import { View as DefaultView, ScrollView } from 'react-native';
+import { View as DefaultView, ScrollView, TouchableOpacity } from 'react-native';
 import { Category } from './Category';
 import { Term } from "./Term";
 import Text from '../text';
 import SearchInput from '../search-input';
 import { useState } from 'react';
-import { VocItem, VocScreenProps } from '../../types';
+import { MainStackParamList, VocItem, VocScreenProps } from '../../types';
 import { SearchResults } from './SearchResults';
 
 type VocContext = {
@@ -22,8 +23,9 @@ const VocContext = React.createContext({} as VocContext);
 
 export const useVoc = () => React.useContext(VocContext);
 
-export default function Voc({ route: { params: { selectable } } }: VocScreenProps) {
+export default function Voc({ route: { params: { selectable, pathAfterSelection } } }: VocScreenProps) {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
+    const navigation = useNavigation();
     const categories = useAppSelector(selectCategories);
     const terms = useAppSelector(selectTerms);
     const categoryIds = categories.map(category => category.id);
@@ -33,6 +35,30 @@ export default function Voc({ route: { params: { selectable } } }: VocScreenProp
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<VocItem[]>([]);
     const [active, setActive] = useState<string[]>([]);
+
+    useEffect(() => {
+        if(!pathAfterSelection) return;
+
+        const goNext = () => {
+            navigation.navigate('Root', {
+                screen: pathAfterSelection,
+                params: { 
+                    termIds: active.filter(id => termIds.includes(id)) 
+                } as any
+            })
+        }
+
+        navigation.setOptions({ headerRight: () => (
+            <TouchableOpacity 
+                onPress={goNext}
+                disabled={!active.length}
+            >
+                <Text>
+                    Next
+                </Text>
+            </TouchableOpacity>
+        ) })
+    }, [selectable, active.length]);
 
     const setActiveItem = (id: string) => {
         // TODO: make this 'algorithm' better

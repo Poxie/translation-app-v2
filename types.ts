@@ -35,9 +35,12 @@ export type MainStackParamList = {
     'Voc': {
         header: string;
         selectable?: boolean;
+        pathAfterSelection?: keyof MainStackParamList;
     };
     'Import Voc': undefined;
-    'Choose Quiz': undefined;
+    'Choose Quiz': {
+        termIds?: string[];
+    };
     'Favorites': undefined;
 }
 
@@ -67,6 +70,7 @@ export type ModalStackParamList = {
 
 // Main stack screen props
 export type VocScreenProps = NativeStackScreenProps<MainStackParamList, 'Voc'>;
+export type QuizScreenProps = NativeStackScreenProps<MainStackParamList, 'Choose Quiz'>;
 
 // Modal stack screen props
 export type SelectItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Select Items'>
