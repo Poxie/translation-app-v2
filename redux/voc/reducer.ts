@@ -1,6 +1,6 @@
 import { AnyAction, createReducer } from "@reduxjs/toolkit";
-import { updateObject } from "../utils";
-import { addTerm as addTermAction, addCategory as addCategoryAction, setCategories as setCategoriesAction, setTerms as setTermsAction } from './actions';
+import { updateItemInArray, updateObject } from "../utils";
+import { addTerm as addTermAction, addCategory as addCategoryAction, setCategories as setCategoriesAction, setTerms as setTermsAction, updateTerm as updateTermAction } from './actions';
 import { VocState } from "./types";
 
 type ReducerAction = (state: VocState, action: AnyAction) => VocState;
@@ -16,10 +16,16 @@ const addTerm: ReducerAction = (state, action) => {
     const newTerms = state.terms.concat(action.payload);
     return updateObject(state, { terms: newTerms });
 }
-
 const addCategory: ReducerAction = (state, action) => {
     const newCategories = state.categories.concat(action.payload);
     return updateObject(state, { categories: newCategories })
+}
+
+const updateTerm: ReducerAction = (state, action) => {
+    const newTerms = updateItemInArray(state.terms, action.payload.id, item => {
+        return updateObject(item, action.payload);
+    })
+    return updateObject(state, { terms: newTerms });
 }
 
 export const vocReducer = createReducer<VocState>({
@@ -31,4 +37,5 @@ export const vocReducer = createReducer<VocState>({
         .addCase(addCategoryAction.type, addCategory)
         .addCase(setCategoriesAction.type, setCategories)
         .addCase(setTermsAction.type, setTerms)
+        .addCase(updateTermAction.type, updateTerm)
 })

@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { ADD_CATEGORY, ADD_TERM, SET_CATEGORIES, SET_TERMS } from "./constants";
+import { ADD_CATEGORY, ADD_TERM, SET_CATEGORIES, SET_TERMS, UPDATE_TERM } from "./constants";
 
 export const setTerms = createAction(SET_TERMS, terms => ({
     type: SET_TERMS,
@@ -17,4 +17,9 @@ export const addTerm = createAction(ADD_TERM, item => ({
 export const addCategory = createAction(ADD_CATEGORY, category => ({
     type: ADD_CATEGORY,
     payload: category
+}))
+
+export const updateTerm = createAction(UPDATE_TERM, item => ({
+    type: UPDATE_TERM,
+    payload: item
 }))

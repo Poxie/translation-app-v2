@@ -30,3 +30,23 @@ export const createCategory = async (category: VocItem) => {
         console.error(`Error creating category`, e);
     }
 }
+
+export const updateItem = async (item: VocItem) => {
+    try {
+        // Fetching items
+        const data = await AsyncStorageLib.getItem('@terms');
+        if(!data) return;
+
+        // Finding and replacing correct item in array
+        let items: VocItem[] = JSON.parse(data);
+        items = items.map(i => {
+            if(i.id === item.id) return item;
+            return i;
+        })
+
+        // Updating storage with new item
+        AsyncStorageLib.setItem('@terms', JSON.stringify(items));
+    } catch(e) {
+        console.error(`Error updating item`, e);
+    }
+}
