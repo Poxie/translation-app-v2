@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TouchableOpacity, View } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { useColors } from '../../hooks/useColors';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { toggleTest } from '../../redux/voc/actions';
@@ -7,6 +7,7 @@ import { selectVocTest } from '../../redux/voc/selectors';
 import Button from '../button';
 import Input from '../input';
 import Text from '../text';
+import View from '../view';
 
 export default function Home() {
     const { text: { secondary }, background: { primary } } = useColors();
@@ -15,7 +16,7 @@ export default function Home() {
     const [text, setText] = useState('typed text');
 
     return(
-        <View style={{backgroundColor: primary, ...styles.container}}>
+        <View scrollView>
             <Text>
                 Hello test is: {test ? 'true' : 'false'}
             </Text>
@@ -53,7 +54,6 @@ export default function Home() {
 
 const styles = {
     container: {
-        flex: 1,
         alignItems: 'center' as 'center',
         justifyContent: 'center' as 'center'
     }
