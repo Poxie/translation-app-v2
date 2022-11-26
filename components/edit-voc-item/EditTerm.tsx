@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import layout from '../../constants/layout';
-import { useAppDispatch } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { addTerm } from '../../redux/voc/actions';
+import { selectCategories } from '../../redux/voc/selectors';
 import { VocItem } from '../../types';
 import Button from '../button';
 import Input from '../input';
+import Select from '../select';
 
 export const EditTerm: React.FC<{
     defaultItem?: VocItem;
@@ -14,6 +16,7 @@ export const EditTerm: React.FC<{
     const [term, setTerm] = useState(defaultItem?.term || '');
     const [definition, setDefinition] = useState(defaultItem?.definition || '');
     const [parentId, setParentId] = useState(defaultItem?.parentId || null);
+    const availableParents = useAppSelector(selectCategories);
     const disabled = !term && !definition;
 
     const createTerm = () => {
@@ -33,6 +36,10 @@ export const EditTerm: React.FC<{
         dispatch(addTerm(termItem));
     }
 
+    const parentItems = availableParents.map(category => ({
+        id: category.id,
+        text: category.title as string
+    }))
     return(
         <View style={styles.container}>
             <View>
@@ -47,6 +54,13 @@ export const EditTerm: React.FC<{
                     label={'Definition'}
                     onTextChange={setDefinition}
                     containerStyle={styles.inputContainer}
+                />
+                <Select 
+                    onChange={ids => setParentId(ids[0])}
+                    containerStyle={styles.inputContainer}
+                    selectableItems={parentItems}
+                    header={'Choose category'}
+                    label={'Category'}
                 />
             </View>
             <Button 
