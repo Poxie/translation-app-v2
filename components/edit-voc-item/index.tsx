@@ -23,7 +23,7 @@ export default function EditVocItem({ route: { params: {
             navigation.setOptions({ headerRight: () => (
                 <TouchableOpacity onPress={() => setIsEditing(!isEditing)}>
                     <Text>
-                        {isEditing ? 'Done' : 'Edit'}
+                        {isEditing ? 'Save' : 'Edit'}
                     </Text>
                 </TouchableOpacity>
             ) });
