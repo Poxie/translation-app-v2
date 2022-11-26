@@ -37,6 +37,7 @@ export default function Home() {
                 </Text>
             </TouchableOpacity>
             <Input 
+                label={'Type something nice'}
                 placeholder={'My nice input'}
                 onTextChange={setText}
                 defaultValue={text}
