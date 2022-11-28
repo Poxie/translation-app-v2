@@ -6,6 +6,8 @@ import { selectTerms } from '../../redux/voc/selectors';
 import { VocItem } from '../../types';
 import Input from '../input';
 import Select from '../select';
+import Text from '../text';
+import { LanguageSelector } from './LanguageSelector';
 
 export default function SearchInput({
     onQueryChange, onQueryResults, hasFilters
@@ -17,6 +19,7 @@ export default function SearchInput({
     const terms = useAppSelector(selectTerms);
     const [filter, setFilter] = useState<string[]>([]);
     const [query, setQuery] = useState('');
+    const [language, setLanguage] = useState('');
     
     // Updating results
     useEffect(() => {
@@ -32,32 +35,44 @@ export default function SearchInput({
             (term.term && term.term.toLowerCase().includes(processedQuery)) ||
             (term.definition && term.definition.toLowerCase().includes(processedQuery))
         ))
-        if(filter.length) {
+        if(['term', 'definition'].includes(filter[0])) {
             filteredTerms = filteredTerms.filter(term => term[filter[0] as 'term' | 'definition']?.toLowerCase()?.includes(processedQuery));
+        }
+        if(['language'].includes(filter[0])) {
+            filteredTerms = filteredTerms.filter(term => term.language?.toLowerCase() === language.toLowerCase());
         }
 
         onQueryResults(filteredTerms.map(term => term.id));
         onQueryChange(query);
-    }, [query, filter]);
+    }, [query, filter, language]);
     
     const filters = [
         { text: 'Filter by term', id: 'term' },
-        { text: 'Filter by definition', id: 'definition' }
+        { text: 'Filter by definition', id: 'definition' },
+        { text: 'Filter by language', id: 'language' }
     ]
     return(
-        <View style={styles.container}>
-            <Input 
-                placeholder={'Search'}
-                onTextChange={setQuery}
-            />
-            {hasFilters && (
-                <Select 
-                    containerStyle={styles.filters}
-                    selectableItems={filters}
-                    onChange={setFilter}
-                    defaultActive={filter}
-                    placeholder={'Select a filter...'}
-                    closeOnChange
+        <View>
+            <View style={styles.container}>
+                <Input 
+                    placeholder={'Search'}
+                    onTextChange={setQuery}
+                />
+                {hasFilters && (
+                    <Select 
+                        containerStyle={styles.filters}
+                        selectableItems={filters}
+                        onChange={setFilter}
+                        defaultActive={filter}
+                        placeholder={'Select a filter...'}
+                        closeOnChange
+                    />
+                )}
+            </View>
+            {filter.includes('language') && (
+                <LanguageSelector 
+                    onChange={setLanguage}
+                    active={language}
                 />
             )}
         </View>
@@ -65,7 +80,7 @@ export default function SearchInput({
 }
 const styles = {
     container: {
-        padding: layout.spacing.primary, 
+        padding: layout.spacing.primary,
         paddingBottom: 0
     },
     filters: {
