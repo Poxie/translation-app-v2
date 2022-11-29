@@ -2,7 +2,8 @@ export default {
     light: {
         color: {
             primary: '#0a95ff',
-            red: '#ff2e2e'
+            red: '#ff2e2e',
+            green: '#00ad11'
         },
         background: {
             primary: '#fff',
@@ -18,7 +19,8 @@ export default {
     dark: {
         color: {
             primary: '#0a95ff',
-            red: '#ff2e2e'
+            red: '#ff2e2e',
+            green: '#00ad11'
         },
         background: {
             primary: 'red',
