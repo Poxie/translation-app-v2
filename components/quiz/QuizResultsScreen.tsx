@@ -2,15 +2,25 @@ import { ScrollView, View } from "react-native"
 import { PlayedTerm } from "."
 import layout from "../../constants/layout";
 import { useColors } from "../../hooks/useColors";
+import { selectQuizById } from "../../redux/quiz/selectors";
+import { useAppSelector } from "../../redux/store";
 import Button from "../button";
 import Text from "../text"
 import { QuizResultItem } from "./QuizResultItem";
 
 export const QuizResultsScreen: React.FC<{
+    quizId: string;
     results: PlayedTerm[];
     replayAll: () => void;
-}> = ({ results, replayAll }) => {
+    replayFailed: () => void;
+}> = ({ quizId, results, replayAll, replayFailed }) => {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
+    
+    // Getting non-played terms
+    const playedIds = results.map(result => result.id);
+    const allTerms = useAppSelector(state => selectQuizById(state, quizId))?.termIds || [];
+    const nonPlayedTermIds = allTerms.filter(term => !playedIds.includes(term));
+
     const correctCount = results.filter(term => term.outcome === 'correct').length;
 
     return(
@@ -43,6 +53,39 @@ export const QuizResultsScreen: React.FC<{
                     />
                 ))}
             </View>
+
+            {nonPlayedTermIds.length !== 0 && (
+                <View style={styles.notPlayedContainer}>
+                    <View style={styles.header}>
+                        <Text style={{
+                            color: textSecondary,
+                            ...styles.label
+                        }}>
+                            Not played terms
+                        </Text>
+                        <Text style={{
+                            color: textSecondary,
+                            ...styles.label
+                        }}>
+                            {nonPlayedTermIds.length.toString()} terms
+                        </Text>
+                    </View>
+
+                    <View style={{
+                        backgroundColor: secondary,
+                        borderColor: tertiary,
+                        ...styles.resultContainer
+                    }}>
+                        {nonPlayedTermIds.map((id, key) => (
+                            <QuizResultItem 
+                                id={id}
+                                isLast={key === results.length -  1}
+                                key={id}
+                            />
+                        ))}
+                    </View>
+                </View>
+            )}
         </ScrollView>
 
         <View style={styles.buttons}>
@@ -53,7 +96,7 @@ export const QuizResultsScreen: React.FC<{
             >
                 Replay quiz
             </Button>
-            <Button>
+            <Button onPress={replayFailed}>
                 Replay failed terms
             </Button>
         </View>
@@ -77,6 +120,9 @@ const styles = {
         padding: layout.spacing.secondary,
         borderRadius: layout.borderRadius.secondary,
         borderWidth: layout.borderWidth.secondary
+    },
+    notPlayedContainer: {
+        marginTop: layout.spacing.primary * 2
     },
     buttons: {
         paddingHorizontal: layout.spacing.primary

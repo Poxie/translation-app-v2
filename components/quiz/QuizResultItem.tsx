@@ -10,7 +10,7 @@ import Text from "../text";
 export const QuizResultItem: React.FC<{
     id: string;
     isLast: boolean;
-    outcome: PlayedTerm['outcome'];
+    outcome?: PlayedTerm['outcome'];
 }> = ({ id, isLast, outcome }) => {
     const { color: { red, green } } = useColors();
     const term = useAppSelector(state => selectTermById(state, id));

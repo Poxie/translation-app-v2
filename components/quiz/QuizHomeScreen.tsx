@@ -16,7 +16,7 @@ export const QuizHomeScreen: React.FC<{
     const quiz = useAppSelector(state => selectQuizById(state, quizId));
     if(!quiz) return <Text>Quiz was not found.</Text>;
 
-    const startQuiz = () => setState('started');
+    const startQuiz = () => setState('play-all');
 
     return(
         <>

@@ -15,9 +15,20 @@ export const QuizStartedScreen: React.FC<{
     quizId: string;
     setState: (state: State) => void;
     setResults: (terms: PlayedTerm[]) => void;
-}> = ({ quizId, setState, setResults }) => {
+    failedTerms: PlayedTerm[];
+    state: State;
+}> = ({ quizId, setState, setResults, state, failedTerms }) => {
     const quiz = useAppSelector(state => selectQuizById(state, quizId));
-    const terms = useAppSelector(state => selectTermsByQuiz(state, quiz?.termIds || []));
+    if(!quiz) return null;
+
+    // Determining what terms to use
+    let termIds: string[] = [];
+    if(state === 'play-all') termIds = quiz.termIds;
+    if(state === 'play-failed') termIds = failedTerms.map(term => term.id);
+
+    // Fetching terms to use
+    const terms = useAppSelector(state => selectTermsByQuiz(state, termIds));
+
     const [index, setIndex] = useState(0);
     const [showAnswer, setShowAnswer] = useState(false);
     const playedTerms = useRef<PlayedTerm[]>([]);
