@@ -177,6 +177,14 @@ export default function Voc({ route: { params: { selectable, pathAfterSelection 
                         )}
 
                         {floatingCategoryIds.length !== 0 && (
+                            <>
+                            <Text style={{
+                                color: textSecondary,
+                                ...styles.label
+                            }}>
+                                Your categories
+                            </Text>
+
                             <DefaultView style={{
                                 backgroundColor: secondary,
                                 borderColor: tertiary,
@@ -189,6 +197,7 @@ export default function Voc({ route: { params: { selectable, pathAfterSelection 
                                     />
                                 ))}
                             </DefaultView>
+                            </>
                         )}
 
                         {floatingTermIds.length !== 0 && (
