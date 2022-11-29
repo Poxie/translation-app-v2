@@ -22,6 +22,7 @@ export const QuizResultsScreen: React.FC<{
     const nonPlayedTermIds = allTerms.filter(term => !playedIds.includes(term));
 
     const correctCount = results.filter(term => term.outcome === 'correct').length;
+    const incorrectCount = results.filter(term => term.outcome === 'incorrect').length;
 
     return(
         <>
@@ -96,9 +97,12 @@ export const QuizResultsScreen: React.FC<{
             >
                 Replay quiz
             </Button>
-            <Button onPress={replayFailed}>
-                Replay failed terms
-            </Button>
+            
+            {incorrectCount !== 0 && (
+                <Button onPress={replayFailed}>
+                    Replay failed terms
+                </Button>
+            )}
         </View>
         </>
     )
