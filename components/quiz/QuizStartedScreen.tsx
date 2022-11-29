@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { TouchableOpacity, View } from "react-native"
-import { State } from ".";
+import { PlayedTerm, State } from ".";
 import layout from "../../constants/layout";
 import { selectQuizById, selectTermsByQuiz } from "../../redux/quiz/selectors";
 import { useAppSelector } from "../../redux/store";
@@ -11,14 +11,11 @@ import { QuizProgressButtons } from "./QuizProgressButtons";
 import { QuizRevealAnswer } from "./QuizRevealAnswer";
 import { QuizRevealedAnswer } from "./QuizRevealvedAnswer";
 
-export type PlayedTerm = {
-    id: string;
-    outcome: 'correct' | 'incorrect';
-}
 export const QuizStartedScreen: React.FC<{
     quizId: string;
     setState: (state: State) => void;
-}> = ({ quizId, setState }) => {
+    setResults: (terms: PlayedTerm[]) => void;
+}> = ({ quizId, setState, setResults }) => {
     const quiz = useAppSelector(state => selectQuizById(state, quizId));
     const terms = useAppSelector(state => selectTermsByQuiz(state, quiz?.termIds || []));
     const [index, setIndex] = useState(0);
@@ -36,7 +33,11 @@ export const QuizStartedScreen: React.FC<{
         playedTerms.current.push(term);
         
         // If term was last term, show results
-        if(index === terms.length - 1) return setState('results');
+        if(index === terms.length - 1) {
+            setResults(playedTerms.current);
+            setState('results');
+            return;
+        }
 
         // Increasing active index
         setIndex(prev => prev + 1);

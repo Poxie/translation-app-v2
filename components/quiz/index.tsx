@@ -10,11 +10,17 @@ import { SelectedTerm } from "../create-quiz/SelectedTerm";
 import Text from "../text";
 import View from "../view";
 import { QuizHomeScreen } from "./QuizHomeScreen";
+import { QuizResultsScreen } from "./QuizResultsScreen";
 import { QuizStartedScreen } from "./QuizStartedScreen";
 
 export type State = 'home' | 'started' | 'results';
+export type PlayedTerm = {
+    id: string;
+    outcome: 'correct' | 'incorrect';
+}
 export default function Quiz({ route: { params: { quizId } }}: QuizScreenProps ) {
     const [state, setState] = useState<State>('home');
+    const [results, setResults] = useState<PlayedTerm[]>([]);
 
     return(
         <View safeAreaView>
@@ -29,6 +35,13 @@ export default function Quiz({ route: { params: { quizId } }}: QuizScreenProps )
                 <QuizStartedScreen 
                     quizId={quizId}
                     setState={setState}
+                    setResults={setResults}
+                />
+            )}
+
+            {state === 'results' && (
+                <QuizResultsScreen 
+                    results={results}
                 />
             )}
         </View>
