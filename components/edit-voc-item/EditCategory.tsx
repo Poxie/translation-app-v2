@@ -54,11 +54,10 @@ export const EditCategory: React.FC<{
             type: 'category'
         }
 
-        // Adding category to redux store
         dispatch(addCategory(category));
+        createCategoryInStorage(category);
 
-        // Adding category to local storage
-        createCategoryInStorage(category)
+        navigation.goBack();
     }
 
     // Deleting category

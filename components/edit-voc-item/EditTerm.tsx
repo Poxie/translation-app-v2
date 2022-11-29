@@ -72,11 +72,10 @@ export const EditTerm: React.FC<{
             type: 'term'
         }
 
-        // Adding term to redux store
         dispatch(addTerm(termItem));
-        
-        // Adding term to local storage
         createTermInStorage(termItem);
+
+        navigation.goBack();
     }
 
     // Deleting term
