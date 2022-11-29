@@ -71,7 +71,7 @@ export const updateCategory = async (category: VocItem) => {
 export const deleteItem = async (id: string) => {
     try {
         // Fetching items
-        const data = await AsyncStorageLib.getItem('@items');
+        const data = await AsyncStorageLib.getItem('@terms');
         if(!data) return;
 
         // Finding and removing correct item from array
@@ -79,7 +79,7 @@ export const deleteItem = async (id: string) => {
         const newItems = items.filter(item => item.id !== id);
 
         // Updating storage with new item
-        AsyncStorageLib.setItem('@items', JSON.stringify(newItems));
+        AsyncStorageLib.setItem('@terms', JSON.stringify(newItems));
     } catch(e) {
         console.error(`Error updating item`, e);
     }
@@ -94,7 +94,7 @@ export const deleteCategory = async (id: string) => {
         const newCategories = categories.filter(category => category.id !== id);
 
         // Removing parentId for category children
-        const itemData = await AsyncStorageLib.getItem('@items');
+        const itemData = await AsyncStorageLib.getItem('@terms');
         if(!itemData) return;
 
         // Parsing item data
@@ -107,9 +107,10 @@ export const deleteCategory = async (id: string) => {
             return item;
         })
 
+        console.log(newCategories, newItems);
         // Setting new categories and items
         AsyncStorageLib.setItem('@categories', JSON.stringify(newCategories));
-        AsyncStorageLib.setItem('@items', JSON.stringify(newItems));
+        AsyncStorageLib.setItem('@terms', JSON.stringify(newItems));
     } catch(e) {
         console.error(`Error updating category`, e);
     }
