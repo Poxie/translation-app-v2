@@ -89,7 +89,7 @@ export const NoTermsSelected: React.FC<{
                 onPress={openTermSelection}
                 disabled={!name}
             >
-                Create quiz
+                Select terms
             </Button>
         </KeyboardAvoidingView>
     )
