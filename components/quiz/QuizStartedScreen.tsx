@@ -13,7 +13,7 @@ import { QuizRevealedAnswer } from "./QuizRevealvedAnswer";
 
 export type PlayedTerm = {
     id: string;
-    outcome: 'success' | 'error';
+    outcome: 'correct' | 'incorrect';
 }
 export const QuizStartedScreen: React.FC<{
     quizId: string;
@@ -26,6 +26,30 @@ export const QuizStartedScreen: React.FC<{
     const playedTerms = useRef<PlayedTerm[]>([]);
 
     const activeTerm = terms[index];
+
+    const nextTerm = (outcome: PlayedTerm['outcome']) => {
+        // Adding term with outcome to played terms
+        const term = {
+            id: activeTerm.id,
+            outcome
+        }
+        playedTerms.current.push(term);
+        
+        // If term was last term, show results
+        if(index === terms.length - 1) return setState('results');
+
+        // Increasing active index
+        setIndex(prev => prev + 1);
+
+        // Resetting board
+        setShowAnswer(false);
+    }
+    const onCorrect = () => {
+        nextTerm('correct')
+    }
+    const onIncorrect = () => {
+        nextTerm('incorrect')
+    }
     
     return(
         <View>
@@ -52,8 +76,8 @@ export const QuizStartedScreen: React.FC<{
                     />
 
                     <QuizProgressButtons 
-                        onCorrect={() => {}}
-                        onIncorrect={() => {}}
+                        onCorrect={onCorrect}
+                        onIncorrect={onIncorrect}
                     />
                     </>
                 )}

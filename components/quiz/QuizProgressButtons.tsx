@@ -6,12 +6,15 @@ import Text from "../text";
 export const QuizProgressButtons: React.FC<{
     onCorrect: () => void;
     onIncorrect: () => void;
-}> = () => {
+}> = ({ onCorrect, onIncorrect }) => {
     const { color: { red, green } } = useColors();
 
     return(
         <View style={styles.progressButtons}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+                onPress={onCorrect} 
+                style={styles.button}
+            >
                 <Text style={{
                     color: green,
                     ...styles.text
@@ -19,7 +22,10 @@ export const QuizProgressButtons: React.FC<{
                     Yes, I was correct.
                 </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity 
+                onPress={onIncorrect}
+                style={styles.button}
+            >
                 <Text style={{
                     color: red,
                     ...styles.text
