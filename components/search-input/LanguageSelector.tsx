@@ -6,6 +6,7 @@ import { useAppSelector } from '../../redux/store';
 import { selectLanguages } from '../../redux/voc/selectors';
 import Text from '../text';
 import { AddLanguage } from './AddLanguage';
+import { RemoveLanguage } from './RemoveLanguage';
 
 export const LanguageSelector: React.FC<{
     onChange: (id: string) => void;
@@ -44,6 +45,7 @@ export const LanguageSelector: React.FC<{
             ))}
 
             <AddLanguage />
+            <RemoveLanguage />
         </ScrollView>
     )
 }

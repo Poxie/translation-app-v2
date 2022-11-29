@@ -55,7 +55,7 @@ const styles = {
         justifyContent: 'center' as 'center',
         borderWidth: layout.borderWidth.secondary,
         borderRadius: layout.borderRadius.secondary,
-        marginRight: layout.spacing.primary * 2,
-        paddingHorizontal: 7
+        paddingHorizontal: 7,
+        marginRight: 10
     }
 }
