@@ -9,8 +9,10 @@ import { selectQuizIds } from "../../redux/quiz/selectors";
 import { QuizItem } from "./QuizItem";
 import { QuizzesScreenProps } from "../../types";
 import { useEffect } from "react";
+import { useColors } from "../../hooks/useColors";
 
 export default function Quizzes({ route }: QuizzesScreenProps) {
+    const { text: { secondary } } = useColors();
     const navigation = useNavigation()
     const quizIds = useAppSelector(selectQuizIds);
 
@@ -41,6 +43,15 @@ export default function Quizzes({ route }: QuizzesScreenProps) {
                     </Text>
                 )}
 
+                {quizIds.length !== 0 && (
+                    <Text style={{
+                        color: secondary,
+                        ...styles.label
+                    }}>
+                        Current quizzes
+                    </Text>
+                )}
+
                 {quizIds.map(quizId => (
                     <QuizItem 
                         id={quizId} 
@@ -64,6 +75,10 @@ const styles = {
     },
     content: {
         padding: layout.spacing.primary
+    },
+    label: {
+        fontWeight: '600' as '600',
+        marginBottom: layout.spacing.secondary
     },
     button: {
         marginHorizontal: layout.spacing.primary
