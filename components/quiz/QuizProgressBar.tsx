@@ -12,7 +12,10 @@ export const QuizProgressBar: React.FC<{
     const width = `${percentage}%`;
 
     return(
-        <View>
+        <View style={{
+            borderColor: tertiary,
+            ...styles.container
+        }}>
             <View style={{
                 backgroundColor: tertiary,
                 ...styles.progress
@@ -41,9 +44,13 @@ export const QuizProgressBar: React.FC<{
     )
 }
 const styles = {
+    container: {
+        padding: layout.spacing.primary,
+        marginBottom: layout.spacing.primary,
+        borderBottomWidth: layout.borderWidth.secondary,
+    },
     progress: {
         position: 'relative' as 'relative',
-        margin: layout.spacing.primary,
         marginBottom: layout.spacing.secondary,
         borderRadius: 120,
     },
@@ -54,12 +61,10 @@ const styles = {
     },
     labels: {
         flexDirection: 'row' as 'row',
-        justifyContent: 'space-between' as 'space-between',
-        paddingHorizontal: layout.spacing.primary
+        justifyContent: 'space-between' as 'space-between'
     },
     label:{
         fontSize: 12,
         fontWeight: '600' as '600',
-        marginBottom: layout.spacing.primary
     }
 }
