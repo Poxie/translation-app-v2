@@ -12,13 +12,14 @@ export type HomeCard = {
     text: string;
     icon: any;
     path: keyof MainStackParamList;
+    params?: any;
 }
 export const HomeCards = () => {
     const { text: { secondary } } = useColors();
 
     const cards: HomeCard[] = [
         { text: 'Search Term', icon: <SearchIcon style={{ fill: secondary }} />, path: 'Search' },
-        { text: 'Vocabulary', icon: <VocIcon style={{ fill: secondary }} />, path: 'Voc' },
+        { text: 'Vocabulary', icon: <VocIcon style={{ fill: secondary }} />, path: 'Voc', params: { header: 'Vocabulary' } },
         { text: 'Import Vocabulary', icon: <VocIcon style={{ fill: secondary }} />, path: 'Import Voc' },
         { text: 'Take Quiz', icon: <QuizIcon style={{ fill: secondary }} />, path: 'Choose Quiz' },
         { text: 'Favorites', icon: <FavoriteIcon style={{ fill: secondary }} />, path: 'Favorites' },

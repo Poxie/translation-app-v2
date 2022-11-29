@@ -26,7 +26,10 @@ export const CreateMenuOptions: React.FC<{ active: boolean, toggleActive: () => 
     }, [active]);
 
     const handlePress = (type: 'term' | 'category') => {
-        // TODO: Open create modal
+        navigation.navigate('Modal', {
+            screen: 'Edit Voc Item',
+            params: { type, header: `Edit ${type}` }
+        })
         toggleActive();
     }
 

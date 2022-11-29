@@ -4,23 +4,26 @@ import { View as DefaultView, TouchableOpacity } from 'react-native';
 import { SelectItemScreenProps } from "../../types"
 import View from "../view"
 import { SelectItem } from "./SelectItem"
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Text from '../text';
 import { useColors } from '../../hooks/useColors';
 
 export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: { 
     items: _items, active: _active, onChange, 
     closeOnChange, allowEdit, onItemAdd, multiSelect,
-    addHeader, onItemDelete
+    addHeader, onItemDelete, onAddClick, onlyEdit=false,
+    addItemLabel, addItemPlaceholder
 } } }) => {
     const navigation = useNavigation();
     const { background: { secondary, tertiary } } = useColors();
     const [active, setActive] = useState(_active);
     const [items, setItems] = useState(_items);
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(onlyEdit);
+    const initial = useRef(true);
 
     // Updating header if items are editable
     useEffect(() => {
+        if(onlyEdit) return;
         if(!allowEdit || !items.length) {
             navigation.setOptions({
                 headerRight: null
@@ -40,11 +43,17 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                 </TouchableOpacity>
             )
         })
-    }, [allowEdit, isEditing, items.length]);
+    }, [allowEdit, onlyEdit, isEditing, items.length]);
 
     // Updating parent on active items change
     useEffect(() => {
         onChange(active);
+
+        if(closeOnChange && !initial.current) {
+            navigation.goBack();
+            return;
+        }
+        initial.current = false;
     }, [active]);
 
     const onDeletePress = (id: string) => {
@@ -53,9 +62,15 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
         onItemDelete(id);
     }
     const onPress = (id: string) => {
+        if(onlyEdit) return;
+
         setActive(prev => {
             // If not multi select, set item id as active
-            if(!multiSelect) return [id];
+            if(!multiSelect) {
+                // If same id is pressed twice
+                if(prev.includes(id)) return [];
+                return [id];
+            }
 
             let newItems = [...prev];
 
@@ -70,11 +85,6 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
 
             return newItems;
         });
-
-        if(closeOnChange) {
-            navigation.goBack();
-            return;
-        }
     }
     const openAddModal = () => {
         if(!onItemAdd) return;
@@ -94,14 +104,19 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
             screen: 'Add Select Item',
             params: {
                 onSubmit,
-                header: addHeader
+                header: addHeader,
+                addLabel: addItemLabel,
+                placeholder: addItemPlaceholder
             }
         })
     }
 
     return(
         <View style={styles.container}>
-            <DefaultView style={styles.content}>
+            <DefaultView style={{
+                borderColor: tertiary,
+                ...styles.content
+            }}>
                 {items.length === 0 && (
                     <Text 
                         style={{
@@ -127,13 +142,13 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                 ))}
             </DefaultView>
 
-            {(isEditing || items.length === 0) && (
+            {(isEditing || items.length === 0) && allowEdit && (
                 <TouchableOpacity 
-                    onPress={openAddModal}
+                    onPress={onAddClick || openAddModal}
                     style={styles.addButton}
                 >
                     <Text>
-                        Add Item
+                        {addItemLabel || 'Add Item'}
                     </Text>
                 </TouchableOpacity>
             )}
@@ -146,6 +161,7 @@ const styles = {
     },
     content: {
         borderRadius: layout.borderRadius.primary,
+        borderWidth: layout.borderWidth.secondary,
         overflow: 'hidden' as 'hidden'
     },
     addButton: {

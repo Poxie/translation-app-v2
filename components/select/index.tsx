@@ -16,7 +16,8 @@ export default function Select({
     selectableItems, defaultActive, header,
     onChange, closeOnChange, allowEdit, onItemAdd,
     multiSelect, addHeader, onItemDelete, label,
-    containerStyle
+    containerStyle, placeholder, onAddClick, addItemLabel,
+    addItemPlaceholder
 }: {
     selectableItems: SelectItem[];
     defaultActive?: string | string[];
@@ -25,21 +26,32 @@ export default function Select({
     closeOnChange?: boolean;
     allowEdit?: boolean;
     onItemAdd?: (item: SelectItem) => void;
-    onItemDelete: (id: string) => void;
+    onItemDelete?: (id: string) => void;
     addHeader?: string;
     multiSelect?: boolean;
     label?: string;
     containerStyle?: StyleProps;
+    placeholder?: string;
+    addItemPlaceholder?: string;
+    addItemLabel?: string;
+    onAddClick?: () => void;
 }) {
     const navigation = useNavigation();
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
     const [active, setActive] = useState(
         defaultActive ? (
             Array.isArray(defaultActive) ? defaultActive : [defaultActive]
-        ) : [selectableItems[0].id]
+        ) : []
     );
     const activeItems = selectableItems.filter(item => active.includes(item.id));
     const activeItemText = activeItems.map(item => item.text);
+
+    const handleChange = (ids: string[]) => {
+        setActive(ids);
+        if(onChange) {
+            onChange(ids);
+        }
+    }
 
     const openModal = () => {
         navigation.navigate('Modal', {
@@ -48,13 +60,16 @@ export default function Select({
                 header: header,
                 active: active,
                 items: selectableItems,
-                onChange: setActive,
+                onChange: handleChange,
                 closeOnChange,
                 allowEdit,
                 onItemAdd,
                 onItemDelete,
                 addHeader,
-                multiSelect
+                multiSelect,
+                addItemLabel,
+                addItemPlaceholder,
+                onAddClick
             }
         });
     }
@@ -79,7 +94,7 @@ export default function Select({
                 }}
             >
                 <Text>
-                    {activeItemText.join(', ') || 'Select an item...'}
+                    {activeItemText.join(', ') || placeholder || 'Select an item...'}
                 </Text>
                 <MaterialIcons name="arrow-forward-ios" size={16} color="black" />
             </TouchableOpacity>

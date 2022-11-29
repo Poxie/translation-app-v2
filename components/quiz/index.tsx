@@ -1,9 +1,10 @@
+import { QuizScreenProps } from "../../types";
 import Text from "../text";
 
-export default function Quiz() {
+export default function Quiz({ route: { params: { termIds } }}: QuizScreenProps ) {
     return(
         <Text>
-            Quiz
+            {termIds?.map(id => id)}
         </Text>
     )
 }

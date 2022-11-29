@@ -6,14 +6,14 @@ import { useColors } from '../../hooks/useColors';
 import Text from '../text';
 import { HomeCard as HomeCardType } from './HomeCards';
 
-export const HomeCard: React.FC<HomeCardType> = ({ text, icon, path }) => {
+export const HomeCard: React.FC<HomeCardType> = ({ text, icon, path, params }) => {
     const { background: { tertiary
     , } } = useColors();
     const { navigate } = useNavigation();
     
     return(
         <TouchableOpacity 
-            onPress={() => navigate('Root', { screen: path })} 
+            onPress={() => navigate('Root', { screen: path, params })} 
             style={styles.button}
         >
             <View style={{
