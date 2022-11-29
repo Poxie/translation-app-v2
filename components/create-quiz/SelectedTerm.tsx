@@ -9,7 +9,7 @@ import Text from "../text";
 export const SelectedTerm: React.FC<{
     id: string;
     isLast: boolean;
-    removeTerm: (id: string) => void;
+    removeTerm?: (id: string) => void;
 }> = ({ id, isLast, removeTerm }) => {
     const { color: { red } } = useColors();
     const term = useAppSelector(state => selectTermById(state, id));
@@ -28,14 +28,16 @@ export const SelectedTerm: React.FC<{
                 </Text>
             </View>
 
-            <TouchableOpacity onPress={() => removeTerm(id)}>
-                <Feather
-                    name="trash-2" 
-                    size={18} 
-                    color={red}
-                    style={styles.removeButton}
-                />
-            </TouchableOpacity>
+            {removeTerm && (
+                <TouchableOpacity onPress={() => removeTerm(id)}>
+                    <Feather
+                        name="trash-2" 
+                        size={18} 
+                        color={red}
+                        style={styles.removeButton}
+                    />
+                </TouchableOpacity>
+            )}
         </View>
     )
 }
