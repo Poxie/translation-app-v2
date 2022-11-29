@@ -2,6 +2,10 @@ import { useNavigation } from '@react-navigation/native';
 import { ScrollView, View } from "react-native";
 import layout from "../../constants/layout";
 import { useColors } from "../../hooks/useColors";
+import { addQuiz as addQuizInStorage } from '../../logic';
+import { addQuiz } from '../../redux/quiz/actions';
+import { useAppDispatch } from '../../redux/store';
+import { Quiz } from '../../types';
 import Button from "../button";
 import Input from "../input";
 import Text from "../text";
@@ -14,7 +18,20 @@ export const CreateQuizSummary: React.FC<{
     name: string;
 }> = ({ removeTerm, setName, termIds, name }) => {
     const navigation = useNavigation();
+    const dispatch = useAppDispatch();
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
+
+    const createQuiz = () => {
+        const id = Math.random().toString();
+        const quiz: Quiz = {
+            id,
+            name,
+            termIds,
+        }
+
+        dispatch(addQuiz(quiz));
+        addQuizInStorage(quiz);
+    }
 
     const addTerm = () => {
         navigation.navigate('Root', {
@@ -84,6 +101,7 @@ export const CreateQuizSummary: React.FC<{
         <Button 
             style={styles.button}
             disabled={!termIds.length || !name}
+            onPress={createQuiz}
         >
             Create quiz
         </Button>
