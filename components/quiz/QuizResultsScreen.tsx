@@ -8,7 +8,8 @@ import { QuizResultItem } from "./QuizResultItem";
 
 export const QuizResultsScreen: React.FC<{
     results: PlayedTerm[];
-}> = ({ results }) => {
+    replayAll: () => void;
+}> = ({ results, replayAll }) => {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
     const correctCount = results.filter(term => term.outcome === 'correct').length;
 
@@ -47,6 +48,7 @@ export const QuizResultsScreen: React.FC<{
         <View style={styles.buttons}>
             <Button 
                 type={'secondary'}
+                onPress={replayAll}
                 style={styles.button}
             >
                 Replay quiz

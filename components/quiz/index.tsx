@@ -42,6 +42,7 @@ export default function Quiz({ route: { params: { quizId } }}: QuizScreenProps )
             {state === 'results' && (
                 <QuizResultsScreen 
                     results={results}
+                    replayAll={() => setState('started')}
                 />
             )}
         </View>
