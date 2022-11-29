@@ -149,7 +149,7 @@ export default function Voc({ route: { params: { selectable, pathAfterSelection 
 
                 {!query && (
                     <ScrollView style={styles.container}>
-                        {floatingTermIds.length === 0 && floatingTermIds.length === 0 && (
+                        {floatingTermIds.length === 0 && floatingCategoryIds.length === 0 && (
                             <>
                             <Text>
                                 Your vocabulary is empty. Let's add something to it!
