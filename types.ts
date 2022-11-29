@@ -67,6 +67,9 @@ export type ModalStackParamList = {
     'Add Select Item': {
         onSubmit: (text: string) => void;
         header?: string;
+        addLabel?: string;
+        placeholder?: string;
+        closeOnSubmit?: boolean;
     }
     'Edit Voc Item': {
         header: string;
