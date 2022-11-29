@@ -25,7 +25,9 @@ const VocContext = React.createContext({} as VocContext);
 
 export const useVoc = () => React.useContext(VocContext);
 
-export default function Voc({ route: { params: { selectable, pathAfterSelection } } }: VocScreenProps) {
+export default function Voc({ route: { params: { 
+    selectable, pathAfterSelection, defaultActiveIds
+} } }: VocScreenProps) {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
     const navigation = useNavigation();
     const categories = useAppSelector(selectCategories);
@@ -36,7 +38,7 @@ export default function Voc({ route: { params: { selectable, pathAfterSelection 
     const floatingTermIds = useAppSelector(selectFloatingTermIds);
     const [query, setQuery] = useState('');
     const [results, setResults] = useState<string[]>([]);
-    const [active, setActive] = useState<string[]>([]);
+    const [active, setActive] = useState<string[]>(defaultActiveIds || []);
 
     useEffect(() => {
         if(!pathAfterSelection) return;
