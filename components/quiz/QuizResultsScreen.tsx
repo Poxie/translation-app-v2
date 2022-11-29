@@ -9,15 +9,24 @@ export const QuizResultsScreen: React.FC<{
     results: PlayedTerm[];
 }> = ({ results }) => {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
+    const correctCount = results.filter(term => term.outcome === 'correct').length;
 
     return(
         <ScrollView style={styles.container}>
-            <Text style={{
-                color: textSecondary,
-                ...styles.header
-            }}>
-                Results
-            </Text>
+            <View style={styles.header}>
+                <Text style={{
+                    color: textSecondary,
+                    ...styles.label
+                }}>
+                    Results
+                </Text>
+                <Text style={{
+                    color: textSecondary,
+                    ...styles.label
+                }}>
+                    {correctCount.toString()}/{results.length.toString()} correct terms
+                </Text>
+            </View>
             <View style={{
                 backgroundColor: secondary,
                 borderColor: tertiary,
@@ -39,6 +48,11 @@ const styles = {
         padding: layout.spacing.primary
     },
     header: {
+        flexDirection: 'row' as 'row',
+        alignItems: 'center' as 'center',
+        justifyContent: 'space-between' as 'space-between'
+    },
+    label: {
         fontWeight: '600' as '600',
         marginBottom: layout.spacing.secondary
     },
