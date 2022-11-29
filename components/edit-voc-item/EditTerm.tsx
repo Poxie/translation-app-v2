@@ -14,11 +14,13 @@ import Input from '../input';
 import Select, { SelectItem } from '../select';
 import { PreviewInput } from './PreviewInput';
 import { TranslationSelect } from './TranslationSelect';
+import { TypeSelection } from './TypeSelection';
 
 export const EditTerm: React.FC<{
     defaultItem?: VocItem;
     isEditing: boolean;
-}> = ({ defaultItem, isEditing }) => {
+    setType: (type: 'term' | 'category') => void;
+}> = ({ defaultItem, isEditing, setType }) => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation();
     const [item, setItem] = useState<Partial<VocItem>>(defaultItem || {
@@ -134,121 +136,132 @@ export const EditTerm: React.FC<{
     // Checking if user can edit values
     const canEdit = isEditing || !defaultItem;
     return(
-        <View style={styles.container}>
-            <ScrollView>
-                {!canEdit ? (
-                    <PreviewInput 
-                        text={term || ''}
-                        label={'Term'}
-                    />
-                ) : (
-                    <Input 
-                        placeholder={'Term'}
-                        label={'Term'}
-                        defaultValue={term || ''}
-                        onTextChange={text => updateProperty('term', text)}
-                        containerStyle={styles.inputContainer}
-                    />
-                )}
-                {!canEdit ? (
-                    <PreviewInput 
-                        text={definition || ''}
-                        label={'Definition'}
-                    />  
-                ) : (
-                    <Input 
-                        placeholder={'Definition'}
-                        label={'Definition'}
-                        defaultValue={definition || ''}
-                        onTextChange={text => updateProperty('definition', text)}
-                        containerStyle={styles.inputContainer}
-                    />
-                )}
-                {!canEdit ? (
-                    <PreviewInput 
-                        text={currentSelectors.join(', ')}
-                        label={'Selectors'}
-                    />
-                ) : (
-                    <Select 
-                        containerStyle={styles.inputContainer}
-                        selectableItems={availableSelectors}
-                        header={'Choose selectors'}
-                        label={'Selectors'}
-                        onChange={selectors => updateProperty('selectors', selectors)}
-                        onItemAdd={onSelectorAdd}
-                        onItemDelete={onSelectorDelete}
-                        defaultActive={selectors}
-                        multiSelect
-                        allowEdit
-                    />
-                )}
-                {!canEdit ? (
-                    <PreviewInput 
-                        text={currentLanguage?.text || ''}
-                        label={'Language'}
-                    />
-                ) : (
-                    <Select 
-                        containerStyle={styles.inputContainer}
-                        defaultActive={language ? [language] : undefined}
-                        selectableItems={availableLanguages}
-                        onChange={ids => updateProperty('language', ids[0])}
-                        header={'Choose language'}
-                        addHeader={'Add language'}
-                        onItemAdd={onLanguageAdd}
-                        onItemDelete={onLanguageDelete}
-                        label={'Language'}
-                        allowEdit
-                    />
-                )}
-                <TranslationSelect 
-                    id={defaultItem?.id || ''}
-                    isEditing={isEditing || !defaultItem}
-                />
-                {!canEdit ? (
-                    <PreviewInput 
-                        text={currentParent?.title || ''}
-                        label={'Category'}
-                    />
-                ) : (
-                    <Select 
-                        defaultActive={parentId ? [parentId] : undefined}
-                        onChange={ids => updateProperty('parentId', ids[0])}
-                        containerStyle={styles.inputContainer}
-                        selectableItems={parentItems}
-                        header={'Choose category'}
-                        placeholder={'No category selected.'}
-                        label={'Category'}
-                    />
-                )}
-
-                {canEdit && defaultItem && (
-                    <Button 
-                        type={'danger'}
-                        onPress={deleteTerm}
-                    >
-                        Delete term
-                    </Button>
-                )}
-            </ScrollView>
+        <>
+        <ScrollView contentContainerStyle={styles.container}>
             {!defaultItem && (
+                <TypeSelection 
+                    type={'term'}
+                    setType={setType}
+                />
+            )}
+
+            {!canEdit ? (
+                <PreviewInput 
+                    text={term || ''}
+                    label={'Term'}
+                />
+            ) : (
+                <Input 
+                    placeholder={'Term'}
+                    label={'Term'}
+                    defaultValue={term || ''}
+                    onTextChange={text => updateProperty('term', text)}
+                    containerStyle={styles.inputContainer}
+                />
+            )}
+            {!canEdit ? (
+                <PreviewInput 
+                    text={definition || ''}
+                    label={'Definition'}
+                />  
+            ) : (
+                <Input 
+                    placeholder={'Definition'}
+                    label={'Definition'}
+                    defaultValue={definition || ''}
+                    onTextChange={text => updateProperty('definition', text)}
+                    containerStyle={styles.inputContainer}
+                />
+            )}
+            {!canEdit ? (
+                <PreviewInput 
+                    text={currentSelectors.join(', ')}
+                    label={'Selectors'}
+                />
+            ) : (
+                <Select 
+                    containerStyle={styles.inputContainer}
+                    selectableItems={availableSelectors}
+                    header={'Choose selectors'}
+                    label={'Selectors'}
+                    onChange={selectors => updateProperty('selectors', selectors)}
+                    onItemAdd={onSelectorAdd}
+                    onItemDelete={onSelectorDelete}
+                    defaultActive={selectors}
+                    multiSelect
+                    allowEdit
+                />
+            )}
+            {!canEdit ? (
+                <PreviewInput 
+                    text={currentLanguage?.text || ''}
+                    label={'Language'}
+                />
+            ) : (
+                <Select 
+                    containerStyle={styles.inputContainer}
+                    defaultActive={language ? [language] : undefined}
+                    selectableItems={availableLanguages}
+                    onChange={ids => updateProperty('language', ids[0])}
+                    header={'Choose language'}
+                    addHeader={'Add language'}
+                    onItemAdd={onLanguageAdd}
+                    onItemDelete={onLanguageDelete}
+                    label={'Language'}
+                    allowEdit
+                />
+            )}
+            <TranslationSelect 
+                id={defaultItem?.id || ''}
+                isEditing={isEditing || !defaultItem}
+            />
+            {!canEdit ? (
+                <PreviewInput 
+                    text={currentParent?.title || ''}
+                    label={'Category'}
+                />
+            ) : (
+                <Select 
+                    defaultActive={parentId ? [parentId] : undefined}
+                    onChange={ids => updateProperty('parentId', ids[0])}
+                    containerStyle={styles.inputContainer}
+                    selectableItems={parentItems}
+                    header={'Choose category'}
+                    placeholder={'No category selected.'}
+                    label={'Category'}
+                />
+            )}
+
+            {canEdit && defaultItem && (
                 <Button 
-                    onPress={createTerm}
-                    disabled={disabled}
+                    type={'danger'}
+                    onPress={deleteTerm}
                 >
-                    Create term
+                    Delete term
                 </Button>
             )}
-        </View>
+        </ScrollView>
+        {!defaultItem && (
+            <Button 
+                onPress={createTerm}
+                disabled={disabled}
+                style={styles.button}
+            >
+                Create term
+            </Button>
+        )}
+        </>
     )
 }
 const styles = {
     container: {
-        flex: 1,
+        padding: layout.spacing.primary,
         justifyContent: 'space-between' as 'space-between'
     },
     inputContainer: {
         marginBottom: layout.spacing.primary
+    },
+    button: {
+        marginHorizontal: layout.spacing.primary
     }
 }

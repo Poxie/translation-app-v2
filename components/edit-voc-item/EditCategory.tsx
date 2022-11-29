@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { addCategory, removeCategory, updateCategory } from '../../redux/voc/actions';
@@ -11,11 +11,13 @@ import Button from '../button';
 import Input from '../input';
 import Select from '../select';
 import { PreviewInput } from './PreviewInput';
+import { TypeSelection } from './TypeSelection';
 
 export const EditCategory: React.FC<{
     defaultItem?: VocItem;
     isEditing: boolean;
-}> = ({ defaultItem, isEditing }) => {
+    setType: (type: 'term' | 'category') => void;
+}> = ({ defaultItem, isEditing, setType }) => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation();
     const [title, setTitle] = useState(defaultItem?.title || '');
@@ -77,8 +79,15 @@ export const EditCategory: React.FC<{
     // Determining if user can edit
     const canEdit = isEditing || !defaultItem;
     return(
-        <View style={styles.container}>
-            <View>
+        <>
+            <ScrollView contentContainerStyle={styles.container}>
+                {!defaultItem && (
+                    <TypeSelection 
+                        type={'category'}
+                        setType={setType}
+                    />
+                )}
+
                 {canEdit ? (
                     <Input 
                         placeholder={'Title'}
@@ -117,24 +126,27 @@ export const EditCategory: React.FC<{
                         Delete category
                     </Button>
                 )}
-            </View>
+            </ScrollView>
             {!defaultItem && (
                 <Button 
                     onPress={createCategory}
                     disabled={disabled}
+                    style={styles.button}
                 >
                     Create category
                 </Button>
             )}
-        </View>
+        </>
     )
 }
 const styles = {
     container: {
-        flex: 1,
-        justifyContent: 'space-between' as 'space-between'
+        padding: layout.spacing.primary
     },
     inputContainer: {
         marginBottom: layout.spacing.primary
+    },
+    button: {
+        marginHorizontal: layout.spacing.primary
     }
 }

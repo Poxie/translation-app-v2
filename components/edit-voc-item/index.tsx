@@ -39,34 +39,21 @@ export default function EditVocItem({ route: { params: {
 
     return(
         <View safeAreaView>
-            <View style={styles.container}>
-                {!defaultItem && (
-                    <TypeSelection 
-                        type={type}
-                        setType={setType}
-                    />
-                )}
+            {type === 'term' && (
+                <EditTerm 
+                    defaultItem={defaultItem}
+                    isEditing={isEditing}
+                    setType={setType}
+                />
+            )}
 
-                {type === 'term' && (
-                    <EditTerm 
-                        defaultItem={defaultItem}
-                        isEditing={isEditing}
-                    />
-                )}
-
-                {type === 'category' && (
-                    <EditCategory 
-                        defaultItem={defaultItem}
-                        isEditing={isEditing}
-                    />
-                )}
-            </View>
+            {type === 'category' && (
+                <EditCategory 
+                    defaultItem={defaultItem}
+                    isEditing={isEditing}
+                    setType={setType}
+                />
+            )}
         </View>
     )
-}
-const styles = {
-    container: {
-        padding: layout.spacing.primary,
-        paddingBottom: 0
-    }
 }
