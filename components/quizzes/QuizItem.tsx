@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, View } from "react-native";
 import layout from "../../constants/layout";
 import { useColors } from "../../hooks/useColors";
@@ -9,15 +10,26 @@ export const QuizItem: React.FC<{
     id: string;
 }> = ({ id }) => {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
+    const navigation = useNavigation();
     const quiz = useAppSelector(state => selectQuizById(state, id));
     if(!quiz) return null;
 
+    const goToQuiz = () => {
+        navigation.navigate('Root', {
+            screen: 'Quiz',
+            params: { quizId: quiz.id }
+        })
+    }
+
     return(
-        <TouchableOpacity style={{
-            backgroundColor: secondary,
-            borderColor: tertiary,
-            ...styles.container
-        }}>
+        <TouchableOpacity
+            onPress={goToQuiz}
+            style={{
+                backgroundColor: secondary,
+                borderColor: tertiary,
+                ...styles.container
+            }}
+        >
             <Text style={{
                 color: textSecondary,
                 ...styles.name
