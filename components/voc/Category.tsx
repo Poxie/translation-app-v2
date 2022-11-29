@@ -162,6 +162,6 @@ const styles = {
         fontSize: 14
     },
     childContainer: {
-        paddingHorizontal: layout.spacing.primary
+        marginHorizontal: layout.spacing.primary
     }
 }
