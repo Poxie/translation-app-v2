@@ -223,7 +223,7 @@ export const EditTerm: React.FC<{
                     />
                 )}
 
-                {canEdit && (
+                {canEdit && defaultItem && (
                     <Button 
                         type={'danger'}
                         onPress={deleteTerm}

@@ -109,7 +109,7 @@ export const EditCategory: React.FC<{
                     />
                 )}
 
-                {canEdit && (
+                {canEdit && defaultItem && (
                     <Button 
                         type={'danger'}
                         onPress={deleteCategory}
