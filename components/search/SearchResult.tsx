@@ -1,17 +1,21 @@
 import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, View } from 'react-native';
 import layout from '../../constants/layout';
+import { useColors } from '../../hooks/useColors';
 import { useAppSelector } from '../../redux/store';
-import { selectSelectors, selectTermById } from '../../redux/voc/selectors';
+import { selectLanguages, selectSelectors, selectTermById } from '../../redux/voc/selectors';
 import { VocItem } from "../../types"
 import Text from '../text';
 
 export const SearchResult: React.FC<{
     id: string;
 }> = ({ id }) => {
+    const { text: { secondary } } = useColors();
     const navigation = useNavigation();
     const item = useAppSelector(state => selectTermById(state, id));
     const selectors = useAppSelector(selectSelectors);
+    const languages = useAppSelector(selectLanguages);
+    const language = languages.find(language => language.id === item?.language);
     if(!item) return null;
     
     const { term, definition, selectors: selectorIds } = item;
@@ -34,17 +38,27 @@ export const SearchResult: React.FC<{
             style={styles.container}
         >
             <View style={styles.header}>
-                <Text
-                    style={{ 
-                        fontStyle: !term ? 'italic' : 'normal',
-                        ...styles.term
-                    }}
-                >
-                    {term || 'Term name missing.'}
-                </Text>
-                {activeSelectors.length !== 0 && (
-                    <Text style={styles.selectors}>
-                        ({activeSelectors.join(', ')})
+                <View style={styles.headerMain}>
+                    <Text
+                        style={{ 
+                            fontStyle: !term ? 'italic' : 'normal',
+                            ...styles.term
+                        }}
+                    >
+                        {term || 'Term name missing.'}
+                    </Text>
+                    {activeSelectors.length !== 0 && (
+                        <Text style={styles.selectors}>
+                            ({activeSelectors.join(', ')})
+                        </Text>
+                    )}
+                </View>
+                {language && (
+                    <Text style={{
+                        color: secondary,
+                        ...styles.language
+                    }}>
+                        {language.text}
                     </Text>
                 )}
             </View>
@@ -58,10 +72,15 @@ export const SearchResult: React.FC<{
 }
 const styles = {
     container: {
-        marginBottom: layout.spacing.primary
+        marginBottom: layout.spacing.primary,
+        flex: 1
     },
     header: {
         marginBottom: 4,
+        flexDirection: 'row' as 'row',
+        justifyContent: 'space-between' as 'space-between'
+    },
+    headerMain: {
         flexDirection: 'row' as 'row'
     },
     term: {
@@ -70,6 +89,10 @@ const styles = {
     selectors: {
         marginLeft: 6,
         fontStyle: 'italic' as 'italic',
+        fontSize: 13
+    },
+    language: {
+        marginLeft: 10,
         fontSize: 13
     }
 }
