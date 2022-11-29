@@ -13,6 +13,7 @@ import SearchInput from '../search-input';
 import { useState } from 'react';
 import { MainStackParamList, VocItem, VocScreenProps } from '../../types';
 import { SearchResults } from './SearchResults';
+import Button from '../button';
 
 type VocContext = {
     setActive: (id: string) => void;
@@ -118,6 +119,14 @@ export default function Voc({ route: { params: { selectable, pathAfterSelection 
         });
     }
 
+    // Function to open create term/category
+    const openModal = (type: 'term' | 'category') => {
+        navigation.navigate('Modal', {
+            screen: 'Edit Voc Item',
+            params: { header: `Create ${type}`, type }
+        })
+    }
+
     const value = {
         setActive: setActiveItem,
         selectable: !!selectable,
@@ -140,18 +149,47 @@ export default function Voc({ route: { params: { selectable, pathAfterSelection 
 
                 {!query && (
                     <ScrollView style={styles.container}>
-                        <DefaultView style={{
-                            backgroundColor: secondary,
-                            borderColor: tertiary,
-                            ...styles.categories
-                        }}>
-                            {floatingCategoryIds.map(categoryId => (
-                                <Category 
-                                    id={categoryId}
-                                    key={categoryId}
-                                />
-                            ))}
-                        </DefaultView>
+                        {floatingTermIds.length === 0 && floatingTermIds.length === 0 && (
+                            <>
+                            <Text>
+                                Your vocabulary is empty. Let's add something to it!
+                            </Text>
+                            <DefaultView style={styles.buttons}>
+                                <Button 
+                                    type={'secondary'}
+                                    style={styles.button}
+                                    onPress={() => openModal('term')}
+                                >
+                                    Add term
+                                </Button>
+                                <Button 
+                                    type={'secondary'}
+                                    style={{
+                                        ...styles.button,
+                                        marginRight: 0
+                                    }}
+                                    onPress={() => openModal('category')}
+                                >
+                                    Add category
+                                </Button>
+                            </DefaultView>
+                            </>
+                        )}
+
+                        {floatingCategoryIds.length !== 0 && (
+                            <DefaultView style={{
+                                backgroundColor: secondary,
+                                borderColor: tertiary,
+                                ...styles.categories
+                            }}>
+                                {floatingCategoryIds.map(categoryId => (
+                                    <Category 
+                                        id={categoryId}
+                                        key={categoryId}
+                                    />
+                                ))}
+                            </DefaultView>
+                        )}
 
                         {floatingTermIds.length !== 0 && (
                             <Text style={{
@@ -180,11 +218,19 @@ const styles = {
     categories: {
         borderWidth: layout.borderWidth.primary,
         borderRadius: layout.borderRadius.primary,
-        padding: layout.spacing.secondary / 2
+        padding: layout.spacing.secondary / 2,
+        marginBottom: layout.spacing.primary
     },
     label: {
-        marginTop: layout.spacing.primary * 2,
         marginBottom: layout.spacing.secondary / 2,
         fontWeight: '600' as '600'
+    },
+    buttons: {
+        flexDirection: 'row' as 'row',
+        marginTop: layout.spacing.secondary
+    },
+    button: {
+        flex: 1,
+        marginRight: layout.spacing.secondary
     }
 }
