@@ -38,8 +38,6 @@ const StorageProvider: React.FC<{
   // Hydrating redux with data from local storage
   useEffect(() => {
     // Setting inital terms
-    AsyncStorageLib.setItem('@terms', '[]');
-    AsyncStorageLib.setItem('@translations', '{}');
     try {
       AsyncStorageLib.getItem('@terms').then(data => {
         if(!data) {

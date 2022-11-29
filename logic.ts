@@ -67,6 +67,54 @@ export const updateCategory = async (category: VocItem) => {
     }
 }
 
+// Deleting data
+export const deleteItem = async (id: string) => {
+    try {
+        // Fetching items
+        const data = await AsyncStorageLib.getItem('@items');
+        if(!data) return;
+
+        // Finding and removing correct item from array
+        const items: VocItem[] = JSON.parse(data);
+        const newItems = items.filter(item => item.id !== id);
+
+        // Updating storage with new item
+        AsyncStorageLib.setItem('@items', JSON.stringify(newItems));
+    } catch(e) {
+        console.error(`Error updating item`, e);
+    }
+}
+export const deleteCategory = async (id: string) => {
+    try {
+        const data = await AsyncStorageLib.getItem('@categories')
+        if(!data) return;
+
+        // Removing category from categories array
+        const categories: VocItem[] = JSON.parse(data);
+        const newCategories = categories.filter(category => category.id !== id);
+
+        // Removing parentId for category children
+        const itemData = await AsyncStorageLib.getItem('@items');
+        if(!itemData) return;
+
+        // Parsing item data
+        const items: VocItem[] = JSON.parse(itemData);
+
+        const newItems = items.map(item => {
+            if(item.parentId === id) {
+                item.parentId = null;
+            }
+            return item;
+        })
+
+        // Setting new categories and items
+        AsyncStorageLib.setItem('@categories', JSON.stringify(newCategories));
+        AsyncStorageLib.setItem('@items', JSON.stringify(newItems));
+    } catch(e) {
+        console.error(`Error updating category`, e);
+    }
+}
+
 export const addSelector = async (selector: SelectorItem) => {
     try {
         const data = await AsyncStorageLib.getItem('@selectors');

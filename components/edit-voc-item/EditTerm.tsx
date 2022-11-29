@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { addLanguage as addLanugageInStorage, removeLanguage as removeLanguageInStorage, updateItem as updateItemInStore } from '../../logic';
+import { useNavigation } from '@react-navigation/native';
+import { addLanguage as addLanugageInStorage, deleteItem as deleteItemInStorage, removeLanguage as removeLanguageInStorage, updateItem as updateItemInStore } from '../../logic';
 import { View, ScrollView } from 'react-native';
 import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { addLanguage, addSelector, addTerm, removeLanguage, removeSelector, setTerms, updateTerm } from '../../redux/voc/actions';
+import { addLanguage, addSelector, addTerm, removeLanguage, removeSelector, removeTerm, setTerms, updateTerm } from '../../redux/voc/actions';
 import { addSelector as addSelectorInStorage, removeSelector as removeSelectorInStorage } from '../../logic';
 import { selectCategories, selectLanguages, selectSelectors } from '../../redux/voc/selectors';
 import { createTerm as createTermInStorage } from '../../logic';
@@ -19,6 +20,7 @@ export const EditTerm: React.FC<{
     isEditing: boolean;
 }> = ({ defaultItem, isEditing }) => {
     const dispatch = useAppDispatch();
+    const navigation = useNavigation();
     const [item, setItem] = useState<Partial<VocItem>>(defaultItem || {
         term: '',
         definition: '',
@@ -73,6 +75,14 @@ export const EditTerm: React.FC<{
         
         // Adding term to local storage
         createTermInStorage(termItem);
+    }
+
+    // Deleting term
+    const deleteTerm = () => {
+        if(!defaultItem) return;
+        dispatch(removeTerm(defaultItem.id));
+        deleteItemInStorage(defaultItem.id);
+        navigation.goBack();
     }
 
     // Updating item property
@@ -211,6 +221,15 @@ export const EditTerm: React.FC<{
                         placeholder={'No category selected.'}
                         label={'Category'}
                     />
+                )}
+
+                {canEdit && (
+                    <Button 
+                        type={'danger'}
+                        onPress={deleteTerm}
+                    >
+                        Delete term
+                    </Button>
                 )}
             </ScrollView>
             {!defaultItem && (

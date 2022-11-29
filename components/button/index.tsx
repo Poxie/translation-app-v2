@@ -14,22 +14,23 @@ export default function Button({
     onLongPress?: () => void;
     style?: StyleProps;
     textStyle?: StyleProps;
-    type?: 'primary' | 'secondary' | 'transparent';
+    type?: 'primary' | 'secondary' | 'danger' | 'transparent';
     disabled?: boolean;
 }) {
     const { 
         background: { tertiary },
-        color: { primary },  
+        color: { primary, red },  
         text: { light, secondary: secondaryText },
     } = useColors();
 
     // Determining button colors
     let color = secondaryText;
     if(type === 'primary') color = light;
+    if(type === 'danger') color = red;
 
     let backgroundColor = primary;
     if(type === 'secondary') backgroundColor = tertiary;
-    if(type === 'transparent') backgroundColor = 'transparent';
+    if(['transparent', 'danger'].includes(type)) backgroundColor = 'transparent';
 
     // Creating button children
     const element = typeof children === 'string' ? (
