@@ -93,13 +93,15 @@ export const QuizResultsScreen: React.FC<{
             <Button 
                 type={'secondary'}
                 onPress={replayAll}
-                style={styles.button}
             >
                 Replay quiz
             </Button>
-            
+
             {incorrectCount !== 0 && (
-                <Button onPress={replayFailed}>
+                <Button 
+                    onPress={replayFailed}
+                    style={styles.button}
+                >
                     Replay failed terms
                 </Button>
             )}
@@ -132,6 +134,6 @@ const styles = {
         paddingHorizontal: layout.spacing.primary
     },
     button: {
-        marginBottom: layout.spacing.secondary
+        marginTop: layout.spacing.secondary
     }
 }
