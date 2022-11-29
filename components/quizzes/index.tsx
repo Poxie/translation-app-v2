@@ -7,11 +7,24 @@ import View from "../view";
 import { useAppSelector } from "../../redux/store";
 import { selectQuizIds } from "../../redux/quiz/selectors";
 import { QuizItem } from "./QuizItem";
+import { QuizzesScreenProps } from "../../types";
+import { useEffect } from "react";
 
-export default function Quizzes() {
+export default function Quizzes({ route }: QuizzesScreenProps) {
     const navigation = useNavigation()
     const quizIds = useAppSelector(selectQuizIds);
 
+    // Navigating to quiz if quizId is present
+    useEffect(() => {
+        if(!route.params?.quizId) return;
+
+        navigation.navigate('Root', {
+            screen: 'Quiz',
+            params: { quizId: route.params.quizId }
+        })
+    }, [route.params?.quizId]);
+
+    // Creataing new quiz
     const goToCreatePage = () => {
         navigation.navigate('Root', {
             screen: 'Create Quiz',
