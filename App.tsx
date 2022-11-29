@@ -8,6 +8,7 @@ import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
 import { ReactElement, useEffect } from 'react';
 import { setCategories, setLanguages, setSelectors, setTerms, setTranslations } from './redux/voc/actions';
+import { setQuizzes } from './redux/quiz/actions';
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -110,6 +111,21 @@ const StorageProvider: React.FC<{
       })
     } catch(e) {
       console.error(`Error getting/setting initial translations`, e);
+    }
+
+    // Setting initial quizzes
+    try {
+      AsyncStorageLib.getItem('@quizzes').then(data => {
+        if(!data) {
+          AsyncStorageLib.setItem('@quizzes', '[]');
+          dispatch(setQuizzes([]));
+          return;
+        }
+
+        dispatch(setQuizzes(JSON.parse(data)));
+      })
+    } catch(e) {
+      console.error(`Error getting/setting initial quizzes`, e);
     }
   }, []);
 

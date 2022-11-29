@@ -1,5 +1,5 @@
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
-import { LanguageItem, SelectorItem, VocItem } from "./types";
+import { LanguageItem, Quiz, SelectorItem, VocItem } from "./types";
 
 export const createTerm = async (item: VocItem) => {
     try {
@@ -167,5 +167,19 @@ export const removeLanguage = async (languageId: string) => {
         AsyncStorageLib.setItem('@languages', JSON.stringify(languages));
     } catch(e) {
         console.error(`Error removing language`, e);
+    }
+}
+
+export const addQuiz = async (quiz: Quiz) => {
+    try {
+        const data = await AsyncStorageLib.getItem('@quizzes');
+        if(!data) return console.error('Couldn\'t fetch quiz data.');
+
+        const quizzes: Quiz[] = JSON.parse(data);
+        const newQuizzes = quizzes.concat(quiz);
+
+        AsyncStorageLib.setItem('@quizzes', JSON.stringify(newQuizzes));
+    } catch(e) {
+        console.error('Error adding quiz', e);
     }
 }

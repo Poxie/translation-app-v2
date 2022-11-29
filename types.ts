@@ -22,6 +22,11 @@ export type LanguageItem = {
     text: string;
     id: string;
 }
+export type Quiz = {
+    id: string;
+    termIds: string[];
+    name: string;
+}
 
 // Overriding useNavigation autocorrection
 declare global {
