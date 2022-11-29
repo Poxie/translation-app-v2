@@ -108,6 +108,7 @@ export const EditCategory: React.FC<{
                         selectableItems={parentItems}
                         onChange={ids => setParentId(ids[0])}
                         containerStyle={styles.inputContainer}
+                        header={'Select category'}
                         placeholder={'Select category...'}
                     />
                 ) : (

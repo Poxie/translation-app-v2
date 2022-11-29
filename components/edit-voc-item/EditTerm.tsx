@@ -187,6 +187,10 @@ export const EditTerm: React.FC<{
                     onItemAdd={onSelectorAdd}
                     onItemDelete={onSelectorDelete}
                     defaultActive={selectors}
+                    addHeader={'Add selector'}
+                    addItemLabel={'Add selector'}
+                    addItemPlaceholder={'Selector'}
+                    placeholder={'Select selector...'}
                     multiSelect
                     allowEdit
                 />
@@ -204,6 +208,9 @@ export const EditTerm: React.FC<{
                     onChange={ids => updateProperty('language', ids[0])}
                     header={'Choose language'}
                     addHeader={'Add language'}
+                    addItemLabel={'Add language'}
+                    addItemPlaceholder={'Language'}
+                    placeholder={'Select language...'}
                     onItemAdd={onLanguageAdd}
                     onItemDelete={onLanguageDelete}
                     label={'Language'}
@@ -225,8 +232,8 @@ export const EditTerm: React.FC<{
                     onChange={ids => updateProperty('parentId', ids[0])}
                     containerStyle={styles.inputContainer}
                     selectableItems={parentItems}
-                    header={'Choose category'}
-                    placeholder={'No category selected.'}
+                    header={'Select category'}
+                    placeholder={'Select category...'}
                     label={'Category'}
                 />
             )}
