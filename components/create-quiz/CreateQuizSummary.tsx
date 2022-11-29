@@ -7,9 +7,10 @@ import Text from "../text";
 import { SelectedTerm } from "./SelectedTerm";
 
 export const CreateQuizSummary: React.FC<{
+    removeTerm: (termId: string) => void;
     termIds: string[];
     name: string;
-}> = ({ termIds, name }) => {
+}> = ({ removeTerm, termIds, name }) => {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
 
     return(
@@ -41,17 +42,27 @@ export const CreateQuizSummary: React.FC<{
                 borderColor: tertiary,
                 ...styles.termContainer
             }}>
+                {termIds.length === 0 && (
+                    <Text>
+                        No terms have been selected. You may not create a quiz with no terms.
+                    </Text>
+                )}
+
                 {termIds.map((termId, key) => (
                     <SelectedTerm 
                         id={termId}
                         isLast={key === termIds.length - 1}
-                        key={termId} 
+                        removeTerm={removeTerm}
+                        key={termId}
                     />
                 ))}
             </View>
         </ScrollView>
 
-        <Button style={styles.button}>
+        <Button 
+            style={styles.button}
+            disabled={!termIds.length}
+        >
             Create quiz
         </Button>
         </>

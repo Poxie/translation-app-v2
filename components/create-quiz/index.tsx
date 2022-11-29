@@ -13,6 +13,8 @@ export default function CreateQuiz({ route: { params: { termIds: _termIds } } }:
 
     useEffect(() => setTermIds(_termIds), [_termIds]);
 
+    const removeTerm = (id: string) => setTermIds(prev => prev?.filter(termId => termId !== id));
+
     return(
         <View safeAreaView>
             {!termIds && (
@@ -24,6 +26,7 @@ export default function CreateQuiz({ route: { params: { termIds: _termIds } } }:
 
             {termIds && (
                 <CreateQuizSummary 
+                    removeTerm={removeTerm}
                     termIds={termIds}
                     name={name}
                 />
