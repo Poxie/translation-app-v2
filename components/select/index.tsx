@@ -16,7 +16,8 @@ export default function Select({
     selectableItems, defaultActive, header,
     onChange, closeOnChange, allowEdit, onItemAdd,
     multiSelect, addHeader, onItemDelete, label,
-    containerStyle, placeholder, onAddClick
+    containerStyle, placeholder, onAddClick, addItemLabel,
+    addItemPlaceholder
 }: {
     selectableItems: SelectItem[];
     defaultActive?: string | string[];
@@ -31,6 +32,8 @@ export default function Select({
     label?: string;
     containerStyle?: StyleProps;
     placeholder?: string;
+    addItemPlaceholder?: string;
+    addItemLabel?: string;
     onAddClick?: () => void;
 }) {
     const navigation = useNavigation();
@@ -64,6 +67,8 @@ export default function Select({
                 onItemDelete,
                 addHeader,
                 multiSelect,
+                addItemLabel,
+                addItemPlaceholder,
                 onAddClick
             }
         });
