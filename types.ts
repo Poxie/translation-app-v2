@@ -64,6 +64,8 @@ export type ModalStackParamList = {
         multiSelect?: boolean;
         onAddClick?: () => void;
         onlyEdit?: boolean;
+        addItemPlaceholder?: string;
+        addItemLabel?: string;
     }
     'Add Select Item': {
         onSubmit: (text: string) => void;

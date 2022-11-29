@@ -11,7 +11,8 @@ import { useColors } from '../../hooks/useColors';
 export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: { 
     items: _items, active: _active, onChange, 
     closeOnChange, allowEdit, onItemAdd, multiSelect,
-    addHeader, onItemDelete, onAddClick, onlyEdit=false
+    addHeader, onItemDelete, onAddClick, onlyEdit=false,
+    addItemLabel, addItemPlaceholder
 } } }) => {
     const navigation = useNavigation();
     const { background: { secondary, tertiary } } = useColors();
@@ -103,7 +104,9 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
             screen: 'Add Select Item',
             params: {
                 onSubmit,
-                header: addHeader
+                header: addHeader,
+                addLabel: addItemLabel,
+                placeholder: addItemPlaceholder
             }
         })
     }
@@ -145,7 +148,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                     style={styles.addButton}
                 >
                     <Text>
-                        Add Item
+                        {addItemLabel || 'Add Item'}
                     </Text>
                 </TouchableOpacity>
             )}
