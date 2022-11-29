@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { MainStackParamList, VocItem, VocScreenProps } from '../../types';
 import { SearchResults } from './SearchResults';
 import Button from '../button';
+import CreateMenu from '../create-menu';
 
 type VocContext = {
     setActive: (id: string) => void;
@@ -217,6 +218,7 @@ export default function Voc({ route: { params: { selectable, pathAfterSelection 
                     </ScrollView>
                 )}
             </View>
+            <CreateMenu />
         </VocContext.Provider>
     )
 }
