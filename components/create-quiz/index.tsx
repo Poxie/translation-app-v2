@@ -27,6 +27,7 @@ export default function CreateQuiz({ route: { params: { termIds: _termIds } } }:
             {termIds && (
                 <CreateQuizSummary 
                     removeTerm={removeTerm}
+                    setName={setName}
                     termIds={termIds}
                     name={name}
                 />

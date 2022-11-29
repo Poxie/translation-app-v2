@@ -9,9 +9,10 @@ import { SelectedTerm } from "./SelectedTerm";
 
 export const CreateQuizSummary: React.FC<{
     removeTerm: (termId: string) => void;
+    setName: (name: string) => void;
     termIds: string[];
     name: string;
-}> = ({ removeTerm, termIds, name }) => {
+}> = ({ removeTerm, setName, termIds, name }) => {
     const navigation = useNavigation();
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
 
@@ -38,10 +39,10 @@ export const CreateQuizSummary: React.FC<{
             </Text>
 
             <Input 
-                onTextChange={() => {}}
+                onTextChange={setName}
                 defaultValue={name}
-                editable={false}
                 containerStyle={styles.input}
+                placeholder={'Quiz name cannot be empty...'}
             />
 
             <Text style={{
@@ -82,7 +83,7 @@ export const CreateQuizSummary: React.FC<{
 
         <Button 
             style={styles.button}
-            disabled={!termIds.length}
+            disabled={!termIds.length || !name}
         >
             Create quiz
         </Button>
