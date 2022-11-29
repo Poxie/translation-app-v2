@@ -6,12 +6,14 @@ import { AddSelectItem } from "../components/select/AddSelectItem";
 import Home from "../components/home";
 import Search from "../components/search";
 import Voc from "../components/voc";
-import Quiz from "../components/quiz";
 import Favorite from "../components/favorite";
 import ImportVoc from "../components/import-voc";
 import EditVocItem from "../components/edit-voc-item";
 import { ItemTranslations } from "../components/edit-voc-item/ItemTranslations";
 import SearchTerm from "../components/search-term";
+import Quizzes from "../components/quizzes";
+import CreateQuiz from "../components/create-quiz";
+import Quiz from "../components/quiz";
 
 // Root stack
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -49,7 +51,9 @@ const MainStackProvider = () => {
                 options={({ route }) => ({ headerTitle: route.params.header })}
             />
             <MainStack.Screen name="Import Voc" component={ImportVoc} />
-            <MainStack.Screen name="Choose Quiz" component={Quiz} />
+            <MainStack.Screen name="Quiz" component={Quiz} />
+            <MainStack.Screen name="Quizzes" component={Quizzes} />
+            <MainStack.Screen name="Create Quiz" component={CreateQuiz} />
             <MainStack.Screen name="Favorites" component={Favorite} />
         </MainStack.Navigator>
     )

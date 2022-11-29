@@ -21,7 +21,7 @@ export const HomeCards = () => {
         { text: 'Search Term', icon: <SearchIcon style={{ fill: secondary }} />, path: 'Search' },
         { text: 'Vocabulary', icon: <VocIcon style={{ fill: secondary }} />, path: 'Voc', params: { header: 'Vocabulary' } },
         { text: 'Import Vocabulary', icon: <VocIcon style={{ fill: secondary }} />, path: 'Import Voc' },
-        { text: 'Take Quiz', icon: <QuizIcon style={{ fill: secondary }} />, path: 'Choose Quiz' },
+        { text: 'Take Quiz', icon: <QuizIcon style={{ fill: secondary }} />, path: 'Quizzes' },
         { text: 'Favorites', icon: <FavoriteIcon style={{ fill: secondary }} />, path: 'Favorites' },
     ]
 

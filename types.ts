@@ -44,7 +44,11 @@ export type MainStackParamList = {
         pathAfterSelection?: keyof MainStackParamList;
     };
     'Import Voc': undefined;
-    'Choose Quiz': {
+    'Quiz': {
+        termIds: string[];
+    };
+    'Quizzes': undefined;
+    'Create Quiz': {
         termIds?: string[];
     };
     'Favorites': undefined;
@@ -91,7 +95,8 @@ export type ModalStackParamList = {
 
 // Main stack screen props
 export type VocScreenProps = NativeStackScreenProps<MainStackParamList, 'Voc'>;
-export type QuizScreenProps = NativeStackScreenProps<MainStackParamList, 'Choose Quiz'>;
+export type QuizScreenProps = NativeStackScreenProps<MainStackParamList, 'Quiz'>;
+export type CreateQuizScreenProps = NativeStackScreenProps<MainStackParamList, 'Create Quiz'>;
 
 // Modal stack screen props
 export type SelectItemScreenProps = NativeStackScreenProps<ModalStackParamList, 'Select Items'>
