@@ -99,7 +99,11 @@ export const Category: React.FC<{
                         paddingVertical: 10
                     }}
                 >
-                    <View style={styles.childContainer}>
+                    <View style={{
+                        borderColor: tertiary,
+                        borderBottomWidth: hasItems ? layout.borderWidth.secondary : 0,
+                        ...styles.childContainer
+                    }}>
                         {!hasItems && (
                             <Text>
                                 This category has no items.
@@ -152,6 +156,7 @@ const styles = {
     },
     childHeader: {
         paddingHorizontal: 0,
+        marginTop: -layout.spacing.secondary / 2
     },
     childText: {
         fontSize: 14

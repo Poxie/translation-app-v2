@@ -5,6 +5,7 @@ import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
 import { useAppSelector } from '../../redux/store';
 import { selectTermById } from '../../redux/voc/selectors';
+import { SearchResult } from '../search/SearchResult';
 import Text from '../text';
 
 export const Term: React.FC<{
@@ -38,17 +39,14 @@ export const Term: React.FC<{
                     }} 
                 />
             )}
-            <Text
-                style={{ fontStyle: !term.term ? 'italic' : 'normal' }}
-            >
-                {term.term || `Term name is missing. (Definition: ${term.definition})`}
-            </Text>
+            <SearchResult 
+                id={term.id}
+            />
         </TouchableOpacity>
     )
 }
 const styles = {
     container: {
-        paddingVertical: layout.spacing.secondary,
         flexDirection: 'row' as 'row',
         alignItems: 'center' as 'center'
     },
