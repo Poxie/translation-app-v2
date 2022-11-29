@@ -1,4 +1,4 @@
-import { ScrollView, View as DefaultView } from "react-native"
+import { ScrollView, View as DefaultView, View } from "react-native"
 import { State } from "."
 import layout from "../../constants/layout"
 import { useColors } from "../../hooks/useColors"
@@ -22,12 +22,17 @@ export const QuizHomeScreen: React.FC<{
         <>
         <ScrollView style={styles.content}>
             <>
-            <Text style={{
-                color: textSecondary,
-                ...styles.label
-            }}>
-                {quiz.termIds.length.toString()} terms
-            </Text>
+            <View style={styles.header}>
+                <Text style={{
+                    color: textSecondary,
+                    ...styles.label
+                }}>
+                    {quiz.name}
+                </Text>
+                <Text>
+                    {quiz.termIds.length.toString()} terms
+                </Text>
+            </View>
 
             <DefaultView style={{
                 backgroundColor: secondary,
@@ -55,16 +60,22 @@ export const QuizHomeScreen: React.FC<{
 }
 const styles = {
     content: {
-        padding: layout.spacing.secondary,
+        padding: layout.spacing.primary,
     },
     termContainer: {
         padding: layout.spacing.secondary,
         borderWidth: layout.borderWidth.secondary,
         borderRadius: layout.borderRadius.secondary
     },
-    label: {
-        fontWeight: '600' as '600',
+    header: {
+        flexDirection: 'row' as 'row',
+        justifyContent: 'space-between' as 'space-between',
+        alignItems: 'center' as 'center',
         marginBottom: layout.spacing.secondary
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: '600' as '600'
     },
     button: {
         marginHorizontal: layout.spacing.primary
