@@ -21,7 +21,7 @@ export const CreateQuizSummary: React.FC<{
     const dispatch = useAppDispatch();
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
 
-    const createQuiz = () => {
+    const createQuiz = async () => {
         const id = Math.random().toString();
         const quiz: Quiz = {
             id,
@@ -30,7 +30,13 @@ export const CreateQuizSummary: React.FC<{
         }
 
         dispatch(addQuiz(quiz));
-        addQuizInStorage(quiz);
+        await addQuizInStorage(quiz);
+
+        // Navigating to created quiz
+        navigation.navigate('Root', {
+            screen: 'Quizzes',
+            params: { quizId: id }
+        })
     }
 
     const addTerm = () => {
