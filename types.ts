@@ -63,6 +63,7 @@ export type ModalStackParamList = {
         onItemDelete?: (id: string) => void;
         multiSelect?: boolean;
         onAddClick?: () => void;
+        onlyEdit?: boolean;
     }
     'Add Select Item': {
         onSubmit: (text: string) => void;

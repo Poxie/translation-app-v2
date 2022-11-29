@@ -11,17 +11,18 @@ import { useColors } from '../../hooks/useColors';
 export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: { 
     items: _items, active: _active, onChange, 
     closeOnChange, allowEdit, onItemAdd, multiSelect,
-    addHeader, onItemDelete, onAddClick
+    addHeader, onItemDelete, onAddClick, onlyEdit=false
 } } }) => {
     const navigation = useNavigation();
     const { background: { secondary, tertiary } } = useColors();
     const [active, setActive] = useState(_active);
     const [items, setItems] = useState(_items);
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(onlyEdit);
     const initial = useRef(true);
 
     // Updating header if items are editable
     useEffect(() => {
+        if(onlyEdit) return;
         if(!allowEdit || !items.length) {
             navigation.setOptions({
                 headerRight: null
@@ -41,7 +42,7 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
                 </TouchableOpacity>
             )
         })
-    }, [allowEdit, isEditing, items.length]);
+    }, [allowEdit, onlyEdit, isEditing, items.length]);
 
     // Updating parent on active items change
     useEffect(() => {
@@ -60,6 +61,8 @@ export const SelectItems: React.FC<SelectItemScreenProps> = ({ route: { params: 
         onItemDelete(id);
     }
     const onPress = (id: string) => {
+        if(onlyEdit) return;
+
         setActive(prev => {
             // If not multi select, set item id as active
             if(!multiSelect) {
