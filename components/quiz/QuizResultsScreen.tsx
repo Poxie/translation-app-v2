@@ -2,6 +2,7 @@ import { ScrollView, View } from "react-native"
 import { PlayedTerm } from "."
 import layout from "../../constants/layout";
 import { useColors } from "../../hooks/useColors";
+import Button from "../button";
 import Text from "../text"
 import { QuizResultItem } from "./QuizResultItem";
 
@@ -12,6 +13,7 @@ export const QuizResultsScreen: React.FC<{
     const correctCount = results.filter(term => term.outcome === 'correct').length;
 
     return(
+        <>
         <ScrollView style={styles.container}>
             <View style={styles.header}>
                 <Text style={{
@@ -41,6 +43,19 @@ export const QuizResultsScreen: React.FC<{
                 ))}
             </View>
         </ScrollView>
+
+        <View style={styles.buttons}>
+            <Button 
+                type={'secondary'}
+                style={styles.button}
+            >
+                Replay quiz
+            </Button>
+            <Button>
+                Replay failed terms
+            </Button>
+        </View>
+        </>
     )
 }
 const styles = {
@@ -60,5 +75,11 @@ const styles = {
         padding: layout.spacing.secondary,
         borderRadius: layout.borderRadius.secondary,
         borderWidth: layout.borderWidth.secondary
+    },
+    buttons: {
+        paddingHorizontal: layout.spacing.primary
+    },
+    button: {
+        marginBottom: layout.spacing.secondary
     }
 }
