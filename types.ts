@@ -51,7 +51,7 @@ export type MainStackParamList = {
     };
     'Import Voc': undefined;
     'Quiz': {
-        termIds: string[];
+        quizId: string;
     };
     'Quizzes': undefined;
     'Create Quiz': {
