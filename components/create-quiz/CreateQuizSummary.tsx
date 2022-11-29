@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import { ScrollView, View } from "react-native";
 import layout from "../../constants/layout";
 import { useColors } from "../../hooks/useColors";
@@ -11,7 +12,20 @@ export const CreateQuizSummary: React.FC<{
     termIds: string[];
     name: string;
 }> = ({ removeTerm, termIds, name }) => {
+    const navigation = useNavigation();
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
+
+    const addTerm = () => {
+        navigation.navigate('Root', {
+            screen: 'Voc',
+            params: { 
+                header: 'Select terms', 
+                pathAfterSelection: 'Create Quiz', 
+                selectable: true,
+                defaultActiveIds: termIds
+            }
+        })
+    }
 
     return(
         <>
@@ -57,6 +71,13 @@ export const CreateQuizSummary: React.FC<{
                     />
                 ))}
             </View>
+
+            <Button 
+                type={'transparent'}
+                onPress={addTerm}
+            >
+                Add term
+            </Button>
         </ScrollView>
 
         <Button 
