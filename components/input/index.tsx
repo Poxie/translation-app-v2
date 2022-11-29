@@ -6,13 +6,14 @@ import Text from '../text';
 
 export default function Input({
     onTextChange, placeholder, defaultValue,
-    label, containerStyle
+    label, containerStyle, editable=true
 }: {
     onTextChange: (text: string) => void;
     placeholder?: string;
     defaultValue?: string;
     label?: string;
     containerStyle?: StyleProps; 
+    editable?: boolean;
 }) {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
 
@@ -30,6 +31,7 @@ export default function Input({
                 defaultValue={defaultValue || ''}
                 placeholder={placeholder}
                 onChangeText={onTextChange}
+                editable={editable}
                 style={{ 
                     backgroundColor: secondary, 
                     borderColor: tertiary, 
