@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { ADD_CATEGORY, ADD_LANGUAGE, ADD_SELECTOR, ADD_TERM, ADD_TRANSLATION, CREATE_TRANSLATION, REMOVE_LANGUAGE, REMOVE_SELECTOR, REMOVE_TERM, REMOVE_TRANSLATION, SET_CATEGORIES, SET_LANGUAGES, SET_SELECTORS, SET_TERMS, SET_TRANSLATIONS, UPDATE_CATEGORY, UPDATE_TERM } from "./constants";
+import { ADD_CATEGORY, ADD_LANGUAGE, ADD_SELECTOR, ADD_TERM, ADD_TRANSLATION, CREATE_TRANSLATION, REMOVE_CATEGORY, REMOVE_LANGUAGE, REMOVE_SELECTOR, REMOVE_TERM, REMOVE_TRANSLATION, SET_CATEGORIES, SET_LANGUAGES, SET_SELECTORS, SET_TERMS, SET_TRANSLATIONS, UPDATE_CATEGORY, UPDATE_TERM } from "./constants";
 
 export const setTerms = createAction(SET_TERMS, terms => ({
     type: SET_TERMS,
@@ -50,6 +50,10 @@ export const createTranslation = createAction(CREATE_TRANSLATION, (termIds, tran
 export const removeTerm = createAction(REMOVE_TERM, termId => ({
     type: REMOVE_TERM,
     payload: termId
+}))
+export const removeCategory = createAction(REMOVE_CATEGORY, categoryId => ({
+    type: REMOVE_CATEGORY,
+    payload: categoryId
 }))
 export const removeTranslation = createAction(REMOVE_TRANSLATION, (termId) => ({
     type: REMOVE_TRANSLATION,

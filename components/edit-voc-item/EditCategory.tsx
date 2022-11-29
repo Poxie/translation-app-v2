@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { View } from 'react-native';
 import layout from '../../constants/layout';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
-import { addCategory, updateCategory } from '../../redux/voc/actions';
+import { addCategory, removeCategory, updateCategory } from '../../redux/voc/actions';
 import { selectCategories } from '../../redux/voc/selectors';
-import { createCategory as createCategoryInStorage, updateCategory as updateCategoryInStorage } from '../../logic';
+import { createCategory as createCategoryInStorage, updateCategory as updateCategoryInStorage, deleteCategory as deleteCategoryInStorage } from '../../logic';
 import { VocItem } from "../../types";
 import Button from '../button';
 import Input from '../input';
@@ -16,6 +17,7 @@ export const EditCategory: React.FC<{
     isEditing: boolean;
 }> = ({ defaultItem, isEditing }) => {
     const dispatch = useAppDispatch();
+    const navigation = useNavigation();
     const [title, setTitle] = useState(defaultItem?.title || '');
     const [parentId, setParentId] = useState(defaultItem?.parentId || null);
     const availableParents = useAppSelector(selectCategories).filter(category => category.id !== defaultItem?.id);
@@ -55,6 +57,14 @@ export const EditCategory: React.FC<{
 
         // Adding category to local storage
         createCategoryInStorage(category)
+    }
+
+    // Deleting category
+    const deleteCategory = () => {
+        if(!defaultItem) return;
+        dispatch(removeCategory(defaultItem.id));
+        deleteCategoryInStorage(defaultItem.id);
+        navigation.goBack();
     }
 
     // Determining parent items and active parent
@@ -97,6 +107,15 @@ export const EditCategory: React.FC<{
                         text={activeParent?.text || ''}
                         label={'Category'}
                     />
+                )}
+
+                {canEdit && (
+                    <Button 
+                        type={'danger'}
+                        onPress={deleteCategory}
+                    >
+                        Delete category
+                    </Button>
                 )}
             </View>
             {!defaultItem && (

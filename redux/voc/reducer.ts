@@ -18,7 +18,8 @@ import {
     addTranslation as addTranslationAction,
     removeTranslation as removeTranslationAction,
     createTranslation as createTranslationAction,
-    removeTerm as removeTermAction
+    removeTerm as removeTermAction,
+    removeCategory as removeCategoryAction
 } from './actions';
 import { VocState } from "./types";
 
@@ -122,6 +123,19 @@ const removeTerm: ReducerAction = (state, action) => {
     const newTerms = state.terms.filter(term => term.id !== action.payload);
     return updateObject(state, { terms: newTerms });
 }
+const removeCategory: ReducerAction = (state, action) => {
+    const newCategories = state.categories.filter(category => category.id !== action.payload);
+    
+    // Resetting parentId for terms with removed category as parent
+    const newTerms = state.terms.map(term => {
+        if(term.parentId === action.payload) {
+            return updateObject(term, { parentId: null });
+        }
+        return term;
+    })
+
+    return updateObject(state, { terms: newTerms, categories: newCategories });
+}
 const removeSelector: ReducerAction = (state, action) => {
     const newSelectors = state.selectors.filter(selector => selector.id !== action.payload);
     return updateObject(state, { selectors: newSelectors });
@@ -169,4 +183,5 @@ export const vocReducer = createReducer<VocState>({
         .addCase(removeTranslationAction.type, removeTranslation)
         .addCase(createTranslationAction.type, createTranslation)
         .addCase(removeTermAction.type, removeTerm)
+        .addCase(removeCategoryAction.type, removeCategory)
 })
