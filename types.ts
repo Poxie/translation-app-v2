@@ -50,10 +50,10 @@ export type MainStackParamList = {
         defaultActiveIds?: string[];
     };
     'Import Voc': undefined;
-    'Quiz'?: {
+    'Quiz': {
         quizId: string;
     };
-    'Quizzes': {
+    'Quizzes'?: {
         quizId?: string;
     };
     'Create Quiz': {
@@ -103,7 +103,7 @@ export type ModalStackParamList = {
 
 // Main stack screen props
 export type VocScreenProps = NativeStackScreenProps<MainStackParamList, 'Voc'>;
-export type QuizzesScreenProps = NativeStackScreenProps<MainStackParamList, 'Quiz'>;
+export type QuizzesScreenProps = NativeStackScreenProps<MainStackParamList, 'Quizzes'>;
 export type QuizScreenProps = NativeStackScreenProps<MainStackParamList, 'Quiz'>;
 export type CreateQuizScreenProps = NativeStackScreenProps<MainStackParamList, 'Create Quiz'>;
 
