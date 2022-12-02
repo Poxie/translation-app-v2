@@ -78,6 +78,22 @@ export const deleteItem = async (id: string) => {
         const items: VocItem[] = JSON.parse(data);
         const newItems = items.filter(item => item.id !== id);
 
+        // Removing term from quiz if quiz has term
+        const quizData = await AsyncStorageLib.getItem('@quizzes');
+        if(quizData) {
+            const quizzes: Quiz[] = JSON.parse(quizData);
+            const newQuizzes: Quiz[] = [];
+            for(const quiz of quizzes) {
+                if(quiz.termIds.includes(id)) {
+                    quiz.termIds = quiz.termIds.filter(termId => termId !== id);
+                    if(!quiz.termIds.length) continue;
+                }
+                newQuizzes.push(quiz);
+            }
+            
+            AsyncStorageLib.setItem('@quizzes', JSON.stringify(newQuizzes));
+        }
+
         // Updating storage with new item
         AsyncStorageLib.setItem('@terms', JSON.stringify(newItems));
     } catch(e) {

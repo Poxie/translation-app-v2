@@ -15,6 +15,7 @@ import Select, { SelectItem } from '../select';
 import { PreviewInput } from './PreviewInput';
 import { TranslationSelect } from './TranslationSelect';
 import { TypeSelection } from './TypeSelection';
+import { removeTermFromQuiz } from '../../redux/quiz/actions';
 
 export const EditTerm: React.FC<{
     defaultItem?: VocItem;
@@ -82,6 +83,7 @@ export const EditTerm: React.FC<{
     const deleteTerm = () => {
         if(!defaultItem) return;
         dispatch(removeTerm(defaultItem.id));
+        dispatch(removeTermFromQuiz(defaultItem.id));
         deleteItemInStorage(defaultItem.id);
         navigation.goBack();
     }
