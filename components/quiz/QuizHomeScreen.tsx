@@ -1,4 +1,6 @@
-import { ScrollView, View as DefaultView, View } from "react-native"
+import { useRef, useEffect } from 'react';
+import { View as DefaultView, View } from "react-native"
+import Animated, { EasingNode } from 'react-native-reanimated';
 import { State } from "."
 import layout from "../../constants/layout"
 import { useColors } from "../../hooks/useColors"
@@ -14,13 +16,50 @@ export const QuizHomeScreen: React.FC<{
 }> = ({ quizId, setState }) => {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
     const quiz = useAppSelector(state => selectQuizById(state, quizId));
+    const translation = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.timing(translation, {
+            toValue: 1,
+            duration: 250,
+            easing: EasingNode.ease
+        }).start();
+    }, []);
+
+    const startQuiz = () => {
+        Animated.timing(translation, {
+            toValue: 0,
+            duration: 250,
+            easing: EasingNode.ease
+        }).start(() => {
+            setState('play-all');
+        })
+    }
+
     if(!quiz) return <Text>Quiz was not found.</Text>;
 
-    const startQuiz = () => setState('play-all');
+    const topTranslation = translation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-25, 0]
+    })
+    const bottomTranslation = translation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [25, 0]
+    })
+    const opacityTranslation = translation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1]
+    })
 
     return(
         <>
-        <ScrollView style={styles.content}>
+        <Animated.ScrollView style={{
+            transform: [{
+                translateY: topTranslation
+            }],
+            opacity: opacityTranslation,
+            ...styles.content
+        }}>
             <>
             <View style={styles.header}>
                 <Text style={{
@@ -48,13 +87,20 @@ export const QuizHomeScreen: React.FC<{
                 ))}
             </DefaultView>
             </>
-        </ScrollView>
-        <Button 
-            onPress={startQuiz}
-            style={styles.button}
-        >
-            Start quiz
-        </Button>
+        </Animated.ScrollView>
+        <Animated.View style={{
+            transform: [{
+                translateY: bottomTranslation 
+            }],
+            opacity: opacityTranslation
+        }}>
+            <Button 
+                onPress={startQuiz}
+                style={styles.button}
+            >
+                Start quiz
+            </Button>
+        </Animated.View>
         </>
     )
 }
