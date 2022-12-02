@@ -1,10 +1,9 @@
-import { useRef, useState } from "react";
-import { TouchableOpacity, View } from "react-native"
+import { useRef, useState, useEffect } from "react";
+import { View } from "react-native"
+import Animated, { EasingNode } from "react-native-reanimated";
 import { PlayedTerm, State } from ".";
-import layout from "../../constants/layout";
 import { selectQuizById, selectTermsByQuiz } from "../../redux/quiz/selectors";
 import { useAppSelector } from "../../redux/store";
-import Button from "../button";
 import Text from "../text";
 import { QuizProgressBar } from "./QuizProgressBar";
 import { QuizProgressButtons } from "./QuizProgressButtons";
@@ -19,6 +18,37 @@ export const QuizStartedScreen: React.FC<{
     state: State;
 }> = ({ quizId, setState, setResults, state, failedTerms }) => {
     const quiz = useAppSelector(state => selectQuizById(state, quizId));
+
+    // Handling animations
+    const translation = useRef(new Animated.Value(0)).current;
+    const translationTwo = useRef(new Animated.Value(1)).current;
+
+    useEffect(() => {
+        Animated.timing(translation, {
+            toValue: 1,
+            duration: 250,
+            easing: EasingNode.ease
+        }).start();
+    }, []);
+    
+    const topTranslation = translation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-25, 0]
+    })
+    const opacityTranslation = translation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1]
+    });
+
+    const headerTranslation = translationTwo.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-25, 0]
+    })
+    const headerOpacityTranslation = translationTwo.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1]
+    })
+    
     if(!quiz) return null;
 
     // Determining what terms to use
@@ -45,16 +75,34 @@ export const QuizStartedScreen: React.FC<{
         
         // If term was last term, show results
         if(index === terms.length - 1) {
-            setResults(playedTerms.current);
-            setState('results');
+            Animated.timing(translation, {
+                toValue: 0,
+                duration: 250,
+                easing: EasingNode.ease
+            }).start(() => {
+                setResults(playedTerms.current);
+                setState('results');
+            })
             return;
         }
 
-        // Increasing active index
-        setIndex(prev => prev + 1);
+        Animated.timing(translationTwo, {
+            toValue: 0,
+            duration: 250,
+            easing: EasingNode.ease
+        }).start(() => {
+            // Increasing active index
+            setIndex(prev => prev + 1);
 
-        // Resetting board
-        setShowAnswer(false);
+            // Resetting board
+            setShowAnswer(false);
+
+            Animated.timing(translationTwo, {
+                toValue: 1,
+                duration: 250,
+                easing: EasingNode.ease
+            }).start();
+        });
     }
     const onCorrect = () => {
         nextTerm('correct')
@@ -64,37 +112,48 @@ export const QuizStartedScreen: React.FC<{
     }
     
     return(
-        <View>
+        <Animated.View style={{
+            transform: [{ translateY: topTranslation }],
+            opacity: opacityTranslation
+        }}>
             <QuizProgressBar 
                 index={index}
                 count={terms.length}
             />
-            <Text style={styles.header}>
-                What is the definition of '{activeTerm?.term || ''}'?
-            </Text>
-            
-            <View style={styles.options}>
-                {!showAnswer && (
-                    <QuizRevealAnswer 
-                        revealAnswer={() => setShowAnswer(true)}
-                    />
-                )}
 
-                {showAnswer && (
-                    <>
-                    <QuizRevealedAnswer 
-                        hideAnswer={() => setShowAnswer(false)}
-                        answer={activeTerm.definition || ''}
-                    />
+            <Animated.View style={{
+                transform: [{
+                    translateY: headerTranslation
+                }],
+                opacity: headerOpacityTranslation
+            }}>
+                <Text style={styles.header}>
+                    What is the definition of '{activeTerm?.term || ''}'?
+                </Text>
+                
+                <View style={styles.options}>
+                    {!showAnswer && (
+                        <QuizRevealAnswer 
+                            revealAnswer={() => setShowAnswer(true)}
+                        />
+                    )}
 
-                    <QuizProgressButtons 
-                        onCorrect={onCorrect}
-                        onIncorrect={onIncorrect}
-                    />
-                    </>
-                )}
-            </View>
-        </View>
+                    {showAnswer && (
+                        <>
+                        <QuizRevealedAnswer 
+                            hideAnswer={() => setShowAnswer(false)}
+                            answer={activeTerm.definition || ''}
+                        />
+
+                        <QuizProgressButtons 
+                            onCorrect={onCorrect}
+                            onIncorrect={onIncorrect}
+                        />
+                        </>
+                    )}
+                </View>
+            </Animated.View>
+        </Animated.View>
     )
 }
 const styles = {
