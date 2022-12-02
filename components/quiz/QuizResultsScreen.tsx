@@ -1,4 +1,6 @@
-import { ScrollView, View } from "react-native"
+import { useRef, useEffect } from 'react';
+import { View } from "react-native"
+import Animated, { EasingNode } from "react-native-reanimated";
 import { PlayedTerm } from "."
 import layout from "../../constants/layout";
 import { useColors } from "../../hooks/useColors";
@@ -15,6 +17,39 @@ export const QuizResultsScreen: React.FC<{
     replayFailed: () => void;
 }> = ({ quizId, results, replayAll, replayFailed }) => {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
+
+    // Handling translations
+    const translation = useRef(new Animated.Value(0)).current;
+
+    useEffect(() => {
+        Animated.timing(translation, {
+            toValue: 1,
+            duration: 250,
+            easing: EasingNode.ease
+        }).start();
+    }, []);
+
+    const topTranslation = translation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-25, 0]
+    })
+    const bottomTranslation = translation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [25, 0]
+    })
+    const opacityTranslation = translation.interpolate({
+        inputRange: [0, 1],
+        outputRange: [0, 1]
+    })
+
+    // Restarting quiz
+    const beforeRestart = (func: () => void) => {
+        Animated.timing(translation, {
+            toValue: 0,
+            duration: 250,
+            easing: EasingNode.ease
+        }).start(func);
+    }
     
     // Getting non-played terms
     const playedIds = results.map(result => result.id);
@@ -26,7 +61,13 @@ export const QuizResultsScreen: React.FC<{
 
     return(
         <>
-        <ScrollView style={styles.container}>
+        <Animated.ScrollView style={{
+            transform: [{
+                translateY: topTranslation
+            }],
+            opacity: opacityTranslation,
+            ...styles.container
+        }}>
             <View style={styles.header}>
                 <Text style={{
                     color: textSecondary,
@@ -87,25 +128,31 @@ export const QuizResultsScreen: React.FC<{
                     </View>
                 </View>
             )}
-        </ScrollView>
+        </Animated.ScrollView>
 
-        <View style={styles.buttons}>
+        <Animated.View style={{
+            transform: [{
+                translateY: bottomTranslation
+            }],
+            opacity: opacityTranslation,
+            ...styles.buttons
+        }}>
             <Button 
                 type={'secondary'}
-                onPress={replayAll}
+                onPress={() => beforeRestart(replayAll)}
             >
                 Replay quiz
             </Button>
 
             {incorrectCount !== 0 && (
                 <Button 
-                    onPress={replayFailed}
+                    onPress={() => beforeRestart(replayFailed)}
                     style={styles.button}
                 >
                     Replay failed terms
                 </Button>
             )}
-        </View>
+        </Animated.View>
         </>
     )
 }
