@@ -64,6 +64,7 @@ export const QuizStartedScreen: React.FC<{
     const playedTerms = useRef<PlayedTerm[]>([]);
 
     const activeTerm = terms[index];
+    if(!activeTerm) return null;
 
     const nextTerm = (outcome: PlayedTerm['outcome']) => {
         // Adding term with outcome to played terms
