@@ -1,4 +1,6 @@
-import { View } from "react-native"
+import { useEffect, useRef, useState } from "react";
+import { Dimensions, View } from "react-native"
+import Animated, { EasingNode } from "react-native-reanimated";
 import layout from "../../constants/layout";
 import { useColors } from "../../hooks/useColors";
 import Text from "../text";
@@ -9,7 +11,20 @@ export const QuizProgressBar: React.FC<{
 }> = ({ index, count }) => {
     const { color: { primary }, background: { tertiary }, text: { secondary } } = useColors();
     const percentage = (index / count) * 100;
-    const width = `${percentage}%`;
+    const progress = useRef(new Animated.Value(0)).current;
+
+    const progressInterpolator = progress.interpolate({
+        inputRange: [0, count],
+        outputRange: [0, Dimensions.get('window').width - layout.spacing.primary * 2]
+    })
+
+    useEffect(() => {
+        Animated.timing(progress, {
+            toValue: index,
+            duration: 400,
+            easing: EasingNode.ease
+        }).start();
+    }, [index]);
 
     return(
         <View style={{
@@ -20,10 +35,10 @@ export const QuizProgressBar: React.FC<{
                 backgroundColor: tertiary,
                 ...styles.progress
             }}>
-                <View style={{
+                <Animated.View style={{
                     ...styles.bar,
                     backgroundColor: primary,
-                    width: width,
+                    width: progressInterpolator,
                 }} />
             </View>
             <View style={styles.labels}>
@@ -31,7 +46,7 @@ export const QuizProgressBar: React.FC<{
                     color: secondary,
                     ...styles.label
                 }}>
-                    {width}
+                    {`${percentage}%`}
                 </Text>
                 <Text style={{
                     color: secondary,
