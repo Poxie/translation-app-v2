@@ -1,7 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { View } from "react-native"
 import Animated, { EasingNode } from "react-native-reanimated";
-import { PlayedTerm } from "."
 import layout from "../../constants/layout";
 import { useColors } from "../../hooks/useColors";
 import { selectQuizById } from "../../redux/quiz/selectors";
@@ -12,11 +11,12 @@ import { QuizResultItem } from "./QuizResultItem";
 
 export const QuizResultsScreen: React.FC<{
     quizId: string;
-    results: PlayedTerm[];
     replayAll: () => void;
     replayFailed: () => void;
-}> = ({ quizId, results, replayAll, replayFailed }) => {
+}> = ({ quizId, replayAll, replayFailed }) => {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
+    const quiz = useAppSelector(state => selectQuizById(state, quizId));
+    const results = quiz?.playedTerms || [];
 
     // Handling translations
     const translation = useRef(new Animated.Value(0)).current;

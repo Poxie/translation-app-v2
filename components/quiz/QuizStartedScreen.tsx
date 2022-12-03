@@ -16,12 +16,11 @@ import { QuizRevealedAnswer } from "./QuizRevealvedAnswer";
 export const QuizStartedScreen: React.FC<{
     quizId: string;
     setState: (state: State) => void;
-    setResults: (terms: PlayedTerm[]) => void;
-    failedTerms: PlayedTerm[];
     state: State;
-}> = ({ quizId, setState, setResults, state, failedTerms }) => {
+}> = ({ quizId, setState, state }) => {
     const dispatch = useAppDispatch();
     const quiz = useAppSelector(state => selectQuizById(state, quizId));
+    const failedTerms = quiz?.playedTerms.filter(term => term.outcome === 'incorrect') || [];
 
     // Handling animations
     const translation = useRef(new Animated.Value(0)).current;
@@ -78,7 +77,7 @@ export const QuizStartedScreen: React.FC<{
             id: activeTerm.id,
             outcome
         }
-        playedTerms.current.push(term);
+        playedTerms.current = [...playedTerms.current.filter(t => t.id !== activeTerm.id), ...[term]];
         dispatch(updateQuizProgress(quizId, [...playedTerms.current]))
         updateQuizProgressInStorage(quizId, playedTerms.current);
         
@@ -89,7 +88,6 @@ export const QuizStartedScreen: React.FC<{
                 duration: 250,
                 easing: EasingNode.ease
             }).start(() => {
-                setResults(playedTerms.current);
                 setState('results');
             })
             return;

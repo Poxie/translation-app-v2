@@ -18,8 +18,7 @@ import { PlayedTerm } from '../../types';
 export const QuizHomeScreen: React.FC<{
     quizId: string;
     setState: (state: State) => void;
-    setResults: (playedTerms: PlayedTerm[]) => void;
-}> = ({ quizId, setState, setResults }) => {
+}> = ({ quizId, setState }) => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation();
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
@@ -54,10 +53,6 @@ export const QuizHomeScreen: React.FC<{
     }, []);
 
     const startQuiz = (type: State) => {
-        if(type === 'play-failed') {
-            setResults(quiz?.playedTerms || []);
-        }
-
         Animated.timing(translation, {
             toValue: 0,
             duration: 250,

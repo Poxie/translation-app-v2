@@ -30,7 +30,8 @@ const removeQuiz: ReducerAction = (state, action) => {
 const setQuizTerms: ReducerAction = (state, action) => {
     const newQuizzes = updateItemInArray(state.quizzes, action.payload.id, quiz => {
         return updateObject(quiz, {
-            termIds: action.payload.termIds
+            termIds: action.payload.termIds,
+            playedTerms: quiz.playedTerms.filter(term => action.payload.termIds.includes(term.id))
         })
     })
     return updateObject(state, { quizzes: newQuizzes });

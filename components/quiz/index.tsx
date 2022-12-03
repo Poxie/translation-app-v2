@@ -13,8 +13,6 @@ export type State = 'home' | 'play-all' | 'continue' | 'play-failed' | 'results'
 export default function Quiz({ route: { params: { quizId, termIds } }}: QuizScreenProps ) {
     const dispatch = useAppDispatch();
     const [state, setState] = useState<State>('home');
-    const [results, setResults] = useState<PlayedTerm[]>([]);
-    const failedTerms = results.filter(term => term.outcome === 'incorrect');
     const quiz = useAppSelector(state => selectQuizById(state, quizId));
 
     useEffect(() => {
@@ -32,7 +30,6 @@ export default function Quiz({ route: { params: { quizId, termIds } }}: QuizScre
                 <QuizHomeScreen 
                     quizId={quizId}
                     setState={setState}
-                    setResults={setResults}
                 />
             )}
 
@@ -40,8 +37,6 @@ export default function Quiz({ route: { params: { quizId, termIds } }}: QuizScre
                 <QuizStartedScreen 
                     quizId={quizId}
                     setState={setState}
-                    setResults={setResults}
-                    failedTerms={failedTerms}
                     state={state}
                 />
             )}
@@ -49,7 +44,6 @@ export default function Quiz({ route: { params: { quizId, termIds } }}: QuizScre
             {state === 'results' && (
                 <QuizResultsScreen 
                     quizId={quizId}
-                    results={results}
                     replayAll={() => setState('play-all')}
                     replayFailed={() => setState('play-failed')}
                 />

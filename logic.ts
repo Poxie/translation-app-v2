@@ -225,6 +225,7 @@ export const setQuizTerms = async (quizId: string, termIds: string[]) => {
         const newQuizzes = quizzes.map(quiz => {
             if(quiz.id == quizId) {
                 quiz.termIds = termIds;
+                quiz.playedTerms = quiz.playedTerms.filter(term => termIds.includes(term.id));
             }
             return quiz;
         })
