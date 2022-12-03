@@ -31,12 +31,14 @@ export const QuizHomeScreen: React.FC<{
             headerRight: () => (
                 <TouchableOpacity onPress={toggleEditing}>
                     <Text>
-                        {isEditing ? 'Save' : 'Edit'}
+                        {isEditing ? 'Done' : 'Edit'}
                     </Text>
                 </TouchableOpacity>
             )
         });
     }, [isEditing]);
+
+
 
     useEffect(() => {
         // Initial animation
@@ -64,6 +66,19 @@ export const QuizHomeScreen: React.FC<{
         navigation.goBack();
         dispatch(removeQuiz(quizId));
         deleteQuizInStorage(quizId);
+    }
+
+    const editTerms = () => {
+        navigation.navigate('Root', {
+            screen: 'Voc',
+            params: {
+                header: 'Select quiz terms',
+                defaultActiveIds: quiz?.termIds,
+                pathAfterSelection: 'Quiz',
+                paramsAfterSelection: { quizId },
+                selectable: true
+            }
+        })
     }
 
     if(!quiz) return <Text>Quiz was not found.</Text>;
@@ -116,6 +131,15 @@ export const QuizHomeScreen: React.FC<{
                     />
                 ))}
             </DefaultView>
+
+            {isEditing && (
+                <Button 
+                    type={'transparent'}
+                    onPress={editTerms}
+                >
+                    Edit terms
+                </Button>
+            )}
             </>
         </Animated.ScrollView>
         <Animated.View style={{

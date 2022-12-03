@@ -215,3 +215,22 @@ export const addQuiz = async (quiz: Quiz) => {
         console.error('Error adding quiz', e);
     }
 }
+
+export const setQuizTerms = async (quizId: string, termIds: string[]) => {
+    try {
+        const data = await AsyncStorageLib.getItem('@quizzes');
+        if(!data) return console.error('Couldn\'t fetch quiz data.');
+
+        const quizzes: Quiz[] = JSON.parse(data);
+        const newQuizzes = quizzes.map(quiz => {
+            if(quiz.id == quizId) {
+                quiz.termIds = termIds;
+            }
+            return quiz;
+        })
+
+        AsyncStorageLib.setItem('@quizzes', JSON.stringify(newQuizzes));
+    } catch(e) {
+        console.error('Error adding quiz', e);
+    }
+}

@@ -1,11 +1,12 @@
 import { AnyAction, createReducer } from "@reduxjs/toolkit";
-import { updateObject } from "../utils";
+import { updateItemInArray, updateObject } from "../utils";
 import { QuizState } from "./types";
 import { 
     setQuizzes as setQuizzesAction,
     addQuiz as addQuizAction,
     removeQuiz as removeQuizAction,
-    removeTermFromQuiz as removeTermFromQuizAction
+    removeTermFromQuiz as removeTermFromQuizAction,
+    setQuizTerms as setQuizTermsAction
 } from './actions'; 
 import { Quiz } from "../../types";
 
@@ -22,6 +23,15 @@ const addQuiz: ReducerAction = (state, action) => {
 
 const removeQuiz: ReducerAction = (state, action) => {
     const newQuizzes = state.quizzes.filter(quiz => quiz.id !== action.payload);
+    return updateObject(state, { quizzes: newQuizzes });
+}
+
+const setQuizTerms: ReducerAction = (state, action) => {
+    const newQuizzes = updateItemInArray(state.quizzes, action.payload.id, quiz => {
+        return updateObject(quiz, {
+            termIds: action.payload.termIds
+        })
+    })
     return updateObject(state, { quizzes: newQuizzes });
 }
 
@@ -48,4 +58,5 @@ export const quizReducer = createReducer<QuizState>({
         .addCase(addQuizAction.type, addQuiz)
         .addCase(removeQuizAction.type, removeQuiz)
         .addCase(removeTermFromQuizAction.type, removeTermFromQuiz)
+        .addCase(setQuizTermsAction.type, setQuizTerms)
 })
