@@ -10,7 +10,7 @@ export const QuizProgressBar: React.FC<{
     count: number;
 }> = ({ index, count }) => {
     const { color: { primary }, background: { tertiary }, text: { secondary } } = useColors();
-    const percentage = (index / count) * 100;
+    const percentage = Math.floor((index / count) * 100);
     const progress = useRef(new Animated.Value(0)).current;
 
     const progressInterpolator = progress.interpolate({
