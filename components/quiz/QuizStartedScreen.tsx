@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import { View } from "react-native"
 import Animated, { EasingNode } from "react-native-reanimated";
 import { State } from ".";
+import { updateQuizProgress } from "../../logic";
 import { selectQuizById, selectTermsByQuiz } from "../../redux/quiz/selectors";
 import { useAppSelector } from "../../redux/store";
 import { PlayedTerm } from "../../types";
@@ -74,6 +75,7 @@ export const QuizStartedScreen: React.FC<{
             outcome
         }
         playedTerms.current.push(term);
+        updateQuizProgress(quizId, playedTerms.current);
         
         // If term was last term, show results
         if(index === terms.length - 1) {

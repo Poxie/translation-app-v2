@@ -1,5 +1,5 @@
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
-import { LanguageItem, Quiz, SelectorItem, VocItem } from "./types";
+import { LanguageItem, PlayedTerm, Quiz, SelectorItem, VocItem } from "./types";
 
 export const createTerm = async (item: VocItem) => {
     try {
@@ -232,5 +232,24 @@ export const setQuizTerms = async (quizId: string, termIds: string[]) => {
         AsyncStorageLib.setItem('@quizzes', JSON.stringify(newQuizzes));
     } catch(e) {
         console.error('Error adding quiz', e);
+    }
+}
+
+export const updateQuizProgress = async (quizId: string, playedTerms: PlayedTerm[]) => {
+    try {
+        const data = await AsyncStorageLib.getItem('@quizzes');
+        if(!data) return console.error('Couldn\'t fetch quiz data.');
+
+        const quizzes: Quiz[] = JSON.parse(data);
+        const newQuizzes = quizzes.map(quiz => {
+            if(quiz.id == quizId) {
+                quiz.playedTerms = playedTerms;
+            }
+            return quiz;
+        })
+
+        AsyncStorageLib.setItem('@quizzes', JSON.stringify(newQuizzes));
+    } catch(e) {
+        console.error('Error updating quiz progress', e);
     }
 }
