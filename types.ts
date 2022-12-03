@@ -47,6 +47,7 @@ export type MainStackParamList = {
         header: string;
         selectable?: boolean;
         pathAfterSelection?: keyof MainStackParamList;
+        paramsAfterSelection?: {[key: string]: any};
         defaultActiveIds?: string[];
     };
     'Import Voc': undefined;

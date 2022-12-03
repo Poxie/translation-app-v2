@@ -26,7 +26,7 @@ const VocContext = React.createContext({} as VocContext);
 export const useVoc = () => React.useContext(VocContext);
 
 export default function Voc({ route: { params: { 
-    selectable, pathAfterSelection, defaultActiveIds
+    selectable, pathAfterSelection, paramsAfterSelection, defaultActiveIds
 } } }: VocScreenProps) {
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
     const navigation = useNavigation();
@@ -47,7 +47,8 @@ export default function Voc({ route: { params: {
             navigation.navigate('Root', {
                 screen: pathAfterSelection,
                 params: { 
-                    termIds: active.filter(id => termIds.includes(id)) 
+                    termIds: active.filter(id => termIds.includes(id)),
+                    ...(paramsAfterSelection || {})
                 } as any
             })
         }
