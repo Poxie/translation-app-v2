@@ -9,7 +9,7 @@ import { QuizHomeScreen } from "./QuizHomeScreen";
 import { QuizResultsScreen } from "./QuizResultsScreen";
 import { QuizStartedScreen } from "./QuizStartedScreen";
 
-export type State = 'home' | 'play-all' | 'play-failed' | 'results';
+export type State = 'home' | 'play-all' | 'continue' | 'play-failed' | 'results';
 export default function Quiz({ route: { params: { quizId, termIds } }}: QuizScreenProps ) {
     const dispatch = useAppDispatch();
     const [state, setState] = useState<State>('home');
@@ -31,11 +31,12 @@ export default function Quiz({ route: { params: { quizId, termIds } }}: QuizScre
             {state === 'home' && (
                 <QuizHomeScreen 
                     quizId={quizId}
-                    setState={setState} 
+                    setState={setState}
+                    setResults={setResults}
                 />
             )}
 
-            {['play-all', 'play-failed'].includes(state) && (
+            {['play-all', 'continue', 'play-failed'].includes(state) && (
                 <QuizStartedScreen 
                     quizId={quizId}
                     setState={setState}

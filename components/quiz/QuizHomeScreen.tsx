@@ -13,11 +13,13 @@ import Button from "../button"
 import { SelectedTerm } from "../create-quiz/SelectedTerm"
 import Text from "../text"
 import { QuizResultItem } from './QuizResultItem';
+import { PlayedTerm } from '../../types';
 
 export const QuizHomeScreen: React.FC<{
     quizId: string;
     setState: (state: State) => void;
-}> = ({ quizId, setState }) => {
+    setResults: (playedTerms: PlayedTerm[]) => void;
+}> = ({ quizId, setState, setResults }) => {
     const dispatch = useAppDispatch();
     const navigation = useNavigation();
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
@@ -51,13 +53,17 @@ export const QuizHomeScreen: React.FC<{
         return () => navigation.setOptions({ headerRight: null });
     }, []);
 
-    const startQuiz = () => {
+    const startQuiz = (type: State) => {
+        if(type === 'play-failed') {
+            setResults(quiz?.playedTerms || []);
+        }
+
         Animated.timing(translation, {
             toValue: 0,
             duration: 250,
             easing: EasingNode.ease
         }).start(() => {
-            setState('play-all');
+            setState(type);
         })
     }
 
@@ -98,6 +104,8 @@ export const QuizHomeScreen: React.FC<{
 
     // Checking for quiz progress
     const playedTerms = quiz.playedTerms;
+    const failedTerms = playedTerms.filter(term => term.outcome === 'incorrect');
+    const hasPlayedAllTerms = quiz.termIds.length === playedTerms.length;
 
     return(
         <>
@@ -144,7 +152,7 @@ export const QuizHomeScreen: React.FC<{
                 </Button>
             )}
 
-            {!isEditing && (
+            {!isEditing && playedTerms.length !== 0 && (
                 <View style={styles.progress}>
                     <Text style={{
                         color: textSecondary,
@@ -178,12 +186,38 @@ export const QuizHomeScreen: React.FC<{
             opacity: opacityTranslation
         }}>
             {!isEditing ? (
+                <>
+                {!hasPlayedAllTerms && playedTerms.length !== 0 && (
+                    <Button 
+                        onPress={() => startQuiz('continue')}
+                        style={{
+                            ...styles.continueButton,
+                            ...styles.button
+                        }}
+                        type={'secondary'}
+                    >
+                        Continue
+                    </Button>
+                )}
+                {hasPlayedAllTerms && failedTerms.length !== 0 && (
+                    <Button 
+                        onPress={() => startQuiz('play-failed')}
+                        style={{
+                            ...styles.continueButton,
+                            ...styles.button
+                        }}
+                        type={'secondary'}
+                    >
+                        Play failed terms
+                    </Button>
+                )}
                 <Button 
-                    onPress={startQuiz}
+                    onPress={() => startQuiz('play-all')}
                     style={styles.button}
                 >
                     Start quiz
                 </Button>
+                </>
             ) : (
                 <Button 
                     onPress={deleteQuiz}
@@ -218,6 +252,9 @@ const styles = {
     },
     button: {
         marginHorizontal: layout.spacing.primary
+    },
+    continueButton: {
+        marginBottom: layout.spacing.secondary
     },
     progress: {
         marginTop: layout.spacing.primary

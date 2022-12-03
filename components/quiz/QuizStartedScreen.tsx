@@ -2,9 +2,10 @@ import { useRef, useState, useEffect } from "react";
 import { View } from "react-native"
 import Animated, { EasingNode } from "react-native-reanimated";
 import { State } from ".";
-import { updateQuizProgress } from "../../logic";
+import { updateQuizProgress as updateQuizProgressInStorage } from "../../logic";
+import { updateQuizProgress } from "../../redux/quiz/actions";
 import { selectQuizById, selectTermsByQuiz } from "../../redux/quiz/selectors";
-import { useAppSelector } from "../../redux/store";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 import { PlayedTerm } from "../../types";
 import Text from "../text";
 import { QuizProgressBar } from "./QuizProgressBar";
@@ -19,6 +20,7 @@ export const QuizStartedScreen: React.FC<{
     failedTerms: PlayedTerm[];
     state: State;
 }> = ({ quizId, setState, setResults, state, failedTerms }) => {
+    const dispatch = useAppDispatch();
     const quiz = useAppSelector(state => selectQuizById(state, quizId));
 
     // Handling animations
@@ -55,15 +57,17 @@ export const QuizStartedScreen: React.FC<{
 
     // Determining what terms to use
     let termIds: string[] = [];
-    if(state === 'play-all') termIds = quiz.termIds;
+    if(['play-all', 'continue'].includes(state)) termIds = quiz.termIds;
     if(state === 'play-failed') termIds = failedTerms.map(term => term.id);
 
     // Fetching terms to use
     const terms = useAppSelector(state => selectTermsByQuiz(state, termIds));
 
-    const [index, setIndex] = useState(0);
+    const [index, setIndex] = useState(state === 'continue' ? quiz.playedTerms.length : 0);
     const [showAnswer, setShowAnswer] = useState(false);
-    const playedTerms = useRef<PlayedTerm[]>([]);
+    const playedTerms = useRef<PlayedTerm[]>(
+        state === 'continue' ? Array.from(quiz.playedTerms) : []
+    );
 
     const activeTerm = terms[index];
     if(!activeTerm) return null;
@@ -75,7 +79,8 @@ export const QuizStartedScreen: React.FC<{
             outcome
         }
         playedTerms.current.push(term);
-        updateQuizProgress(quizId, playedTerms.current);
+        dispatch(updateQuizProgress(quizId, [...playedTerms.current]))
+        updateQuizProgressInStorage(quizId, playedTerms.current);
         
         // If term was last term, show results
         if(index === terms.length - 1) {

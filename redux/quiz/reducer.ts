@@ -6,7 +6,8 @@ import {
     addQuiz as addQuizAction,
     removeQuiz as removeQuizAction,
     removeTermFromQuiz as removeTermFromQuizAction,
-    setQuizTerms as setQuizTermsAction
+    setQuizTerms as setQuizTermsAction,
+    updateQuizProgress as updateQuizProgressAction
 } from './actions'; 
 import { Quiz } from "../../types";
 
@@ -30,6 +31,15 @@ const setQuizTerms: ReducerAction = (state, action) => {
     const newQuizzes = updateItemInArray(state.quizzes, action.payload.id, quiz => {
         return updateObject(quiz, {
             termIds: action.payload.termIds
+        })
+    })
+    return updateObject(state, { quizzes: newQuizzes });
+}
+
+const updateQuizProgress: ReducerAction = (state, action) => {
+    const newQuizzes = updateItemInArray(state.quizzes, action.payload.id, quiz => {
+        return updateObject(quiz, {
+            playedTerms: action.payload.playedTerms
         })
     })
     return updateObject(state, { quizzes: newQuizzes });
@@ -59,4 +69,5 @@ export const quizReducer = createReducer<QuizState>({
         .addCase(removeQuizAction.type, removeQuiz)
         .addCase(removeTermFromQuizAction.type, removeTermFromQuiz)
         .addCase(setQuizTermsAction.type, setQuizTerms)
+        .addCase(updateQuizProgressAction.type, updateQuizProgress)
 })
