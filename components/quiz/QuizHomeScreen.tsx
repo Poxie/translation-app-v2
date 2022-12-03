@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/store"
 import Button from "../button"
 import { SelectedTerm } from "../create-quiz/SelectedTerm"
 import Text from "../text"
+import { QuizResultItem } from './QuizResultItem';
 
 export const QuizHomeScreen: React.FC<{
     quizId: string;
@@ -37,8 +38,6 @@ export const QuizHomeScreen: React.FC<{
             )
         });
     }, [isEditing]);
-
-
 
     useEffect(() => {
         // Initial animation
@@ -83,6 +82,7 @@ export const QuizHomeScreen: React.FC<{
 
     if(!quiz) return <Text>Quiz was not found.</Text>;
 
+    // Transitions
     const topTranslation = translation.interpolate({
         inputRange: [0, 1],
         outputRange: [-25, 0]
@@ -95,6 +95,9 @@ export const QuizHomeScreen: React.FC<{
         inputRange: [0, 1],
         outputRange: [0, 1]
     })
+
+    // Checking for quiz progress
+    const playedTerms = quiz.playedTerms;
 
     return(
         <>
@@ -139,6 +142,32 @@ export const QuizHomeScreen: React.FC<{
                 >
                     Edit terms
                 </Button>
+            )}
+
+            {!isEditing && (
+                <View style={styles.progress}>
+                    <Text style={{
+                        color: textSecondary,
+                        ...styles.progressHeader
+                    }}>
+                        Previous Progress
+                    </Text>
+
+                    <View style={{
+                        borderColor: tertiary,
+                        backgroundColor: secondary,
+                        ...styles.termContainer
+                    }}>
+                        {playedTerms.map((term, key) => (
+                            <QuizResultItem 
+                                id={term.id}
+                                outcome={term.outcome}
+                                isLast={key === playedTerms.length - 1}
+                                key={term.id}
+                            />
+                        ))}
+                    </View>
+                </View>
             )}
             </>
         </Animated.ScrollView>
@@ -189,5 +218,13 @@ const styles = {
     },
     button: {
         marginHorizontal: layout.spacing.primary
+    },
+    progress: {
+        marginTop: layout.spacing.primary
+    },
+    progressHeader: {
+        marginBottom: layout.spacing.secondary,
+        fontWeight: '600' as '600',
+        fontSize: 14
     }
 }
