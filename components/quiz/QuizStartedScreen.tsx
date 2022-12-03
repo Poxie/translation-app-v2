@@ -1,9 +1,10 @@
 import { useRef, useState, useEffect } from "react";
 import { View } from "react-native"
 import Animated, { EasingNode } from "react-native-reanimated";
-import { PlayedTerm, State } from ".";
+import { State } from ".";
 import { selectQuizById, selectTermsByQuiz } from "../../redux/quiz/selectors";
 import { useAppSelector } from "../../redux/store";
+import { PlayedTerm } from "../../types";
 import Text from "../text";
 import { QuizProgressBar } from "./QuizProgressBar";
 import { QuizProgressButtons } from "./QuizProgressButtons";

@@ -22,10 +22,15 @@ export type LanguageItem = {
     text: string;
     id: string;
 }
+export type PlayedTerm = {
+    id: string;
+    outcome: 'correct' | 'incorrect';
+}
 export type Quiz = {
     id: string;
     termIds: string[];
     name: string;
+    playedTerms: PlayedTerm[];
 }
 
 // Overriding useNavigation autocorrection

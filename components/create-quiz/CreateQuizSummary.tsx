@@ -27,6 +27,7 @@ export const CreateQuizSummary: React.FC<{
             id,
             name,
             termIds,
+            playedTerms: []
         }
 
         dispatch(addQuiz(quiz));
