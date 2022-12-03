@@ -1,11 +1,14 @@
-import { useRef, useEffect } from 'react';
-import { View as DefaultView, View } from "react-native"
+import { useNavigation } from '@react-navigation/native';
+import { useRef, useEffect, useState } from 'react';
+import { TouchableOpacity, View as DefaultView, View } from "react-native"
+import { deleteQuiz as deleteQuizInStorage } from '../../logic';
 import Animated, { EasingNode } from 'react-native-reanimated';
 import { State } from "."
 import layout from "../../constants/layout"
 import { useColors } from "../../hooks/useColors"
+import { removeQuiz } from '../../redux/quiz/actions';
 import { selectQuizById } from "../../redux/quiz/selectors"
-import { useAppSelector } from "../../redux/store"
+import { useAppDispatch, useAppSelector } from "../../redux/store"
 import Button from "../button"
 import { SelectedTerm } from "../create-quiz/SelectedTerm"
 import Text from "../text"
@@ -14,16 +17,37 @@ export const QuizHomeScreen: React.FC<{
     quizId: string;
     setState: (state: State) => void;
 }> = ({ quizId, setState }) => {
+    const dispatch = useAppDispatch();
+    const navigation = useNavigation();
     const { background: { secondary, tertiary }, text: { secondary: textSecondary } } = useColors();
     const quiz = useAppSelector(state => selectQuizById(state, quizId));
     const translation = useRef(new Animated.Value(0)).current;
+    const [isEditing, setIsEditing] = useState(false);
 
     useEffect(() => {
+        const toggleEditing = () => setIsEditing(prev => !prev);
+
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity onPress={toggleEditing}>
+                    <Text>
+                        {isEditing ? 'Save' : 'Edit'}
+                    </Text>
+                </TouchableOpacity>
+            )
+        });
+    }, [isEditing]);
+
+    useEffect(() => {
+        // Initial animation
         Animated.timing(translation, {
             toValue: 1,
             duration: 250,
             easing: EasingNode.ease
         }).start();
+
+        // Removing edit option
+        return () => navigation.setOptions({ headerRight: null });
     }, []);
 
     const startQuiz = () => {
@@ -34,6 +58,12 @@ export const QuizHomeScreen: React.FC<{
         }).start(() => {
             setState('play-all');
         })
+    }
+
+    const deleteQuiz = () => {
+        navigation.goBack();
+        dispatch(removeQuiz(quizId));
+        deleteQuizInStorage(quizId);
     }
 
     if(!quiz) return <Text>Quiz was not found.</Text>;
@@ -94,12 +124,22 @@ export const QuizHomeScreen: React.FC<{
             }],
             opacity: opacityTranslation
         }}>
-            <Button 
-                onPress={startQuiz}
-                style={styles.button}
-            >
-                Start quiz
-            </Button>
+            {!isEditing ? (
+                <Button 
+                    onPress={startQuiz}
+                    style={styles.button}
+                >
+                    Start quiz
+                </Button>
+            ) : (
+                <Button 
+                    onPress={deleteQuiz}
+                    style={styles.button}
+                    type={'danger'}
+                >
+                    Delete quiz
+                </Button>
+            )}
         </Animated.View>
         </>
     )

@@ -131,6 +131,22 @@ export const deleteCategory = async (id: string) => {
         console.error(`Error updating category`, e);
     }
 }
+export const deleteQuiz = async (id: string) => {
+    try {
+        // Fetching items
+        const data = await AsyncStorageLib.getItem('@quizzes');
+        if(!data) return;
+
+        // Finding and removing correct item from array
+        const items: Quiz[] = JSON.parse(data);
+        const newItems = items.filter(item => item.id !== id);
+
+        // Updating storage with new item
+        AsyncStorageLib.setItem('@quizzes', JSON.stringify(newItems));
+    } catch(e) {
+        console.error(`Error deleting quiz`, e);
+    }
+}
 
 export const addSelector = async (selector: SelectorItem) => {
     try {

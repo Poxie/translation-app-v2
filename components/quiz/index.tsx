@@ -1,13 +1,5 @@
 import { useState } from "react";
-import { ScrollView, View as DefaultView } from "react-native";
-import layout from "../../constants/layout";
-import { useColors } from "../../hooks/useColors";
-import { selectQuizById } from "../../redux/quiz/selectors";
-import { useAppSelector } from "../../redux/store";
 import { QuizScreenProps } from "../../types";
-import Button from "../button";
-import { SelectedTerm } from "../create-quiz/SelectedTerm";
-import Text from "../text";
 import View from "../view";
 import { QuizHomeScreen } from "./QuizHomeScreen";
 import { QuizResultsScreen } from "./QuizResultsScreen";
@@ -22,7 +14,7 @@ export default function Quiz({ route: { params: { quizId } }}: QuizScreenProps )
     const [state, setState] = useState<State>('home');
     const [results, setResults] = useState<PlayedTerm[]>([]);
     const failedTerms = results.filter(term => term.outcome === 'incorrect');
-
+    
     return(
         <View safeAreaView>
             {state === 'home' && (

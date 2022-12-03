@@ -4,6 +4,7 @@ import { QuizState } from "./types";
 import { 
     setQuizzes as setQuizzesAction,
     addQuiz as addQuizAction,
+    removeQuiz as removeQuizAction,
     removeTermFromQuiz as removeTermFromQuizAction
 } from './actions'; 
 import { Quiz } from "../../types";
@@ -16,6 +17,11 @@ const setQuizzes: ReducerAction = (state, action) => {
 
 const addQuiz: ReducerAction = (state, action) => {
     const newQuizzes = state.quizzes.concat(action.payload);
+    return updateObject(state, { quizzes: newQuizzes });
+}
+
+const removeQuiz: ReducerAction = (state, action) => {
+    const newQuizzes = state.quizzes.filter(quiz => quiz.id !== action.payload);
     return updateObject(state, { quizzes: newQuizzes });
 }
 
@@ -40,5 +46,6 @@ export const quizReducer = createReducer<QuizState>({
     builder
         .addCase(setQuizzesAction.type, setQuizzes)
         .addCase(addQuizAction.type, addQuiz)
+        .addCase(removeQuizAction.type, removeQuiz)
         .addCase(removeTermFromQuizAction.type, removeTermFromQuiz)
 })
