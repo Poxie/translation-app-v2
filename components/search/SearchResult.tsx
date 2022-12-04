@@ -9,7 +9,8 @@ import Text from '../text';
 
 export const SearchResult: React.FC<{
     id: string;
-}> = ({ id }) => {
+    onPress?: () => void;
+}> = ({ id, onPress }) => {
     const { text: { secondary } } = useColors();
     const navigation = useNavigation();
     const item = useAppSelector(state => selectTermById(state, id));
@@ -34,7 +35,7 @@ export const SearchResult: React.FC<{
 
     return(
         <TouchableOpacity 
-            onPress={viewItem}
+            onPress={onPress ? onPress : viewItem}
             style={styles.container}
         >
             <View style={styles.header}>
