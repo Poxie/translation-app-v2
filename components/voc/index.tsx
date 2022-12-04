@@ -206,8 +206,9 @@ export default function Voc({ route: { params: {
 
                         {floatingTermIds.length !== 0 && (
                             <Text style={{
+                                ...styles.label,
                                 color: textSecondary,
-                                ...styles.label
+                                marginBottom: 0
                             }}>
                                 Uncategorized terms
                             </Text>

@@ -73,7 +73,8 @@ export const SearchResult: React.FC<{
 }
 const styles = {
     container: {
-        marginBottom: layout.spacing.primary,
+        marginTop: layout.spacing.secondary,
+        marginBottom: layout.spacing.secondary,
         flex: 1
     },
     header: {

@@ -33,7 +33,6 @@ export const SearchLabel: React.FC<{
 const styles = {
     labelContainer: {
         borderBottomWidth: layout.borderWidth.secondary,
-        marginBottom: layout.spacing.primary,
         paddingBottom: layout.spacing.primary
     },
     label: {

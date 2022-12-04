@@ -48,16 +48,14 @@ export const Term: React.FC<{
 }
 const styles = {
     container: {
-        // width: '100%',
-        flexDirection: 'row' as 'row',
-        // alignItems: 'center' as 'center',
-        // justifyContent: 'space-between' as 'space-between'
+        flexDirection: 'row' as 'row'
     },
     checkbox: {
         width: 20,
         height: 20,
         borderWidth: 1,
         borderRadius: 4,
-        marginTop: layout.spacing.secondary
+        marginTop: layout.spacing.secondary,
+        marginLeft: layout.spacing.primary
     }
 }
