@@ -54,9 +54,16 @@ export const QuizStartedScreen: React.FC<{
     // Determining quiz terms
     let termIds: string[] = [];
     if(['play-all', 'continue'].includes(state)) termIds = quiz?.termIds || [];
+    if(state === 'play-failed') termIds = (
+        quiz?.playedTerms
+            .filter(term => term.outcome === 'incorrect')
+            .map(term => term.id)
+    ) || [];
     const terms = useAppSelector(state => selectTermsByQuiz(state, termIds));
     const playedTerms = useRef<PlayedTerm[]>(
-        state === 'continue' ? [...(quiz?.playedTerms || [])] : []
+        state === 'continue' ? [...(quiz?.playedTerms || [])] : (
+            state === 'play-failed' ? quiz?.playedTerms.filter(term => term.outcome === 'correct') : []
+        ) || []
     );
 
     // Determining start term start index
@@ -69,6 +76,7 @@ export const QuizStartedScreen: React.FC<{
 
     // Determining active term
     const activeTerm = terms[index];
+    if(!activeTerm) return;
 
     const nextTerm = (outcome: PlayedTerm['outcome']) => {
         const term = {
