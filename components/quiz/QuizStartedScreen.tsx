@@ -20,7 +20,6 @@ export const QuizStartedScreen: React.FC<{
 }> = ({ quizId, setState, state }) => {
     const dispatch = useAppDispatch();
     const quiz = useAppSelector(state => selectQuizById(state, quizId));
-    const failedTerms = quiz?.playedTerms.filter(term => term.outcome === 'incorrect') || [];
 
     // Handling animations
     const translation = useRef(new Animated.Value(0)).current;
@@ -51,37 +50,35 @@ export const QuizStartedScreen: React.FC<{
         inputRange: [0, 1],
         outputRange: [0, 1]
     })
-    
-    if(!quiz) return null;
 
-    // Determining what terms to use
+    // Determining quiz terms
     let termIds: string[] = [];
-    if(['play-all', 'continue'].includes(state)) termIds = quiz.termIds;
-    if(state === 'play-failed') termIds = failedTerms.map(term => term.id);
-
-    // Fetching terms to use
+    if(['play-all', 'continue'].includes(state)) termIds = quiz?.termIds || [];
     const terms = useAppSelector(state => selectTermsByQuiz(state, termIds));
-
-    const [index, setIndex] = useState(state === 'continue' ? quiz.playedTerms.length : 0);
-    const [showAnswer, setShowAnswer] = useState(false);
     const playedTerms = useRef<PlayedTerm[]>(
-        state === 'continue' ? Array.from(quiz.playedTerms) : []
+        state === 'continue' ? [...(quiz?.playedTerms || [])] : []
     );
 
+    // Determining start term start index
+    let defaultIndex = 0;
+    if(state === 'continue') defaultIndex = quiz?.playedTerms?.length || 0;
+    const [index, setIndex] = useState(defaultIndex);
+
+    // Game options
+    const [showAnswer, setShowAnswer] = useState(false);
+
+    // Determining active term
     const activeTerm = terms[index];
-    if(!activeTerm) return null;
 
     const nextTerm = (outcome: PlayedTerm['outcome']) => {
-        // Adding term with outcome to played terms
         const term = {
             id: activeTerm.id,
             outcome
         }
-        playedTerms.current = [...playedTerms.current.filter(t => t.id !== activeTerm.id), ...[term]];
-        dispatch(updateQuizProgress(quizId, [...playedTerms.current]))
-        updateQuizProgressInStorage(quizId, playedTerms.current);
-        
-        // If term was last term, show results
+        playedTerms.current.push(term);
+        dispatch(updateQuizProgress(quizId, [...playedTerms.current]));
+        updateQuizProgressInStorage(quizId, [...playedTerms.current]);
+
         if(index === terms.length - 1) {
             Animated.timing(translation, {
                 toValue: 0,
@@ -98,10 +95,7 @@ export const QuizStartedScreen: React.FC<{
             duration: 250,
             easing: EasingNode.ease
         }).start(() => {
-            // Increasing active index
             setIndex(prev => prev + 1);
-
-            // Resetting board
             setShowAnswer(false);
 
             Animated.timing(translationTwo, {
@@ -109,7 +103,7 @@ export const QuizStartedScreen: React.FC<{
                 duration: 250,
                 easing: EasingNode.ease
             }).start();
-        });
+        })
     }
     const onCorrect = () => {
         nextTerm('correct')
