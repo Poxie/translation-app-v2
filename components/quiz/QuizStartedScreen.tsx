@@ -76,7 +76,7 @@ export const QuizStartedScreen: React.FC<{
 
     // Determining active term
     const activeTerm = terms[index];
-    if(!activeTerm) return;
+    if(!activeTerm) return null;
 
     const nextTerm = (outcome: PlayedTerm['outcome']) => {
         const term = {
