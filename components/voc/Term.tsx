@@ -30,6 +30,10 @@ export const Term: React.FC<{
             style={styles.container}
             onPress={selectable ? () => setActive(id) : editTerm}
         >
+            <SearchResult 
+                id={term.id}
+                onPress={selectable ? () => setActive(id) : editTerm}
+            />
             {selectable && (
                 <View 
                     style={{
@@ -39,22 +43,21 @@ export const Term: React.FC<{
                     }} 
                 />
             )}
-            <SearchResult 
-                id={term.id}
-            />
         </TouchableOpacity>
     )
 }
 const styles = {
     container: {
+        // width: '100%',
         flexDirection: 'row' as 'row',
-        alignItems: 'center' as 'center'
+        // alignItems: 'center' as 'center',
+        // justifyContent: 'space-between' as 'space-between'
     },
     checkbox: {
         width: 20,
         height: 20,
         borderWidth: 1,
         borderRadius: 4,
-        marginRight: layout.spacing.primary
+        marginTop: layout.spacing.secondary
     }
 }
