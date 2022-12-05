@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { getDoc, doc } from '@firebase/firestore';
-import { ScrollView, View as DefaultView } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View as DefaultView } from 'react-native';
 import Button from "../button";
 import Input from "../input";
 import Text from "../text";
@@ -62,39 +62,45 @@ export default function ImportVoc() {
     return(
         <>
             {terms.length === 0 && (
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'space-between'
-                }} safeAreaView>
-                    <DefaultView style={styles.container}>
-                        <Text style={{
-                            color: textSecondary,
-                            ...styles.label
-                        }}>
-                            Enter vocabulary ID
-                        </Text>
-                        <Input 
-                            onTextChange={onTextChange}
-                            placeholder={'mpwFKV7SzksDp1wczCVL'}
-                        />
-
-                        {error && (
-                            <Text style={{
-                                color: red,
-                                ...styles.error
-                            }}>
-                                {error}
-                            </Text>
-                        )}
-                    </DefaultView>
-                    <Button
-                        onPress={fetchTerms}
-                        style={styles.button}
-                        disabled={!id}
-                        loading={loading}
+                <View safeAreaView>
+                    <KeyboardAvoidingView 
+                        style={{
+                            flex: 1,
+                            justifyContent: 'space-between'
+                        }}
+                        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                        keyboardVerticalOffset={110}
                     >
-                        Import vocabulary
-                    </Button>
+                        <DefaultView style={styles.container}>
+                            <Text style={{
+                                color: textSecondary,
+                                ...styles.label
+                            }}>
+                                Enter vocabulary ID
+                            </Text>
+                            <Input 
+                                onTextChange={onTextChange}
+                                placeholder={'mpwFKV7SzksDp1wczCVL'}
+                            />
+
+                            {error && (
+                                <Text style={{
+                                    color: red,
+                                    ...styles.error
+                                }}>
+                                    {error}
+                                </Text>
+                            )}
+                        </DefaultView>
+                        <Button
+                            onPress={fetchTerms}
+                            style={styles.button}
+                            disabled={!id}
+                            loading={loading}
+                        >
+                            Import vocabulary
+                        </Button>
+                    </KeyboardAvoidingView>
                 </View>
             )}
 
