@@ -4,6 +4,7 @@ export const SET_SELECTORS = 'SET_SELECTORS';
 export const SET_LANGUAGES = 'SET_LANGUAGES';
 export const SET_TRANSLATIONS = 'SET_TRANSLATIONS';
 export const ADD_TERM = 'ADD_TERM';
+export const ADD_TERMS = 'ADD_TERMS';
 export const ADD_CATEGORY = 'ADD_CATEGORY';
 export const ADD_SELECTOR = 'ADD_SELECTOR';
 export const ADD_LANGUAGE = 'ADD_LANGUAGE';

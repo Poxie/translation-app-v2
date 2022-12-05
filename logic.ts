@@ -17,6 +17,22 @@ export const createTerm = async (item: VocItem) => {
         console.error(`Error creating item`, e);
     }
 }
+export const createTerms = async (items: VocItem[]) => {
+    try {
+        // Fetching stored terms data
+        const data = await AsyncStorageLib.getItem('@terms');
+        if(!data) return;
+
+        // Pushing new term to terms array
+        let terms: VocItem[] = JSON.parse(data);
+        terms = [...terms, ...items];
+
+        // Setting new terms to local storage
+        AsyncStorageLib.setItem('@terms', JSON.stringify(terms));
+    } catch(e) {
+        console.error(`Error creating items`, e);
+    }
+}
 export const createCategory = async (category: VocItem) => {
     try {
         const data = await AsyncStorageLib.getItem('@categories');

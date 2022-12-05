@@ -2,7 +2,8 @@ import { AnyAction, createReducer } from "@reduxjs/toolkit";
 import { VocItem } from "../../types";
 import { updateItemInArray, updateObject } from "../utils";
 import { 
-    addTerm as addTermAction, 
+    addTerm as addTermAction,
+    addTerms as addTermsAction,
     addCategory as addCategoryAction, 
     setCategories as setCategoriesAction, 
     setTerms as setTermsAction, 
@@ -43,6 +44,10 @@ const setTranslations: ReducerAction = (state, action) => {
 
 const addTerm: ReducerAction = (state, action) => {
     const newTerms = state.terms.concat(action.payload);
+    return updateObject(state, { terms: newTerms });
+}
+const addTerms: ReducerAction = (state, action) => {
+    const newTerms = [...state.terms, ...action.payload];
     return updateObject(state, { terms: newTerms });
 }
 const addCategory: ReducerAction = (state, action) => {
@@ -167,6 +172,7 @@ export const vocReducer = createReducer<VocState>({
 }, builder => {
     builder
         .addCase(addTermAction.type, addTerm)
+        .addCase(addTermsAction.type, addTerms)
         .addCase(addCategoryAction.type, addCategory)
         .addCase(setCategoriesAction.type, setCategories)
         .addCase(setTermsAction.type, setTerms)
