@@ -182,38 +182,32 @@ export default function Voc({ route: { params: {
                             )}
 
                             {floatingCategoryIds.length !== 0 && (
-                                <>
-                                <Text style={{
-                                    color: textSecondary,
-                                    ...styles.label
-                                }}>
-                                    Your categories
-                                </Text>
-
                                 <DefaultView style={{
-                                    backgroundColor: secondary,
-                                    borderColor: tertiary,
-                                    ...styles.categories
+                                    borderBottomWidth: floatingTermIds.length !== 0 ? 1 : 0,
+                                    borderColor: secondary
                                 }}>
-                                    {floatingCategoryIds.map(categoryId => (
-                                        <Category 
-                                            id={categoryId}
-                                            key={categoryId}
-                                        />
-                                    ))}
+                                    <Text style={{
+                                        color: textSecondary,
+                                        ...styles.label
+                                    }}>
+                                        Your categories
+                                    </Text>
+
+                                    <DefaultView style={{
+                                        backgroundColor: secondary,
+                                        borderColor: tertiary,
+                                        ...styles.categories
+                                    }}>
+                                        {floatingCategoryIds.map(categoryId => (
+                                            <Category 
+                                                id={categoryId}
+                                                key={categoryId}
+                                            />
+                                        ))}
+                                    </DefaultView>
                                 </DefaultView>
-                                </>
                             )}
 
-                            {floatingTermIds.length !== 0 && (
-                                <Text style={{
-                                    ...styles.label,
-                                    color: textSecondary,
-                                    marginBottom: 0
-                                }}>
-                                    Uncategorized terms
-                                </Text>
-                            )}
                             {floatingTermIds.map(termId => (
                                 <Term 
                                     id={termId}
