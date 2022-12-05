@@ -5,7 +5,7 @@ import { useColors } from '../../hooks/useColors';
 import { useAppSelector } from "../../redux/store";
 import { selectCategories, selectFloatingCategoryIds, selectFloatingTermIds, selectTerms } from "../../redux/voc/selectors";
 import View from '../view';
-import { View as DefaultView, ScrollView, TouchableOpacity } from 'react-native';
+import { View as DefaultView, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Category } from './Category';
 import { Term } from "./Term";
 import Text from '../text';
@@ -152,73 +152,75 @@ export default function Voc({ route: { params: {
                 )}
 
                 {!query && (
-                    <ScrollView style={styles.container}>
-                        {floatingTermIds.length === 0 && floatingCategoryIds.length === 0 && (
-                            <>
-                            <Text>
-                                Your vocabulary is empty. Let's add something to it!
-                            </Text>
-                            <DefaultView style={styles.buttons}>
-                                <Button 
-                                    type={'secondary'}
-                                    style={styles.button}
-                                    onPress={() => openModal('term')}
-                                >
-                                    Add term
-                                </Button>
-                                <Button 
-                                    type={'secondary'}
-                                    style={{
-                                        ...styles.button,
-                                        marginRight: 0
-                                    }}
-                                    onPress={() => openModal('category')}
-                                >
-                                    Add category
-                                </Button>
-                            </DefaultView>
-                            </>
-                        )}
+                    <ScrollView style={styles.container} contentInsetAdjustmentBehavior={'automatic'}>
+                        <SafeAreaView>
+                            {floatingTermIds.length === 0 && floatingCategoryIds.length === 0 && (
+                                <>
+                                <Text>
+                                    Your vocabulary is empty. Let's add something to it!
+                                </Text>
+                                <DefaultView style={styles.buttons}>
+                                    <Button 
+                                        type={'secondary'}
+                                        style={styles.button}
+                                        onPress={() => openModal('term')}
+                                    >
+                                        Add term
+                                    </Button>
+                                    <Button 
+                                        type={'secondary'}
+                                        style={{
+                                            ...styles.button,
+                                            marginRight: 0
+                                        }}
+                                        onPress={() => openModal('category')}
+                                    >
+                                        Add category
+                                    </Button>
+                                </DefaultView>
+                                </>
+                            )}
 
-                        {floatingCategoryIds.length !== 0 && (
-                            <>
-                            <Text style={{
-                                color: textSecondary,
-                                ...styles.label
-                            }}>
-                                Your categories
-                            </Text>
+                            {floatingCategoryIds.length !== 0 && (
+                                <>
+                                <Text style={{
+                                    color: textSecondary,
+                                    ...styles.label
+                                }}>
+                                    Your categories
+                                </Text>
 
-                            <DefaultView style={{
-                                backgroundColor: secondary,
-                                borderColor: tertiary,
-                                ...styles.categories
-                            }}>
-                                {floatingCategoryIds.map(categoryId => (
-                                    <Category 
-                                        id={categoryId}
-                                        key={categoryId}
-                                    />
-                                ))}
-                            </DefaultView>
-                            </>
-                        )}
+                                <DefaultView style={{
+                                    backgroundColor: secondary,
+                                    borderColor: tertiary,
+                                    ...styles.categories
+                                }}>
+                                    {floatingCategoryIds.map(categoryId => (
+                                        <Category 
+                                            id={categoryId}
+                                            key={categoryId}
+                                        />
+                                    ))}
+                                </DefaultView>
+                                </>
+                            )}
 
-                        {floatingTermIds.length !== 0 && (
-                            <Text style={{
-                                ...styles.label,
-                                color: textSecondary,
-                                marginBottom: 0
-                            }}>
-                                Uncategorized terms
-                            </Text>
-                        )}
-                        {floatingTermIds.map(termId => (
-                            <Term 
-                                id={termId}
-                                key={termId}
-                            />
-                        ))}
+                            {floatingTermIds.length !== 0 && (
+                                <Text style={{
+                                    ...styles.label,
+                                    color: textSecondary,
+                                    marginBottom: 0
+                                }}>
+                                    Uncategorized terms
+                                </Text>
+                            )}
+                            {floatingTermIds.map(termId => (
+                                <Term 
+                                    id={termId}
+                                    key={termId}
+                                />
+                            ))}
+                        </SafeAreaView>
                     </ScrollView>
                 )}
             </View>
