@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import { StyleProps } from 'react-native-reanimated';
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
@@ -7,7 +7,7 @@ import Text from '../text';
 
 export default function Button({
     children, onPress, onLongPress, style, textStyle,
-    type='primary', disabled=false
+    type='primary', disabled=false, loading=false
 }: {
     children: ReactElement | string;
     onPress?: () => void;
@@ -16,6 +16,7 @@ export default function Button({
     textStyle?: StyleProps;
     type?: 'primary' | 'secondary' | 'danger' | 'transparent';
     disabled?: boolean;
+    loading?: boolean;
 }) {
     const { 
         background: { tertiary },
@@ -45,7 +46,7 @@ export default function Button({
 
     return(
         <TouchableOpacity
-            disabled={disabled}
+            disabled={disabled || loading}
             onPress={onPress}
             onLongPress={onLongPress}
             style={{ 
@@ -55,7 +56,11 @@ export default function Button({
                 ...style
             }}
         >
-            {element}
+            {!loading ? element : (
+                <ActivityIndicator 
+                    color={type === 'primary' ? '#fff' : undefined} 
+                />
+            )}
         </TouchableOpacity>
     )
 }
