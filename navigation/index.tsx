@@ -50,7 +50,11 @@ const MainStackProvider = () => {
                 component={Voc} 
                 options={({ route }) => ({ headerTitle: route.params.header })}
             />
-            <MainStack.Screen name="Import Voc" component={ImportVoc} />
+            <MainStack.Screen 
+                name="Import Voc" 
+                component={ImportVoc} 
+                options={{ headerTitle: 'Import' }}
+            />
             <MainStack.Screen name="Quiz" component={Quiz} />
             <MainStack.Screen name="Quizzes" component={Quizzes} />
             <MainStack.Screen name="Create Quiz" component={CreateQuiz} />

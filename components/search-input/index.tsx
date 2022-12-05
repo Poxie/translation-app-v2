@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import layout from '../../constants/layout';
+import { useColors } from '../../hooks/useColors';
 import { useAppSelector } from '../../redux/store';
 import { selectTerms } from '../../redux/voc/selectors';
 import { VocItem } from '../../types';
@@ -16,6 +17,7 @@ export default function SearchInput({
     onQueryResults: (items: string[]) => void;
     hasFilters?: boolean;
 }) {
+    const { background: { secondary } } = useColors();
     const terms = useAppSelector(selectTerms);
     const [filter, setFilter] = useState<string[]>([]);
     const [query, setQuery] = useState('');
@@ -53,7 +55,10 @@ export default function SearchInput({
     ]
     return(
         <View>
-            <View style={styles.container}>
+            <View style={{
+                borderColor: secondary,
+                ...styles.container
+            }}>
                 <Input 
                     placeholder={'Search'}
                     onTextChange={setQuery}
@@ -80,8 +85,9 @@ export default function SearchInput({
 }
 const styles = {
     container: {
-        padding: layout.spacing.primary,
-        paddingBottom: 0
+        paddingBottom: layout.spacing.primary,
+        marginBottom: layout.spacing.primary,
+        borderBottomWidth: layout.borderWidth.secondary
     },
     filters: {
         marginTop: 4

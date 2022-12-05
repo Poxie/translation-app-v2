@@ -15,28 +15,30 @@ export default function Search() {
     const [query, setQuery] = useState('');
 
     return(
-        <View>
+        <View 
+            scrollView
+            style={styles.content} 
+            contentInsetAdjustmentBehavior={'automatic'} 
+        >
             <SearchInput
                 onQueryChange={setQuery}
                 onQueryResults={setResults}
                 hasFilters
             />
 
-            <ScrollView style={styles.content} contentInsetAdjustmentBehavior={'automatic'}>
-                <SafeAreaView>
-                    <SearchLabel 
-                        query={query}
-                        resultCount={results.length}
-                    />
+            <SafeAreaView>
+                <SearchLabel 
+                    query={query}
+                    resultCount={results.length}
+                />
 
-                    {results.map(result => (
-                        <SearchResult 
-                            id={result}
-                            key={result}
-                        />
-                    ))}
-                </SafeAreaView>
-            </ScrollView>
+                {results.map(result => (
+                    <SearchResult 
+                        id={result}
+                        key={result}
+                    />
+                ))}
+            </SafeAreaView>
         </View>
     )
 }

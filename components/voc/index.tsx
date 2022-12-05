@@ -138,7 +138,11 @@ export default function Voc({ route: { params: {
     }
     return(
         <VocContext.Provider value={value}>
-            <View>
+            <View 
+                scrollView
+                style={styles.container} 
+                contentInsetAdjustmentBehavior={'automatic'} 
+            >
                 <SearchInput 
                     onQueryChange={setQuery}
                     onQueryResults={setResults}
@@ -152,70 +156,68 @@ export default function Voc({ route: { params: {
                 )}
 
                 {!query && (
-                    <ScrollView style={styles.container} contentInsetAdjustmentBehavior={'automatic'}>
-                        <SafeAreaView>
-                            {floatingTermIds.length === 0 && floatingCategoryIds.length === 0 && (
-                                <>
-                                <Text>
-                                    Your vocabulary is empty. Let's add something to it!
-                                </Text>
-                                <DefaultView style={styles.buttons}>
-                                    <Button 
-                                        type={'secondary'}
-                                        style={styles.button}
-                                        onPress={() => openModal('term')}
-                                    >
-                                        Add term
-                                    </Button>
-                                    <Button 
-                                        type={'secondary'}
-                                        style={{
-                                            ...styles.button,
-                                            marginRight: 0
-                                        }}
-                                        onPress={() => openModal('category')}
-                                    >
-                                        Add category
-                                    </Button>
-                                </DefaultView>
-                                </>
-                            )}
+                    <SafeAreaView>
+                        {floatingTermIds.length === 0 && floatingCategoryIds.length === 0 && (
+                            <>
+                            <Text>
+                                Your vocabulary is empty. Let's add something to it!
+                            </Text>
+                            <DefaultView style={styles.buttons}>
+                                <Button 
+                                    type={'secondary'}
+                                    style={styles.button}
+                                    onPress={() => openModal('term')}
+                                >
+                                    Add term
+                                </Button>
+                                <Button 
+                                    type={'secondary'}
+                                    style={{
+                                        ...styles.button,
+                                        marginRight: 0
+                                    }}
+                                    onPress={() => openModal('category')}
+                                >
+                                    Add category
+                                </Button>
+                            </DefaultView>
+                            </>
+                        )}
 
-                            {floatingCategoryIds.length !== 0 && (
-                                <DefaultView style={{
-                                    borderBottomWidth: floatingTermIds.length !== 0 ? 1 : 0,
-                                    borderColor: secondary
+                        {floatingCategoryIds.length !== 0 && (
+                            <DefaultView style={{
+                                borderBottomWidth: floatingTermIds.length !== 0 ? 1 : 0,
+                                borderColor: secondary
+                            }}>
+                                <Text style={{
+                                    color: textSecondary,
+                                    ...styles.label
                                 }}>
-                                    <Text style={{
-                                        color: textSecondary,
-                                        ...styles.label
-                                    }}>
-                                        Your categories
-                                    </Text>
+                                    Your categories
+                                </Text>
 
-                                    <DefaultView style={{
-                                        backgroundColor: secondary,
-                                        borderColor: tertiary,
-                                        ...styles.categories
-                                    }}>
-                                        {floatingCategoryIds.map(categoryId => (
-                                            <Category 
-                                                id={categoryId}
-                                                key={categoryId}
-                                            />
-                                        ))}
-                                    </DefaultView>
+                                <DefaultView style={{
+                                    backgroundColor: secondary,
+                                    borderColor: tertiary,
+                                    ...styles.categories
+                                }}>
+                                    {floatingCategoryIds.map(categoryId => (
+                                        <Category 
+                                            id={categoryId}
+                                            key={categoryId}
+                                        />
+                                    ))}
                                 </DefaultView>
-                            )}
+                            </DefaultView>
+                        )}
 
-                            {floatingTermIds.map(termId => (
-                                <Term 
-                                    id={termId}
-                                    key={termId}
-                                />
-                            ))}
-                        </SafeAreaView>
-                    </ScrollView>
+                        {floatingTermIds.map(termId => (
+                            <Term 
+                                id={termId}
+                                key={termId}
+                            />
+                        ))}
+                    </SafeAreaView>
                 )}
             </View>
             <CreateMenu />

@@ -7,14 +7,14 @@ export const SearchLabel: React.FC<{
     resultCount: number;
     query: string;
 }> = ({ query, resultCount }) => {
-    const { background: { tertiary }, text: { secondary } } = useColors();
+    const { background: { secondary }, text: { secondary: textSecondary } } = useColors();
     return(
         <View style={{
-            borderColor: tertiary,
+            borderColor: secondary,
             ...styles.labelContainer
         }}>
             <Text style={{
-                color: secondary,
+                color: textSecondary,
                 ...styles.label
             }}>
                 {!query ? (
