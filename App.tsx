@@ -1,7 +1,7 @@
 import { ToastProvider } from 'react-native-toast-notifications'
 import AsyncStorageLib from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { LogBox, StyleSheet, Text, View } from 'react-native';
 import { Provider } from 'react-redux';
 import { store, useAppDispatch } from './redux/store';
 import useCachedResources from './hooks/useCachedResources';
@@ -9,6 +9,11 @@ import Navigation from './navigation';
 import { ReactElement, useEffect } from 'react';
 import { setCategories, setLanguages, setSelectors, setTerms, setTranslations } from './redux/voc/actions';
 import { setQuizzes } from './redux/quiz/actions';
+
+LogBox.ignoreLogs([
+  'Require cycle',
+  'Non-serializable values were found in the navigation state',
+]);
 
 export default function App() {
   const isLoadingComplete = useCachedResources();
