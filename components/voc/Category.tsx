@@ -96,7 +96,7 @@ export const Category: React.FC<{
                     style={{ 
                         borderTopWidth: hasItems ? 1 : 0, 
                         borderColor: tertiary,
-                        paddingVertical: 10
+                        paddingBottom: 10
                     }}
                 >
                     <View style={{
@@ -155,13 +155,13 @@ const styles = {
         fontSize: 16
     },
     childHeader: {
-        paddingHorizontal: 0,
         marginTop: -layout.spacing.secondary / 2
     },
     childText: {
         fontSize: 14
     },
     childContainer: {
-        marginHorizontal: layout.spacing.primary
+        marginHorizontal: layout.spacing.secondary,
+        paddingVertical: 4
     }
 }

@@ -53,6 +53,8 @@ const styles = {
     container: {
         flexDirection: 'row' as 'row',
         padding: layout.spacing.primary,
+        paddingTop: 0,
+        marginBottom: layout.spacing.primary,
         borderBottomWidth: layout.borderWidth.secondary
     },
     item: {

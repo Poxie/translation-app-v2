@@ -29,6 +29,7 @@ export default function SearchTerm({ route: { params: {
             <SearchInput 
                 onQueryChange={setQuery}
                 onQueryResults={setResults}
+                containerStyle={styles.search}
                 hasFilters
             />
 
@@ -36,6 +37,7 @@ export default function SearchTerm({ route: { params: {
                 <SearchLabel 
                     resultCount={results.length}
                     query={query}
+                    style={styles.label}
                 />
 
                 {results.map(result => (
@@ -55,7 +57,15 @@ const styles = {
         padding: layout.spacing.primary,
         paddingBottom: 0
     },
+    search: {
+        padding: layout.spacing.primary,
+        paddingBottom: 0,
+    },
     container: {
-        padding: layout.spacing.primary
+        padding: layout.spacing.primary,
+        paddingTop: 0
+    },
+    label: {
+        marginBottom: layout.spacing.primary
     }
 }

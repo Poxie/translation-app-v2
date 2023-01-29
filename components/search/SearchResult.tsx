@@ -75,6 +75,7 @@ const styles = {
     container: {
         marginTop: layout.spacing.secondary,
         marginBottom: layout.spacing.secondary,
+        paddingHorizontal: layout.spacing.primary,
         flex: 1
     },
     header: {

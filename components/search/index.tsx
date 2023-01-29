@@ -17,12 +17,12 @@ export default function Search() {
     return(
         <View 
             scrollView
-            style={styles.content} 
             contentInsetAdjustmentBehavior={'automatic'} 
         >
             <SearchInput
                 onQueryChange={setQuery}
                 onQueryResults={setResults}
+                containerStyle={styles.content} 
                 hasFilters
             />
 
@@ -30,6 +30,7 @@ export default function Search() {
                 <SearchLabel 
                     query={query}
                     resultCount={results.length}
+                    style={styles.label} 
                 />
 
                 {results.map(result => (
@@ -45,5 +46,8 @@ export default function Search() {
 const styles = {
     content: {
         padding: layout.spacing.primary
+    },
+    label: {
+        paddingHorizontal: layout.spacing.primary
     }
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View } from 'react-native';
+import { StyleProps } from 'react-native-reanimated';
 import layout from '../../constants/layout';
 import { useColors } from '../../hooks/useColors';
 import { useAppSelector } from '../../redux/store';
@@ -11,10 +12,11 @@ import Text from '../text';
 import { LanguageSelector } from './LanguageSelector';
 
 export default function SearchInput({
-    onQueryChange, onQueryResults, hasFilters
+    onQueryChange, onQueryResults, containerStyle, hasFilters
 }: {
     onQueryChange: (query: string) => void;
     onQueryResults: (items: string[]) => void;
+    containerStyle?: StyleProps;
     hasFilters?: boolean;
 }) {
     const { background: { secondary } } = useColors();
@@ -57,7 +59,8 @@ export default function SearchInput({
         <View>
             <View style={{
                 borderColor: secondary,
-                ...styles.container
+                ...styles.container,
+                ...containerStyle
             }}>
                 <Input 
                     placeholder={'Search'}
